@@ -1,0 +1,8 @@
+{
+  "name": "Olor a Libros · Sucursal de Hogwarts",
+  "description": "La Sucursal de Hogwarts del club Olor a Libros: descubre tu casa, tu varita y tu deseo ante el Espejo de Oesed.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

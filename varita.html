@@ -83,7 +83,10 @@
       <div class="ollie-top">
         <a class="linkback" href="index.html">← Portada</a>
         <div class="ollie-sign">OLLIVANDER'S<small>Fabricantes de varitas desde el 382 a.C. · Callejón Diagon</small></div>
-        <span style="width:90px"></span>
+        <div class="topline-actions">
+          <button class="sound-toggle" type="button" aria-label="Activar sonido" title="Activar/desactivar sonido"><span class="icon-bell">🔕</span><span class="lbl-sound">Silencio</span></button>
+          <button class="lumos-toggle" type="button" aria-label="Lumos / Nox" title="Encender la luz (Lumos)"><span class="icon-candle">🕯️</span><span class="lbl-lumos">Lumos</span></button>
+        </div>
       </div>
       <p class="olor-tag">📖 Olor a Libros presenta: su sucursal oficial de varitas</p>
       <div class="quiz-top">
@@ -457,6 +460,7 @@ async function tryWand(box,it,idx){
   const btn=box.querySelector('button'); btn.disabled=true;
   try{
     if(!it.true){
+      if(window.SucursalSound && window.SucursalSound.wand) window.SucursalSound.wand();
       burst(box,['#9aa7b8','#c9d2dd'],14,70);
       box.classList.add('dead');
       tryIdx++;
@@ -466,6 +470,8 @@ async function tryWand(box,it,idx){
       await type(tb,line);
       tb.scrollIntoView({behavior:REDUCED?'auto':'smooth',block:'nearest'});
     } else {
+      if(window.SucursalSound && window.SucursalSound.bell) window.SucursalSound.bell();
+      if(window.fireGoldenSparks) window.fireGoldenSparks(window.innerWidth/2, window.innerHeight/2);
       box.classList.add('truew');
       burst(box,['#ffd88a','#f2cd7b','#fff3cf'],60,180);
       updateTrial();

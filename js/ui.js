@@ -152,23 +152,26 @@
   /* ── Sección Las Casas (#casas) ── */
   (function () {
     var grid = $('#housesGrid'); if (!grid || !HOUSES_D) return;
+    var totems = { Gryffindor: '🦁', Slytherin: '🐍', Ravenclaw: '🦅', Hufflepuff: '🦡' };
     grid.innerHTML = Object.keys(HOUSES_D).map(function (k, i) {
       var h = HOUSES_D[k];
-      return '<article class="house reveal" style="--ha:' + h.ha + ';--hb:' + h.hb + ';--rd:' + (i * .12) + 's">'
-        + '<div class="house-crest" data-relic="' + k[0] + '"></div>'
-        + '<p class="house-tag">' + h.tag + '</p>'
-        + '<div class="house-head"><div class="house-relic" data-relic="' + k[0] + '"></div><h3>' + k + '</h3></div>'
-        + '<span class="house-motto">«' + h.q + '»</span>'
-        + '<dl>'
-        + '<div class="row"><dt>Fundador</dt><dd>' + h.founder + '</dd></div>'
-        + '<div class="row"><dt>Cualidades</dt><dd>' + h.q + '</dd></div>'
-        + '<div class="row"><dt>Fantasma</dt><dd>' + h.ghost + '</dd></div>'
-        + '<div class="row"><dt>Sala común</dt><dd>' + h.common + '</dd></div>'
-        + '<div class="row"><dt>Reliquia</dt><dd>' + h.relic + '</dd></div>'
-        + '</dl>'
+      var totem = totems[k] || '✨';
+      return '<article class="house-card reveal" style="--ha:' + h.ha + ';--hb:' + h.hb + ';--rd:' + (i * .12) + 's">'
+        + '<div class="house-tag">' + h.tag + '</div>'
+        + '<div class="house-emblem" data-relic="' + k[0] + '" title="' + k + '"></div>'
+        + '<div class="house-title-wrap">'
+        +   '<h3>' + k + ' <span class="house-totem">' + totem + '</span></h3>'
+        +   '<p class="motto">«' + h.q + '»</p>'
+        + '</div>'
         + '<p class="house-desc">' + h.desc + '</p>'
-        + '<p class="house-note">' + h.note + '</p>'
-        + '<p class="house-members"><b>Miembros célebres:</b> ' + h.members + '</p>'
+        + '<div class="house-details">'
+        +   '<div><b>Fundador:</b> ' + h.founder + '</div>'
+        +   '<div><b>Reliquia:</b> ' + h.relic + '</div>'
+        +   '<div><b>Sala Común:</b> ' + h.common + '</div>'
+        +   '<div><b>Fantasma:</b> ' + h.ghost + '</div>'
+        + '</div>'
+        + '<div class="house-note">' + h.note + '</div>'
+        + '<div class="house-members"><b>Miembros célebres:</b> ' + h.members + '</div>'
         + '</article>';
     }).join('');
     fillRelics(grid);

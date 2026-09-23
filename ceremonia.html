@@ -35,8 +35,13 @@
         <nav aria-label="Secciones">
           <a href="index.html">← Portada</a>
           <a href="varita.html">🪄 El Taller</a>
+          <a href="espejo.html">🪞 El Espejo</a>
           <a href="index.html#casas">Las casas</a>
         </nav>
+        <div class="topline-actions">
+          <button class="sound-toggle" type="button" aria-label="Activar sonido mágico" title="Activar/desactivar sonido"><span class="icon-bell">🔕</span><span class="lbl-sound">Silencio</span></button>
+          <button class="lumos-toggle" type="button" aria-label="Lumos / Nox" title="Encender la luz (Lumos)"><span class="icon-candle">🕯️</span><span class="lbl-lumos">Lumos</span></button>
+        </div>
         <div class="fecha">1 de septiembre · Gran Comedor</div>
       </header>
       <div class="intro-main">
@@ -290,6 +295,7 @@ async function ask(i){
 }
 function choose(btn,w){
   if(locked)return; locked=true;
+  if(window.SucursalSound && window.SucursalSound.page) window.SucursalSound.page();
   $$('#opts .opt').forEach(b=>{b.disabled=true; if(b!==btn)b.classList.add('faded')});
   btn.classList.add('chosen');
   for(const k in w) score[k]+=w[k];
@@ -304,6 +310,7 @@ function choose(btn,w){
 }
 async function think(){
   const hat=screens.quiz.querySelector('.hat-holder');
+  if(window.SucursalSound && window.SucursalSound.wand) window.SucursalSound.wand();
   screens.quiz.classList.add('thinking'); hat.classList.add('ruminating');
   await type(qb,'Silencio ahora… déjame mirar dentro de ti…',hat);
   const msgs=['Difícil… muy difícil…','Mucho valor, sí…','Y una mente despierta…','Lealtad de la buena…','Ambición… claro que sí…','Y un punto de locura que no pienso contar en el Gran Comedor…','¡Ah! Ya lo veo.'];
@@ -317,6 +324,8 @@ function reveal(){
   const tops=entries.filter(e=>e[1]===max).map(e=>e[0]);
   const key=tops[(Math.random()*tops.length)|0]; finalKey=key;
   const H=HOUSES[key], scr=screens.result;
+  if(window.SucursalSound && window.SucursalSound.bell) window.SucursalSound.bell();
+  if(window.fireGoldenSparks) window.fireGoldenSparks(window.innerWidth/2, window.innerHeight/3);
   scr.style.setProperty('--ha',H.ha); scr.style.setProperty('--hb',H.hb);
   $('#rEmblem').innerHTML=RELICS[key];
   $('#rHouse').textContent='';

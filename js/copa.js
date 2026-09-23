@@ -70,8 +70,8 @@
       + '<circle cx="30" cy="30" r="5" fill="url(#br-' + u + ')" stroke="#4f3813" stroke-width="1"/><circle cx="210" cy="30" r="5" fill="url(#br-' + u + ')" stroke="#4f3813" stroke-width="1"/>'
       + '<rect x="26" y="384" width="188" height="8" rx="1" fill="url(#br-' + u + ')"/><rect x="16" y="392" width="208" height="28" rx="3" fill="url(#mh-' + u + ')" stroke="#694d1f" stroke-width="1"/>'
       + '<rect x="24" y="420" width="20" height="6" rx="2" fill="url(#br-' + u + ')"/><rect x="196" y="420" width="20" height="6" rx="2" fill="url(#br-' + u + ')"/>'
-      + '<rect x="40" y="396" width="160" height="20" rx="3" fill="url(#br-' + u + ')" stroke="#422e0e" stroke-width="1.2"/><circle cx="45" cy="406" r="1.5" fill="#382208"/><circle cx="195" cy="406" r="1.5" fill="#382208"/>'
-      + '<text x="120" y="410" fill="#140a02" font-size="10" font-family="\'Cinzel Decorative\',serif" font-weight="bold" letter-spacing="1" text-anchor="middle">' + k.toUpperCase() + ' · ' + pts + ' PTS</text>'
+      + '<rect x="36" y="396" width="168" height="22" rx="3" fill="#1b1108" stroke="url(#br-' + u + ')" stroke-width="1.5"/><circle cx="43" cy="407" r="2" fill="#caa96a"/><circle cx="197" cy="407" r="2" fill="#caa96a"/>'
+      + '<text x="120" y="411" fill="#fcedba" font-size="10.5" font-family="\'Cinzel Decorative\',serif" font-weight="bold" letter-spacing="1.2" text-anchor="middle">' + k.toUpperCase() + ' · ' + pts + ' PTS</text>'
       + '</svg>';
   }
 
@@ -95,8 +95,18 @@
       var fill = p > 0 ? Math.max(8, Math.min(100, Math.round(p / max * 92))) : 0;
       var rank = sorted.indexOf(k) + 1;
       var lead = p > 0 && rank === 1 && !tied;
-      return '<article class="hgcard" style="--gg:' + g.gg + ';--gb:' + g.bord + '" title="Toca el reloj: las gemas tintinean">'
-        + '<div class="hg-head"><div class="hg-id"><span class="hg-crest">' + g.crest + '</span><span><span class="hg-name">' + k + '</span><span class="hg-gemname">' + g.gem + '</span></span></div><span class="hg-rank' + (lead ? ' lead' : '') + '">' + (lead ? '👑' : '#' + rank) + '</span></div>'
+      var relicSvg = (typeof RELICS !== 'undefined' && RELICS[k[0]]) ? RELICS[k[0]] : g.crest;
+      return '<article class="hgcard" style="--gg:' + g.gg + ';--gb:' + g.bord + ';--ha:' + g.pri + '" title="Toca el reloj: las gemas tintinean">'
+        + '<div class="hg-head">'
+        +   '<div class="hg-id">'
+        +     '<span class="hg-crest" aria-label="' + k + '">' + relicSvg + '</span>'
+        +     '<div class="hg-meta">'
+        +       '<div class="hg-name-row"><span class="hg-name">' + k + '</span><span class="hg-crest-badge">' + g.crest + '</span></div>'
+        +       '<span class="hg-gemname">' + g.gem + '</span>'
+        +     '</div>'
+        +   '</div>'
+        +   '<span class="hg-rank' + (lead ? ' lead' : '') + '">' + (lead ? '👑' : '#' + rank) + '</span>'
+        + '</div>'
         + '<div class="hg-stage">' + hourglassSVG(k, p, fill) + '</div>'
         + '<div class="hg-read"><span class="num">' + p.toLocaleString('es-ES') + '</span><span class="lbl">Puntos Oficiales</span></div>'
         + '<p class="hg-lore">«' + g.gem + '»</p></article>';

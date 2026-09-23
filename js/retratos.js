@@ -26,14 +26,12 @@
     grid.innerHTML = PORTR.map(function (p, i) {
       return '<div class="port reveal" style="--rd:' + (i * .08) + 's" data-id="' + p.id + '">'
         + '<div class="port-frame">'
-        + '<span class="ros" style="top:2px;left:4px">❖</span><span class="ros" style="top:2px;right:4px">❖</span>'
-        + '<span class="ros" style="bottom:2px;left:4px">❖</span><span class="ros" style="bottom:2px;right:4px">❖</span>'
-        + '<div class="port-top"><span class="port-mood">' + p.mood + '</span>'
-        + '<button class="port-pet" data-pet="' + p.id + '" title="Interactuar">♥</button></div>'
+        + '<div class="port-top"><span class="port-mood">✦ ' + p.mood + '</span>'
+        + '<button class="port-pet" data-pet="' + p.id + '" title="Acariciar el lienzo">✨ Interactuar</button></div>'
         + '<div class="port-canvas">' + (PAINTS[p.id] || '') + '<span class="port-eye"><i></i>Atento</span></div>'
         + '<p class="port-bio">' + p.bio + '</p>'
         + '<div class="port-plate"><b>' + p.name + '</b><small>' + p.title + '</small></div>'
-        + '<span class="port-hint">💬 Tocar marco para conversar →</span>'
+        + '<span class="port-hint">💬 Haz clic en el marco para hablar</span>'
         + '</div></div>';
     }).join('');
     if (typeof observeReveals === 'function') observeReveals(grid);

@@ -110,7 +110,10 @@
       <div class="mtop">
         <a class="mback" href="index.html">← Portada</a>
         <div class="msign">EL ESPEJO DE OESED<small>aula vacía · tercera puerta a la izquierda</small></div>
-        <span style="width:90px"></span>
+        <div class="topline-actions">
+          <button class="sound-toggle" type="button" aria-label="Activar sonido" title="Activar/desactivar sonido"><span class="icon-bell">🔕</span><span class="lbl-sound">Silencio</span></button>
+          <button class="lumos-toggle" type="button" aria-label="Lumos / Nox" title="Encender la luz (Lumos)"><span class="icon-candle">🕯️</span><span class="lbl-lumos">Lumos</span></button>
+        </div>
       </div>
       <div class="mirror-wrap" id="mirrorIntro">
         <div class="mirror-glow"></div>
@@ -394,6 +397,7 @@ async function askE(i){
 }
 function chooseE(btn,w){
   if(elocked)return; elocked=true;
+  if(window.SucursalSound && window.SucursalSound.page) window.SucursalSound.page();
   $$('#egopts .gopt').forEach(b=>{b.disabled=true; if(b!==btn)b.classList.add('faded')});
   btn.classList.add('chosen');
   for(const k in w) escore[k]=(escore[k]||0)+w[k];

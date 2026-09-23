@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Ceremonia de Selección — Olor a Libros · Sucursal de Hogwarts</title>
+<meta name="description" content="El Sombrero Seleccionador lee tu mente y decide tu casa de Hogwarts. Ceremonia oficial de la Sucursal de Olor a Libros.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Olor a Libros · Sucursal de Hogwarts">
+<meta property="og:title" content="La Ceremonia de Selección">
+<meta property="og:description" content="El Sombrero te lee la mente: 18 preguntas y una casa gritada al Gran Comedor.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<div class="toast" id="toast" role="status"></div>
+<noscript><p style="max-width:600px;margin:60px auto;text-align:center;font-size:1.15rem;color:#e9e2d2">🕯️ El Sombrero necesita JavaScript para leer tu mente. Actívalo para comenzar.</p></noscript>
+
+<section class="ceremony" id="ceremonia" aria-label="Ceremonia de Selección">
+  <div class="backdrop" aria-hidden="true">
+    <div class="stars" id="stars"></div>
+    <div class="arch a1"></div><div class="arch a2"></div>
+    <div class="candles" id="candles"></div>
+    <div class="fog f1"></div><div class="fog f2"></div>
+  </div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <div class="screen on" id="scr-intro">
+    <div class="intro-wrap">
+      <header class="topline">
+        <div class="brand">✦ Sucursal de Hogwarts · Olor a Libros</div>
+        <nav aria-label="Secciones">
+          <a href="index.html">← Portada</a>
+          <a href="varita.html">🪄 El Taller</a>
+          <a href="index.html#casas">Las casas</a>
+        </nav>
+        <div class="fecha">1 de septiembre · Gran Comedor</div>
+      </header>
+      <div class="intro-main">
+        <div class="intro-title">
+          <h1 class="line-mask"><span>El Sombrero</span></h1>
+          <h1 class="line-mask gold"><span>Seleccionador</span></h1>
+          <div class="orn" aria-hidden="true">✦ ────── ❖ ────── ✦</div>
+        </div>
+        <div class="intro-scene">
+          <div class="hat-holder main-hat" data-hat title="El Sombrero (sí, está vivo)"></div>
+          <div class="bubble" id="introBubble" aria-live="polite"></div>
+        </div>
+        <form class="scroll-form" id="nameForm">
+          <label for="wname">¿Cuál es tu nombre, joven mago de Olor a Libros? Escríbelo antes de sentarte en el taburete.</label>
+          <div class="form-row">
+            <input id="wname" type="text" maxlength="24" placeholder="Tu nombre, aquí…" autocomplete="off" required>
+            <button class="seal-btn" type="submit">
+              <span class="seal" aria-hidden="true">H</span>
+              <span class="seal-label">Que comience<br>la ceremonia</span>
+            </button>
+          </div>
+        </form>
+        <div class="scroll-cue">Tu casa te espera abajo… o no <span class="cue-arrow">▼</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="scr-quiz">
+    <div class="quiz-wrap">
+      <div class="quiz-top">
+        <div class="hat-holder quiz-hat" data-hat></div>
+        <div class="bubble" id="quizBubble" aria-live="polite"></div>
+      </div>
+      <div class="qprogress" id="qprogress" aria-hidden="true">
+        <div class="qprogress-bar" id="qprogressBar"></div>
+      </div>
+      <div class="qcard" id="qcard">
+        <div class="qnum" id="qnum"></div>
+        <h3 class="qtext" id="qtext"></h3>
+        <div class="opts" id="opts"></div>
+      </div>
+    </div>
+    <div class="think-veil" aria-hidden="true"><p id="veilText">Hmm…</p></div>
+  </div>
+
+  <div class="screen" id="scr-result">
+    <div class="house-aura" aria-hidden="true"></div>
+    <div class="embers" id="embers" aria-hidden="true"></div>
+    <div class="result-inner">
+      <div class="result-hatrow">
+        <div class="hat-holder result-hat" data-hat></div>
+        <div class="bubble" id="resultBubble" aria-live="polite"></div>
+      </div>
+      <p class="r-kicker">El Sombrero Seleccionador proclama</p>
+      <div class="r-emblem" id="rEmblem"></div>
+      <h2 class="r-house" id="rHouse"></h2>
+      <p class="r-for" id="rFor"></p>
+      <p class="r-tie" id="rTie" hidden></p>
+      <p class="r-desc" id="rDesc"></p>
+      <dl class="r-facts" id="rFacts"></dl>
+      <div class="mind"><h4>Lo que vi en tu mente</h4><div id="mindBars"></div></div>
+      <div class="r-actions">
+        <a class="btn" href="varita.html">🪄 &nbsp;Visitar el Taller de Ollivander</a>
+        <button class="btn" id="btnRestart">↺ &nbsp;Nueva ceremonia</button>
+        <button class="btn" id="btnCopy">⎘ &nbsp;Copiar veredicto</button>
+      </div>
+      <p class="r-grupo">Para <b>Olor a Libros</b> · Sucursal de Hogwarts</p>
+      <p class="r-cert" id="rCert"></p>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="sombrero">
+  <div class="lore-grid">
+    <div class="lore-sticky reveal">
+      <div class="hat-holder mini-hat" data-hat></div>
+      <div>
+        <div class="kicker">❖ Mil años de memoria</div>
+        <h2>¿Cómo decide el Sombrero?</h2>
+        <blockquote class="lore-quote">«Bajo mi ala gastada guardo lo que fuiste y lo que serás; ningún mago esconde su alma donde el Sombrero mira jamás.»</blockquote>
+      </div>
+    </div>
+    <div class="lore-body">
+      <div class="lore-block reveal"><span class="num">I.</span><h3>Un sombrero con mil años de memoria</h3><p>Todo empezó con un sombrero corriente que perteneció a Godric Gryffindor. Cuando los cuatro fundadores temieron que su obra no sobreviviera a sus desacuerdos, cada uno le confió un fragmento de su criterio: valor, ambición, ingenio y lealtad. Desde entonces, el Sombrero piensa con cuatro mentes a la vez… lo cual explica por qué a veces tarda tanto en decidirse y por qué discute consigo mismo en voz baja.</p></div>
+      <div class="lore-block reveal"><span class="num">II.</span><h3>Legeremancia silenciosa</h3><p>El Sombrero es un legeremante consumado: no necesita que le cuentes nada, porque lee directamente en tu cabeza. Pesa tus virtudes, escucha tus dudas y, sobre todo, atiende a lo que tú mismo le susurras. Mentirle es tan útil como mentirle a tu abuela: ya lo sabe, y solo está viendo hasta dónde llegas.</p></div>
+      <div class="lore-block reveal"><span class="num">III.</span><h3>La Canción del Sombrero</h3><p>Cada año, antes de la ceremonia, el Sombrero compone una canción nueva. En tiempos de calma es burlona y ligera; cuando presiente peligro para el colegio, sus versos se vuelven una advertencia. Escucharla en silencio es la primera prueba de todo primer curso… y la primera siesta de todo último.</p></div>
+      <div class="lore-block reveal"><span class="num">IV.</span><h3>¿Y si el Sombrero duda?</h3><p>Se llama <em>Hatstall</em>: cuando la deliberación supera los cinco minutos. Es un fenómeno rarísimo — el Sombrero casi nunca se equivoca, y quienes vivieron una ceremonia reñida suelen decir, años después, que entendieron por qué dudó. El veredicto, eso sí, se grita una sola vez… y resuena en todo el Gran Comedor. Y en el grupo de WhatsApp de Olor a Libros, que es casi lo mismo pero con más stickers.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot-light">
+  <span>© <span id="year"></span> · Olor a Libros · Sucursal de Hogwarts</span>
+  <nav><a href="index.html">Portada</a><a href="varita.html">El Taller</a><a href="index.html#casas">Las casas</a></nav>
+  <span>Draco dormiens nunquam titillandus</span>
+</footer>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+$('#year').textContent=new Date().getFullYear();
+
+const RELICS={
+G:`<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 3 L36 10 L34 40 L32 46 L30 40 L28 10 Z" fill="currentColor"/><path d="M20 40 H44 L41 45 H23 Z" fill="currentColor"/><rect x="30" y="45" width="4" height="9" rx="1.5" fill="currentColor"/><circle cx="32" cy="57" r="3.4" fill="currentColor"/><circle cx="32" cy="42.4" r="2.1" fill="#b3232a"/></svg>`,
+S:`<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M40 10c11 2 13 11 4 16-9 6-25 4-25 13 0 8 13 11 21 7 7-4 7-10 3-12" stroke="currentColor" stroke-width="6" fill="none" stroke-linecap="round"/><circle cx="41" cy="9" r="5" fill="currentColor"/><circle cx="42.6" cy="8" r="1.1" fill="#0b0a14"/><path d="M46 9l7-2M46 9l6 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`,
+R:`<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M8 46 Q32 32 56 46" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M15 44 L19 27 L25 42 M39 42 L45 27 L49 44" stroke="currentColor" stroke-width="3.6" fill="none" stroke-linejoin="round"/><path d="M32 38 L26 21 L32 8 L38 21 Z" fill="currentColor"/><circle cx="32" cy="43" r="5" fill="currentColor"/><circle cx="32" cy="43" r="2.3" fill="#274b9d"/></svg>`,
+H:`<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M18 11 H46 L44 29 Q42 40 32 40 Q22 40 20 29 Z" fill="currentColor"/><path d="M18 14 Q6 16 10 26 Q13 32 20 30" stroke="currentColor" stroke-width="3.5" fill="none"/><path d="M46 14 Q58 16 54 26 Q51 32 44 30" stroke="currentColor" stroke-width="3.5" fill="none"/><rect x="29.5" y="40" width="5" height="8" fill="currentColor"/><path d="M21 53 H43 L39 48 H25 Z" fill="currentColor"/></svg>`};
+const HOUSES={
+G:{name:'Gryffindor',crest:'🦁',ha:'#7f0909',hb:'#ffc500',founder:'Godric Gryffindor',qualities:'Coraje · Osadía · Caballerosidad',ghost:'Nick Casi Decapitado',common:'Torre de Gryffindor, tras la Dama Gorda',relic:'La espada de rubíes',element:'Fuego',desc:'Donde habitan los valientes de corazón. Su estandarte escarlata ondea allí donde haga falta coraje, honor y un punto de temeridad.'},
+S:{name:'Slytherin',crest:'🐍',ha:'#0f3d2a',hb:'#b8cdc2',founder:'Salazar Slytherin',qualities:'Ambición · Astucia · Autonomía · Determinación',ghost:'El Barón Sanguinario',common:'Mazmorras, bajo el Lago Negro',relic:'El guardapelo de plata',element:'Agua',desc:'Cuna de ambición, astucia y autosuficiencia. Aquí se forjan los que trazan su propio camino, con o sin compañía, y saben exactamente a dónde van.'},
+R:{name:'Ravenclaw',crest:'🦅',ha:'#0e1a40',hb:'#c9a86a',founder:'Rowena Ravenclaw',qualities:'Inteligencia · Ingenio · Pensamiento independiente',ghost:'La Dama Gris',common:'Torre oeste, tras la puerta-águila',relic:'La diadema perdida',element:'Aire',desc:'El nido de las mentes despiertas: curiosidad, creatividad y un pensamiento independiente que no acepta respuestas fáciles.'},
+H:{name:'Hufflepuff',crest:'🦡',ha:'#c99b00',hb:'#ffd95e',founder:'Helga Hufflepuff',qualities:'Lealtad · Justicia · Esfuerzo honesto',ghost:'El Fray Gordito',common:'Junto a las cocinas, tras el bodegón',relic:'La copa de oro',element:'Tierra',desc:'El corazón más justo del castillo. Paciencia, trabajo honesto y una lealtad que no se quiebra ni con mil hechizos.'}};
+
+const QUESTIONS=[
+ {q:'Cuando tomas una decisión importante, ¿qué pesa más en tu mente?',o:[['Si es lo correcto, aunque sea difícil o impopular.',{G:3,H:1}],['Si tiene sentido lógico y está bien fundamentada.',{R:3,S:1}],['Si me acerca a donde quiero estar en el futuro.',{S:3}],['Si afecta a las personas que me importan.',{H:3,G:1}]]},
+ {q:'¿Qué te molesta más en una situación?',o:[['Que alguien se aproveche de los más vulnerables.',{G:3,H:1}],['Que las cosas se hagan mal por pereza o desidia.',{H:3,R:1}],['Que no se reconozca el mérito de quien lo merece.',{S:3,G:1}],['Que se tomen decisiones sin entender bien el problema.',{R:3}]]},
+ {q:'En un grupo de amigos, ¿cuál suele ser tu papel natural?',o:[['El que propone hacer algo diferente o arriesgado.',{G:3}],['El que escucha y aconseja cuando alguien lo necesita.',{H:3}],['El que observa y aporta ideas cuando hace falta.',{R:3}],['El que prefiere hacer sus propias cosas a su manera.',{S:3}]]},
+ {q:'¿Qué frase te representa mejor?',o:[['«Prefiero equivocarme por hacer algo que no hacer nada.»',{G:3,S:1}],['«La justicia no es negociable, aunque duela.»',{H:3,G:1}],['«Cada uno es responsable de su propio camino.»',{S:3}],['«Hay más de una forma de ver las cosas.»',{R:3,H:1}]]},
+ {q:'Cuando alguien te decepciona, ¿cómo reaccionas?',o:[['Me duele, pero intento entender por qué pasó.',{H:3,R:1}],['Corto por lo sano si hace falta: no tengo tiempo para dramas.',{S:3,G:1}],['Analizo qué hice yo también y aprendo de ello.',{R:3,H:1}],['Me enfado, pero si la persona me importa, hablamos.',{G:3,H:1}]]},
+ {q:'¿Qué tipo de trabajo te atraería más?',o:[['Algo donde pudiera ser completamente autónomo.',{S:3,R:1}],['Algo que implique proteger o defender a otros.',{G:3}],['Algo donde el esfuerzo y la constancia sean visibles.',{H:3}],['Algo que requiera creatividad y resolver problemas.',{R:3,S:1}]]},
+ {q:'Si tuvieras que elegir un defecto con el que vivir, sería:',o:[['Ser demasiado impulsivo a veces.',{G:3}],['Me cuesta confiar plenamente en los demás.',{S:3,R:1}],['Dedicar demasiado tiempo a cosas que no son urgentes.',{R:3}],['Me cuesta decir que no cuando alguien me necesita.',{H:3,G:1}]]},
+ {q:'¿Qué te hace sentir más orgulloso de ti mismo?',o:[['Haber mantenido mi palabra cuando era fácil romperla.',{H:3}],['Haber defendido algo en lo que creía, aunque estaba solo.',{G:3,S:1}],['Haber resuelto algo que otros no pudieron.',{R:3,S:1}],['Haber logrado algo por mi propio esfuerzo, sin ayuda.',{S:3,R:1}]]},
+ {q:'En una discusión, ¿qué valoras más?',o:[['Que la otra persona sea honesta, aunque no estemos de acuerdo.',{G:3,H:1}],['Que haya argumentos sólidos, no solo opiniones.',{R:3}],['Que se llegue a una solución práctica.',{S:3,H:1}],['Que nadie salga herido en el proceso.',{H:3}]]},
+ {q:'¿Qué te da más miedo?',o:[['Ser recordado como alguien que no hizo nada con su vida.',{S:3,G:1}],['Traicionar a alguien que confió en mí.',{H:3}],['Tomar una decisión equivocada por no pensarlo bien.',{R:3,H:1}],['Quedarme paralizado cuando hace falta actuar.',{G:3,S:1}]]},
+ {q:'Si pudieras tener un superpoder, elegirías:',o:[['Ver la verdad detrás de las apariencias.',{R:3,S:1}],['Proteger a quienes no pueden defenderse.',{G:3,H:1}],['Ser completamente autosuficiente.',{S:3}],['Curar o aliviar el sufrimiento de otros.',{H:3,G:1}]]},
+ {q:'¿Cómo te sientes cuando estás mucho tiempo sin hacer nada?',o:[['Incómodo: necesito sentir que avanzo en algo.',{S:3,G:1}],['Tranquilo: a veces hace falta parar.',{H:3,R:1}],['Aprovecho para pensar o aprender algo nuevo.',{R:3,S:1}],['Depende: si es después de algo intenso, lo necesito.',{G:3,H:1}]]},
+ {q:'¿Qué tipo de líder prefieres?',o:[['Alguien que inspire y motive con su ejemplo.',{G:3}],['Alguien justo que trate a todos por igual.',{H:3}],['Alguien competente que sepa lo que hace.',{R:3,S:1}],['Prefiero no tener jefe y ser mi propio líder.',{S:3}]]},
+ {q:'Cuando ves una injusticia, lo primero que piensas es:',o:[['«Alguien tiene que hacer algo, y puedo ser yo.»',{G:3}],['«Hay que entender bien qué pasó antes de actuar.»',{R:3,H:1}],['«¿Cómo puedo ayudar a quien la sufre?»',{H:3,G:1}],['«El sistema está mal: hay que cambiar las reglas.»',{S:3,R:1}]]},
+ {q:'¿Qué valoras más en una amistad?',o:[['Que sea leal y esté ahí cuando importa.',{H:3}],['Que me desafíe y me haga crecer.',{G:3,R:1}],['Que respete mi espacio y mi autonomía.',{S:3}],['Que podamos hablar de cualquier cosa con profundidad.',{R:3,H:1}]]},
+ {q:'Si tuvieras que elegir, ¿cómo te gustaría ser recordado?',o:[['Como alguien valiente.',{G:3}],['Como alguien sabio.',{R:3}],['Como alguien confiable.',{H:3}],['Como alguien que logró sus metas.',{S:3,G:1}]]},
+ {q:'¿Qué te motiva más a seguir adelante?',o:[['La idea de no rendirme, aunque sea difícil.',{G:3,H:1}],['Saber que mi esfuerzo vale la pena.',{H:3,S:1}],['La curiosidad por ver qué hay más allá.',{R:3,G:1}],['La satisfacción de hacer las cosas a mi manera.',{S:3}]]},
+ {q:'Y si el Sombrero te preguntara directamente «¿qué casa prefieres?», ¿qué harías?',o:[['Le diría la verdad, aunque no sea la que él espera.',{G:3,S:1}],['Le pediría que me explicara bien qué significa cada casa.',{R:3}],['Le diría que confío en su juicio: él sabe más que yo.',{H:3}],['Le diría que ya tengo mi opinión, pero que escucho la suya.',{S:3,R:1}]]}];
+
+const qLines=n=>[
+ `Dime, ${n}: cuando tomas una decisión importante, ¿qué pesa más?`,
+ `Hay cosas que te molestan profundamente. ¿Cuál es la que más?`,
+ `En tu grupo de amigos, ${n}… ¿cuál es tu papel natural?`,
+ `Hay una frase que te define. ¿Cuál es?`,
+ `Cuando alguien te decepciona, ${n}… ¿cómo reaccionas?`,
+ `Imagina tu trabajo ideal. ¿Cómo sería?`,
+ `Todos tenemos defectos. ¿Con cuál te quedas?`,
+ `¿Qué te hace sentir orgulloso de ti mismo, ${n}?`,
+ `En una discusión, ¿qué valoras más?`,
+ `Hay miedos que nos definen. ¿Cuál es el tuyo?`,
+ `Si pudieras elegir un superpoder, ${n}…`,
+ `¿Cómo te sientes cuando no haces nada?`,
+ `¿Qué tipo de líder prefieres?`,
+ `Cuando ves una injusticia, ${n}, ¿qué piensas primero?`,
+ `En una amistad, ¿qué valoras más?`,
+ `¿Cómo quieres ser recordado, ${n}?`,
+ `¿Qué te motiva a seguir adelante?`,
+ `Y por último: si el Sombrero te preguntara directamente… ¿qué harías?`];
+const MURMURS=['Mmm… interesante.','Ajá… eso me dice mucho.','Curioso… muy curioso.','Sí… lo veo clarísimo.','Hmm… no intentes engañarme: ya sé lo que quiero oír y no era eso.','Vaya, vaya…','He visto mentes peores. Mucho peores. La tuya… promete.','Sigue, sigue: esto se pone bueno.'];
+const QUIPS=['¡No me toques! Aún no he terminado.','Mil años… y todos hacen exactamente lo mismo.','Dedos curiosos… concéntrate, la decisión es seria.','Mmm. Si insistes, te dejo sin casa. Es broma. O no.','Cuidado, que me acaban de cepillar.','Si buscas cosquillas: tengo tres y cada una con nombre.'];
+const ROMAN=['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV','XVI','XVII','XVIII'];
+const SEALS=['✦','','✧','❖'];
+
+const hatSVG=`
+<svg viewBox="0 0 340 330" role="img" aria-label="El Sombrero Seleccionador">
+  <defs>
+    <linearGradient id="hb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5c3a1f"/><stop offset="1" stop-color="#2c1a0d"/></linearGradient>
+    <linearGradient id="hc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9a6a3e"/><stop offset=".55" stop-color="#6d4526"/><stop offset="1" stop-color="#412714"/></linearGradient>
+    <filter id="softb" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="5"/></filter>
+  </defs>
+  <ellipse cx="170" cy="318" rx="118" ry="10" fill="#000" opacity=".4" filter="url(#softb)"/>
+  <g stroke-linecap="round"><path d="M116 266 l-16 54" stroke="#3c2513" stroke-width="11"/><path d="M224 266 l16 54" stroke="#3c2513" stroke-width="11"/><path d="M170 274 l0 48" stroke="#4a2f1a" stroke-width="11"/></g>
+  <ellipse cx="170" cy="266" rx="94" ry="17" fill="#5d3c20"/><ellipse cx="170" cy="261" rx="82" ry="12" fill="#7a5028"/>
+  <g class="hat-sway">
+    <path d="M28 244 C 60 214 120 206 170 208 C 224 206 282 216 312 246 C 292 272 232 284 168 284 C 104 284 50 270 28 244 Z" fill="url(#hb)" stroke="#1d1006" stroke-width="2"/>
+    <path d="M42 240 C 90 216 250 216 298 244" fill="none" stroke="#b07c42" stroke-width="2.5" opacity=".45" stroke-dasharray="1 6"/>
+    <path d="M84 232 C 92 178 104 138 128 104 C 146 78 158 66 186 46 C 200 36 216 30 230 38 C 222 50 212 56 202 60 C 216 88 232 126 244 166 C 251 190 256 214 258 236 C 226 252 192 256 160 254 C 128 252 102 244 84 232 Z" fill="url(#hc)" stroke="#231207" stroke-width="2.5"/>
+    <path d="M206 58 C 226 48 246 56 254 74 C 240 78 222 72 210 65 Z" fill="#3e2413" stroke="#231207" stroke-width="1.5"/>
+    <path d="M110 182 C 140 168 182 168 216 184" stroke="#38220f" stroke-width="3" fill="none" opacity=".7"/>
+    <path d="M120 150 C 148 138 186 140 210 154" stroke="#38220f" stroke-width="3" fill="none" opacity=".6"/>
+    <path d="M138 118 C 158 108 184 110 200 122" stroke="#38220f" stroke-width="2.5" fill="none" opacity=".55"/>
+    <path d="M196 138 l34 -8 l6 26 l-34 8 Z" fill="#7d5a33" stroke="#d9a94e" stroke-width="1.4" stroke-dasharray="4 3" opacity=".95"/>
+    <path d="M106 194 l26 6 l-5 20 l-26 -6 Z" fill="#55361c" stroke="#d9a94e" stroke-width="1.2" stroke-dasharray="4 3" opacity=".9"/>
+    <path d="M122 174 q20 -12 42 -4" stroke="#2a1708" stroke-width="2.5" fill="none" opacity=".65"/>
+    <path d="M184 170 q20 -10 40 0" stroke="#2a1708" stroke-width="2.5" fill="none" opacity=".65"/>
+    <path d="M126 184 q16 -14 34 -4 q-18 12 -34 4 Z" fill="#170b03"/>
+    <path d="M186 180 q18 -12 34 0 q-18 12 -34 0 Z" fill="#170b03"/>
+    <g class="mouth"><path d="M118 208 Q146 196 172 204 Q200 212 224 202 Q212 230 172 234 Q134 230 118 208 Z" fill="#150a02"/><path d="M118 208 Q172 194 224 202" stroke="#a8794a" stroke-width="2" fill="none" opacity=".45"/></g>
+  </g>
+</svg>`;
+$$('[data-hat]').forEach(el=>el.innerHTML=hatSVG);
+
+const starsBox=$('#stars');
+for(let i=0;i<70;i++){const s=document.createElement('span');
+  s.style.left=Math.random()*100+'%'; s.style.top=Math.random()*70+'%';
+  s.style.setProperty('--tw',(2+Math.random()*4)+'s'); s.style.setProperty('--td',(Math.random()*4)+'s');
+  if(Math.random()<.2){s.style.width='3px';s.style.height='3px'}
+  starsBox.appendChild(s);}
+const candleBox=$('#candles');
+for(let i=0;i<10;i++){
+  const c=document.createElement('div'); c.className='candle'; c.setAttribute('aria-hidden','true');
+  c.style.left=(2+Math.random()*94)+'%'; c.style.top=(4+Math.random()*36)+'%';
+  c.style.setProperty('--dur',(8+Math.random()*8)+'s');
+  c.style.setProperty('--del',(-Math.random()*8)+'s');
+  c.style.setProperty('--tilt',(1.5+Math.random()*3.5)+'deg');
+  if(Math.random()<.3) c.style.filter='blur(.6px)';
+  c.innerHTML=`<div class="candle-in" style="--s:${(.7+Math.random()*.6).toFixed(2)}"><span class="glow"></span><span class="flame"></span><span class="wax"></span></div>`;
+  candleBox.appendChild(c);}
+
+function type(el,text,hat,speed=26){
+  return new Promise(res=>{
+    if(hat){hat.classList.add('speaking')}
+    if(REDUCED){el.textContent=text;if(hat)hat.classList.remove('speaking');res();return}
+    el.textContent='';
+    const caret=document.createElement('span');caret.className='caret';caret.setAttribute('aria-hidden','true');
+    const tn=document.createTextNode('');el.append(tn,caret);
+    let i=0;
+    const iv=setInterval(()=>{tn.textContent=text.slice(0,++i);
+      if(i>=text.length){clearInterval(iv);caret.remove();if(hat)hat.classList.remove('speaking');res()}},speed);
+  });
+}
+const screens={intro:$('#scr-intro'),quiz:$('#scr-quiz'),result:$('#scr-result')};
+function show(key){Object.values(screens).forEach(s=>s.classList.remove('on'));const el=screens[key];el.classList.add('on');el.scrollTop=0;
+  if(key==='quiz')$('#ceremonia').scrollIntoView({behavior:REDUCED?'auto':'smooth'});}
+
+let wizName='Aprendiz', qi=0, locked=false, score={G:0,S:0,R:0,H:0}, finalKey='G';
+const qb=$('#quizBubble'), qcard=$('#qcard'), optsBox=$('#opts'), veilText=$('#veilText');
+for(let i=0;i<18;i++){const p=document.createElement('span');p.className='pcandle';$('#qprogress').appendChild(p)}
+const pcandles=$$('.pcandle');
+const lightCandles=n=>pcandles.forEach((p,i)=>p.classList.toggle('lit',i<n));
+
+document.getElementById('nameForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const v=$('#wname').value.trim();
+  wizName=v? v[0].toUpperCase()+v.slice(1) : 'Aprendiz';
+  show('quiz'); locked=true;
+  await type(qb,`Hmm… ${wizName}… bienvenido a la Sucursal de Hogwarts de Olor a Libros. Acércate al taburete. Llevo mil años leyendo mentes y nadie me ha preguntado nunca cómo estoy yo. Sigamos: responde sin miedo, que sé cuándo mientes.`,screens.quiz.querySelector('.quiz-hat'));
+  locked=false; ask(0);
+});
+async function ask(i){
+  qi=i; lightCandles(i);
+  const progressBar=$('#qprogressBar');
+  if(progressBar) progressBar.style.width=((i)/18*100)+'%';
+  $('#qnum').textContent=`Pregunta ${ROMAN[i]} · de XVIII`;
+  $('#qtext').textContent=QUESTIONS[i].q;
+  optsBox.innerHTML='';
+  QUESTIONS[i].o.forEach((o,j)=>{
+    const b=document.createElement('button'); b.className='opt'; b.type='button';
+    b.style.setProperty('--d',(.12+j*.08)+'s');
+    b.innerHTML=`<span class="opt-seal">${SEALS[j]}</span><span>${o[0]}</span>`;
+    b.addEventListener('click',()=>choose(b,o[1]));
+    optsBox.appendChild(b);
+  });
+  qcard.classList.remove('in'); void qcard.offsetWidth; qcard.classList.add('in');
+  await type(qb,qLines(wizName)[i],screens.quiz.querySelector('.quiz-hat'));
+}
+function choose(btn,w){
+  if(locked)return; locked=true;
+  $$('#opts .opt').forEach(b=>{b.disabled=true; if(b!==btn)b.classList.add('faded')});
+  btn.classList.add('chosen');
+  for(const k in w) score[k]+=w[k];
+  setTimeout(async()=>{
+    if(qi+1<QUESTIONS.length){
+      const progressBar=$('#qprogressBar');
+      if(progressBar) progressBar.style.width=((qi+1)/18*100)+'%';
+      await type(qb,MURMURS[(Math.random()*MURMURS.length)|0],screens.quiz.querySelector('.quiz-hat'),13);
+      locked=false; ask(qi+1);
+    } else { lightCandles(18); locked=false; think(); }
+  }, REDUCED?250:850);
+}
+async function think(){
+  const hat=screens.quiz.querySelector('.hat-holder');
+  screens.quiz.classList.add('thinking'); hat.classList.add('ruminating');
+  await type(qb,'Silencio ahora… déjame mirar dentro de ti…',hat);
+  const msgs=['Difícil… muy difícil…','Mucho valor, sí…','Y una mente despierta…','Lealtad de la buena…','Ambición… claro que sí…','Y un punto de locura que no pienso contar en el Gran Comedor…','¡Ah! Ya lo veo.'];
+  for(const m of msgs){veilText.textContent=m; await wait(REDUCED?180:780);}
+  hat.classList.remove('ruminating'); screens.quiz.classList.remove('thinking');
+  reveal();
+}
+function reveal(){
+  const entries=Object.entries(score);
+  const max=Math.max(...entries.map(e=>e[1]));
+  const tops=entries.filter(e=>e[1]===max).map(e=>e[0]);
+  const key=tops[(Math.random()*tops.length)|0]; finalKey=key;
+  const H=HOUSES[key], scr=screens.result;
+  scr.style.setProperty('--ha',H.ha); scr.style.setProperty('--hb',H.hb);
+  $('#rEmblem').innerHTML=RELICS[key];
+  $('#rHouse').textContent='';
+  $('#rFor').innerHTML=`Bienvenido a tu casa, <b>${wizName}</b>. El retrato ya conoce tu contraseña.`;
+  const tie=$('#rTie');
+  if(tops.length>1){tie.hidden=false;tie.textContent=`⏳ Decisión reñida — dudé entre ${tops.map(t=>HOUSES[t].name).join(' y ')}. Culpa a tu personalidad, no a mí.`}
+  else tie.hidden=true;
+  $('#rDesc').textContent=H.desc;
+  $('#rFacts').innerHTML=[['Fundador',H.founder],['Cualidades',H.qualities],['Fantasma',H.ghost],['Sala común',H.common],['Reliquia',H.relic],['Elemento',H.element]]
+    .map(f=>`<div class="fact"><dt>${f[0]}</dt><dd>${f[1]}</dd></div>`).join('');
+  const total=entries.reduce((a,e)=>a+e[1],0)||1;
+  $('#mindBars').innerHTML=['G','R','H','S'].map(k=>
+    `<div class="mindrow"><span class="lbl">${HOUSES[k].name}</span><span class="mindbar"><span data-w="${(score[k]/total*100).toFixed(0)}" style="background:linear-gradient(90deg,${HOUSES[k].ha},${HOUSES[k].hb})"></span></span><span class="pts">${score[k]}</span></div>`).join('');
+  const date=new Intl.DateTimeFormat('es-ES',{day:'numeric',month:'long',year:'numeric'}).format(new Date());
+  $('#rCert').textContent=`Pergamino expedido el ${date} · Sucursal de Hogwarts · Olor a Libros · Firmado: el Sombrero (no firma porque no tiene manos)`;
+  const embers=$('#embers'); embers.innerHTML='';
+  if(!REDUCED) for(let i=0;i<16;i++){const e=document.createElement('span');
+    e.style.left=Math.random()*100+'%';
+    e.style.setProperty('--ed',(4+Math.random()*5)+'s'); e.style.setProperty('--edel',(Math.random()*4)+'s');
+    e.style.setProperty('--ex',((Math.random()*80)-40)+'px'); embers.appendChild(e);}
+  show('result');
+  scramble($('#rHouse'),H.name.toUpperCase());
+  burst(screens.result.querySelector('.result-inner'),[H.ha,H.hb],80,340);
+  const line=tops.length>1?`¡Casi me haces dudar, ${wizName}! Pero lo tengo claro: ¡${H.name.toUpperCase()}!`:`¡Lo supe casi desde el principio! ¡${H.name.toUpperCase()}!`;
+  type($('#resultBubble'),line,scr.querySelector('.hat-holder'),20);
+}
+function scramble(el,text,dur=1200){
+  if(REDUCED){el.textContent=text;return}
+  const chars='ABCDEFGHIKLMNOPRSTUVYZ¡'; const steps=Math.ceil(dur/40); let f=0;
+  const iv=setInterval(()=>{f++; const p=f/steps;
+    el.textContent=text.split('').map((c,i)=> i<p*text.length? c : chars[(Math.random()*chars.length)|0]).join('');
+    if(f>=steps){el.textContent=text;clearInterval(iv)}},40);
+}
+function burst(container,colors,n,dist){
+  if(REDUCED)return;
+  for(let i=0;i<n;i++){
+    const p=document.createElement('span'); const a=Math.random()*Math.PI*2, d=60+Math.random()*dist;
+    p.style.cssText=`position:absolute;left:50%;top:32%;width:${5+Math.random()*7}px;height:${5+Math.random()*7}px;z-index:5;pointer-events:none;
+      background:${colors[(Math.random()*colors.length)|0]};opacity:0;border-radius:${Math.random()<.5?'50%':'1px'};
+      box-shadow:0 0 10px ${colors[1]||colors[0]};
+      animation:spark ${(.9+Math.random()*.9).toFixed(2)}s cubic-bezier(.15,.6,.3,1) ${(Math.random()*.25).toFixed(2)}s forwards;
+      --dx:${Math.cos(a)*d}px;--dy:${Math.sin(a)*d-60}px;--rr:${(Math.random()*720-360)|0}deg`;
+    container.appendChild(p); setTimeout(()=>p.remove(),2400);
+  }
+}
+if(!document.getElementById('sparkKF')){
+  const st=document.createElement('style'); st.id='sparkKF';
+  st.textContent='@keyframes spark{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--rr))}}';
+  document.head.appendChild(st);
+}
+$('#btnRestart').addEventListener('click',()=>{
+  score={G:0,S:0,R:0,H:0}; qi=0; lightCandles(0);
+  qb.textContent=''; $('#resultBubble').textContent='';
+  show('intro');
+  type($('#introBubble'),'¿Otra vez tú? Bah, siéntate. El taburete no se queja nunca. Yo tampoco, aunque llevo mil años sin vacaciones.',screens.intro.querySelector('.hat-holder'));
+});
+$('#btnCopy').addEventListener('click',async()=>{
+  const H=HOUSES[finalKey];
+  const txt=`🎩⚡ El Sombrero Seleccionador de Hogwarts ha decidido: ¡${H.name.toUpperCase()}! ${H.crest}\n${wizName}, tu casa te espera en la Sucursal de Hogwarts de Olor a Libros.`;
+  try{ await navigator.clipboard.writeText(txt); toastMsg('Veredicto copiado en tu pergamino ✓'); }
+  catch{ toastMsg('El hechizo de copia falló… inténtalo de nuevo'); }
+});
+function toastMsg(t){const el=$('#toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2600)}
+let quipIdx=0;
+document.addEventListener('click',e=>{
+  const holder=e.target.closest('.hat-holder'); if(!holder)return;
+  /* no responder en el mini-hat de lore ni en el result-hat (solo en intro/quiz) */
+  if(holder.classList.contains('mini-hat')||holder.classList.contains('result-hat'))return;
+  if(locked)return;
+  const screen=holder.closest('.screen'); if(!screen)return;
+  const bubble=screen.querySelector('.bubble'); if(!bubble)return;
+  type(bubble,QUIPS[quipIdx++ % QUIPS.length],holder,18);
+});
+const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{threshold:.15});
+$$('.reveal').forEach(el=>io.observe(el));
+$('#mindBars')&&new MutationObserver(()=>{$$('#mindBars .mindbar span').forEach(s=>requestAnimationFrame(()=>s.style.width=s.dataset.w+'%'))}).observe($('#mindBars'),{childList:true});
+type($('#introBubble'),'Hmm… ¿otro alumno de Olor a Libros? Acércate, acércate… no muerdo. Casi nunca. Y si muerdo, es con cariño y previa firma de un permiso.',screens.intro.querySelector('.hat-holder'),30);
+</script>
+<script src="magia.js" defer></script>
+</body>
+</html>

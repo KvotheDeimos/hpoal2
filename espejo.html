@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Espejo de Oesed — Olor a Libros · Sucursal de Hogwarts</title>
+<meta name="description" content="El Espejo de Oesed muestra el deseo más profundo de tu corazón. Experiencia de la Sucursal de Hogwarts de Olor a Libros.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Olor a Libros · Sucursal de Hogwarts">
+<meta property="og:title" content="El Espejo de Oesed">
+<meta property="og:description" content="Muestra el deseo más profundo de tu corazón. Entra sin compañía: ahí dentro no se mira, se es mirado.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.espejo{position:relative;min-height:100vh;min-height:100svh;overflow:hidden;
+  background:radial-gradient(130% 100% at 50% 0%, #0d1628 0%, #070d1a 55%, #04060c 100%)}
+.dust span{position:absolute;width:2px;height:2px;border-radius:50%;background:#cfd8ea;opacity:0;animation:dust var(--dd) linear infinite;animation-delay:var(--ddel)}
+@keyframes dust{0%{transform:translate(0,0);opacity:0}18%{opacity:.4}100%{transform:translate(var(--dx),-70vh);opacity:0}}
+.mtop{display:flex;justify-content:space-between;align-items:center;gap:var(--sp-4);margin-bottom:var(--sp-1)}
+.msign{font-family:'Cinzel Decorative',serif;font-weight:700;color:#cfd8ea;letter-spacing:.2em;font-size:clamp(.9rem,2.4vw,var(--fs-3));text-align:center}
+.msign small{display:block;font-family:'IM Fell English',serif;font-style:italic;font-weight:400;color:#8fa0bf;letter-spacing:.16em;font-size:.72rem;margin-top:var(--sp-1)}
+.mback{background:none;border:none;color:#8fa0bf;font:600 .85rem 'EB Garamond',serif;letter-spacing:.12em;text-transform:uppercase;padding:var(--sp-2) var(--sp-1);text-decoration:none}
+.mback:hover{color:#dfe6f5}
+.mirror-wrap{position:relative;width:clamp(190px,30vw,290px);margin:0 auto;flex:none}
+.mirror-wrap svg{width:100%;height:auto;filter:drop-shadow(0 20px 40px rgba(0,0,0,.6))}
+.mirror-glow{position:absolute;inset:-18%;border-radius:50%;background:radial-gradient(closest-side,rgba(150,180,255,.16),transparent 70%);animation:mglow 5s ease-in-out infinite}
+@keyframes mglow{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.06)}}
+.cloth{transition:transform 1.6s cubic-bezier(.6,.05,.3,1),opacity 1.4s;transform-origin:50% 0}
+.unveiled .cloth{transform:translateY(105%) rotate(2deg);opacity:0}
+.mirror-fog{position:absolute;inset:9% 7%;border-radius:50%;background:radial-gradient(closest-side,rgba(200,215,240,.35),rgba(200,215,240,.12));filter:blur(8px);transition:opacity 2.8s ease;pointer-events:none;animation:fogBreath 6s ease-in-out infinite}
+@keyframes fogBreath{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.7;transform:scale(1.03)}}
+.clear .mirror-fog{opacity:0}
+.inscription{margin-top:var(--sp-3);text-align:center;font-family:'Cinzel Decorative',serif;font-size:.62rem;letter-spacing:.28em;color:#6f7fa0}
+.inscription-trans{margin-top:var(--sp-1);text-align:center;font-family:'IM Fell English',serif;font-style:italic;font-size:.8rem;color:#8fa0bf;opacity:0;transition:opacity 1.6s ease .4s}
+.shown .inscription-trans{opacity:1}
+.glasscard{background:rgba(160,185,235,.07);border:1px solid rgba(190,210,255,.22);border-radius:var(--r-m);
+  padding:var(--sp-6);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+  box-shadow:0 20px 50px rgba(0,0,0,.45), inset 0 0 60px rgba(140,170,230,.06);position:relative}
+.glasscard.in{animation:glassIn .8s cubic-bezier(.2,.7,.2,1)}
+@keyframes glassIn{from{opacity:0;transform:translateY(18px);filter:blur(6px)}to{opacity:1;transform:none;filter:blur(0)}}
+.gtext{font-size:var(--fs-3);font-weight:500;line-height:1.45;margin-bottom:var(--sp-5);color:#e8edf8;font-family:'EB Garamond',serif}
+.gopts{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3)}
+.gopt{display:flex;gap:var(--sp-3);align-items:center;text-align:left;background:rgba(160,185,235,.05);
+  border:1px solid rgba(190,210,255,.2);border-radius:var(--r-s);padding:var(--sp-3) var(--sp-4);
+  font:500 1.02rem/1.45 'EB Garamond',serif;color:#dfe6f5;
+  opacity:0;transform:translateY(10px);
+  transition:opacity .5s ease var(--d),transform .5s ease var(--d),background .3s,border-color .3s,box-shadow .3s}
+.glasscard.in .gopt{opacity:1;transform:none}
+.gopt:hover:not(:disabled){background:rgba(160,185,235,.13);border-color:rgba(210,225,255,.5);box-shadow:0 8px 22px rgba(90,120,200,.25);transform:translateY(-2px)!important}
+.gopt:disabled{cursor:default}
+.gopt.chosen{background:rgba(120,150,220,.22);border-color:#cfd8ea;color:#fff}
+.gopt.faded{opacity:.3}
+.gseal{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(190,210,255,.35);color:#8fa0bf;font-size:.85rem;transition:transform .4s,background .3s,color .3s}
+.gopt:hover:not(:disabled) .gseal{transform:rotate(180deg);background:#8fa0bf;color:#0a0f1e}
+.gwhisper{min-height:26px;text-align:center;font-family:'IM Fell English',serif;font-style:italic;color:#8fa0bf;font-size:.98rem}
+.word-input{flex:1;min-width:180px;background:rgba(160,185,235,.08);border:1px solid rgba(190,210,255,.3);border-radius:var(--r-s);padding:var(--sp-3) var(--sp-4);font:500 1.05rem 'EB Garamond',serif;color:#e8edf8}
+.word-input::placeholder{color:#6f7fa0;font-style:italic}
+.word-input:focus{border-color:#cfd8ea;box-shadow:0 0 0 3px rgba(160,185,235,.15);outline:none}
+.mprogress{display:flex;justify-content:center;gap:var(--sp-4);align-items:flex-end;flex-wrap:wrap}
+.mcandle{width:9px;height:24px;background:linear-gradient(#e8e2d2,#b9b2a0);border-radius:3px;position:relative}
+.mcandle::before{content:'';position:absolute;left:50%;bottom:96%;width:7px;height:10px;margin-left:-3.5px;
+  border-radius:50%/62% 62% 38% 38%;background:radial-gradient(#fff6da,#ffbe62 70%,transparent);
+  box-shadow:0 0 10px rgba(255,190,98,.6);transition:opacity .8s,transform .8s}
+.mcandle::after{content:'';position:absolute;left:50%;bottom:100%;width:3px;height:10px;margin-left:-1.5px;border-radius:50%;
+  background:linear-gradient(rgba(200,210,230,.5),transparent);opacity:0}
+.mcandle.out::before{opacity:0;transform:scale(.2)}
+.mcandle.out::after{opacity:1;animation:smoke 2.2s ease-out forwards}
+@keyframes smoke{0%{transform:translateY(0);opacity:.6}100%{transform:translateY(-16px) translateX(4px);opacity:0}}
+.reveal-wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:var(--sp-5);text-align:center}
+.eline{min-height:24px;font-family:'IM Fell English',serif;font-style:italic;color:#8fa0bf;font-size:1.02rem}
+.escene{display:flex;flex-direction:column;gap:var(--sp-2);font-family:'EB Garamond',serif;font-size:clamp(1.05rem,2.4vw,var(--fs-3));color:#e8edf8;line-height:1.55}
+.ename{font-family:'Cinzel Decorative',serif;font-weight:900;font-size:clamp(1.9rem,6.5vw,var(--fs-6));letter-spacing:.08em;
+  color:#e9d8a8;text-shadow:0 0 40px rgba(233,216,168,.35);opacity:0}
+.ename.flip-in{animation:mirrorFlip 1.8s cubic-bezier(.3,.7,.2,1) forwards}
+@keyframes mirrorFlip{0%{opacity:0;transform:scaleX(-1);filter:blur(8px)}55%{opacity:1;transform:scaleX(-.15);filter:blur(2px)}100%{opacity:1;transform:scaleX(1);filter:blur(0)}}
+.edesire{font-family:'IM Fell English',serif;font-style:italic;font-size:clamp(1.1rem,2.8vw,var(--fs-3));color:#cfd8ea}
+.elayer{text-align:left;border-left:2px solid rgba(190,210,255,.3);padding:var(--sp-2) 0 var(--sp-2) var(--sp-4);opacity:0;transform:translateY(10px);transition:opacity 1.1s ease,transform 1.1s ease}
+.elayer.on{opacity:1;transform:none}
+.elayer h4{font-family:'Cinzel Decorative',serif;font-size:.78rem;letter-spacing:.3em;text-transform:uppercase;color:#8fa0bf;margin-bottom:var(--sp-2)}
+.elayer p{font-size:1.03rem;color:#dfe6f5;line-height:1.6}
+.elayer.gift{border-left-color:rgba(233,216,168,.5)}
+.elayer.gift p{color:#efe6cd}
+.elayer.ask{border-left-color:rgba(190,210,255,.55)}
+.elayer.ask p{font-family:'IM Fell English',serif;font-style:italic;font-size:1.14rem;color:#cfd8ea}
+.echoice{display:flex;justify-content:center;gap:var(--sp-4);flex-wrap:wrap;opacity:0;transition:opacity 1s ease}
+.echoice.on{opacity:1}
+.btn-m{background:rgba(10,16,30,.5);border:1px solid rgba(190,210,255,.35);color:#dfe6f5;padding:var(--sp-3) var(--sp-6);
+  font:600 .98rem 'EB Garamond',serif;letter-spacing:.08em;border-radius:var(--r-s);transition:.3s}
+.btn-m:hover{background:rgba(160,185,235,.2);border-color:#cfd8ea;box-shadow:0 10px 26px rgba(90,120,200,.3);transform:translateY(-2px)}
+.eepilogue{display:flex;flex-direction:column;gap:var(--sp-3);font-family:'EB Garamond',serif;font-size:clamp(1.02rem,2.3vw,var(--fs-2));color:#dfe6f5;line-height:1.65;text-align:left;max-width:640px;margin:0 auto}
+.eepilogue p.ps{font-family:'IM Fell English',serif;font-style:italic;color:#8fa0bf;font-size:.98rem}
+.ecert{text-align:center;font-size:.82rem;color:#6f7fa0;font-style:italic}
+.caret-s{background:#cfd8ea}
+@media (max-width:760px){.gopts{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<div class="toast" id="toast" role="status"></div>
+<noscript><p style="max-width:600px;margin:60px auto;text-align:center;font-size:1.15rem;color:#dfe6f5">🪞 El espejo necesita JavaScript para empañarse. Actívalo con cuidado.</p></noscript>
+
+<section class="ceremony espejo" id="espejo" aria-label="El Espejo de Oesed">
+  <div class="backdrop" aria-hidden="true"><div class="dust" id="dust"></div></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <div class="screen on" id="scr-eintro">
+    <div class="quiz-wrap">
+      <div class="mtop">
+        <a class="mback" href="index.html">← Portada</a>
+        <div class="msign">EL ESPEJO DE OESED<small>aula vacía · tercera puerta a la izquierda</small></div>
+        <span style="width:90px"></span>
+      </div>
+      <div class="mirror-wrap" id="mirrorIntro">
+        <div class="mirror-glow"></div>
+        <svg viewBox="0 0 300 420" role="img" aria-label="El Espejo de Oesed, cubierto por una tela">
+          <defs>
+            <linearGradient id="mgold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6b4e17"/><stop offset=".45" stop-color="#e8c87a"/><stop offset="1" stop-color="#8a6a2f"/></linearGradient>
+            <radialGradient id="mglass" cx=".5" cy=".42" r=".75"><stop offset="0" stop-color="#1b2a4a"/><stop offset=".7" stop-color="#0d1526"/><stop offset="1" stop-color="#080d18"/></radialGradient>
+          </defs>
+          <ellipse cx="150" cy="210" rx="122" ry="172" fill="none" stroke="url(#mgold)" stroke-width="11"/>
+          <ellipse cx="150" cy="210" rx="109" ry="159" fill="none" stroke="#d9b968" stroke-width="2" opacity=".75"/>
+          <ellipse cx="150" cy="210" rx="104" ry="154" fill="url(#mglass)"/>
+          <path d="M96 120 q30 -34 74 -22" stroke="#cfd8ea" stroke-width="5" fill="none" opacity=".08" stroke-linecap="round"/>
+          <path d="M150 22 c-16 10 -12 24 0 28 c12 -4 16 -18 0 -28 Z" fill="url(#mgold)"/>
+          <path d="M52 96 q-18 8 -14 26 M248 96 q18 8 14 26 M52 324 q-18 -8 -14 -26 M248 324 q18 -8 14 -26" stroke="url(#mgold)" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <path d="M118 388 h64 l10 22 h-84 Z" fill="url(#mgold)"/>
+          <g class="cloth">
+            <path d="M40 60 q110 -34 220 0 l-8 250 q-102 26 -204 0 Z" fill="#2a3350"/>
+            <path d="M80 66 q10 120 -4 236 M150 58 q6 130 0 250 M220 66 q-10 120 4 236" stroke="#1d2540" stroke-width="5" fill="none" opacity=".8"/>
+            <path d="M40 60 q110 -34 220 0" stroke="#3d4a70" stroke-width="4" fill="none"/>
+          </g>
+        </svg>
+        <div class="mirror-fog"></div>
+      </div>
+      <p class="inscription">erised stra ehru oyt ube cafru oyt on wohsi</p>
+      <div class="quiz-top" style="justify-content:center">
+        <div class="bubble" id="eintroBubble" aria-live="polite" style="max-width:660px"></div>
+      </div>
+      <form class="scroll-form" id="eForm" style="margin:0 auto">
+        <label for="ename">El espejo ya sabe tu nombre. Pero le gusta oírlo de tu boca.</label>
+        <div class="form-row">
+          <input id="ename" type="text" maxlength="24" placeholder="Tu nombre, dicho en voz baja…" autocomplete="off">
+          <button class="seal-btn" type="submit">
+            <span class="seal" aria-hidden="true">E</span>
+            <span class="seal-label">Ponerte delante<br>del espejo</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="screen" id="scr-equiz">
+    <div class="quiz-wrap">
+      <div class="mtop">
+        <a class="mback" href="index.html">← Salir en silencio</a>
+        <div class="msign">EL ESPEJO DE OESED<small>el vaho escucha</small></div>
+        <span style="width:90px"></span>
+      </div>
+      <div class="mprogress" id="mprogress" aria-hidden="true"></div>
+      <p class="gwhisper" id="ewhisper" aria-live="polite"></p>
+      <div class="glasscard" id="egcard">
+        <div class="gnum" id="egnum"></div>
+        <h3 class="gtext" id="egtext"></h3>
+        <div class="gopts" id="egopts"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="scr-eword">
+    <div class="quiz-wrap">
+      <div class="mtop">
+        <a class="mback" href="index.html">← Salir en silencio</a>
+        <div class="msign">EL ESPEJO DE OESED<small>una última pregunta, distinta</small></div>
+        <span style="width:90px"></span>
+      </div>
+      <div class="glasscard in" style="max-width:660px;margin:0 auto">
+        <div class="gnum">La pregunta del vaho</div>
+        <h3 class="gtext">Una palabra, un nombre, un lugar: quién o qué estaría en el centro de esa escena.</h3>
+        <form id="wordForm" class="form-row" style="margin-top:var(--sp-2)">
+          <input id="eword" type="text" maxlength="40" class="word-input" placeholder="Díselo en voz baja…" autocomplete="off">
+          <button class="btn-m" type="submit">Decírselo al espejo</button>
+          <button class="btn-m" type="button" id="btnSkipWord">El espejo ya lo sabe</button>
+        </form>
+        <p class="gwhisper" style="margin-top:var(--sp-4)">El espejo no juzga las palabras. Solo las guarda donde no se rompen.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="scr-ereveal">
+    <div class="quiz-wrap">
+      <div class="mtop">
+        <span style="width:90px"></span>
+        <div class="msign">EL ESPEJO DE OESED<small>no juzga lo que ve</small></div>
+        <span style="width:90px"></span>
+      </div>
+      <div class="reveal-wrap">
+        <div class="mirror-wrap" id="mirrorReveal">
+          <div class="mirror-glow"></div>
+          <svg viewBox="0 0 300 420" role="img" aria-label="El Espejo de Oesed">
+            <defs>
+              <linearGradient id="mgold2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6b4e17"/><stop offset=".45" stop-color="#e8c87a"/><stop offset="1" stop-color="#8a6a2f"/></linearGradient>
+              <radialGradient id="mglass2" cx=".5" cy=".42" r=".75"><stop offset="0" stop-color="#1b2a4a"/><stop offset=".7" stop-color="#0d1526"/><stop offset="1" stop-color="#080d18"/></radialGradient>
+            </defs>
+            <ellipse cx="150" cy="210" rx="122" ry="172" fill="none" stroke="url(#mgold2)" stroke-width="11"/>
+            <ellipse cx="150" cy="210" rx="109" ry="159" fill="none" stroke="#d9b968" stroke-width="2" opacity=".75"/>
+            <ellipse cx="150" cy="210" rx="104" ry="154" fill="url(#mglass2)"/>
+            <path d="M96 120 q30 -34 74 -22" stroke="#cfd8ea" stroke-width="5" fill="none" opacity=".1" stroke-linecap="round"/>
+            <path d="M150 22 c-16 10 -12 24 0 28 c12 -4 16 -18 0 -28 Z" fill="url(#mgold2)"/>
+            <path d="M52 96 q-18 8 -14 26 M248 96 q18 8 14 26 M52 324 q-18 -8 -14 -26 M248 324 q18 -8 14 -26" stroke="url(#mgold2)" stroke-width="6" fill="none" stroke-linecap="round"/>
+            <path d="M118 388 h64 l10 22 h-84 Z" fill="url(#mgold2)"/>
+          </svg>
+          <div class="mirror-fog" id="revealFog"></div>
+        </div>
+        <p class="inscription">erised stra ehru oyt ube cafru oyt on wohsi</p>
+        <p class="inscription-trans" id="etrans">«no muestro tu rostro, sino el deseo de tu corazón»</p>
+        <p class="eline" id="eline" aria-live="polite"></p>
+        <div class="escene" id="escene"></div>
+        <h2 class="ename" id="ename-out"></h2>
+        <p class="edesire" id="edesire"></p>
+        <div class="elayer" id="eshadow"><h4>Lo que el espejo calla</h4><p id="eshadow-p"></p></div>
+        <div class="elayer gift" id="egift"><h4>Lo que los demás reciben de ti (y tú no ves)</h4><p id="egift-p"></p></div>
+        <div class="elayer ask" id="eask"><h4>La pregunta del espejo</h4><p id="eask-p"></p></div>
+        <div class="echoice" id="echoice">
+          <button class="btn-m" id="btnStay">Quedarme un minuto más</button>
+          <button class="btn-m" id="btnLeave">Irme sin mirar atrás</button>
+        </div>
+        <div class="eepilogue" id="eepilogue"></div>
+        <div class="r-actions" id="eactions" style="display:none">
+          <button class="btn-m" id="btnECopy">⎘ &nbsp;Llevarme lo que vi</button>
+          <button class="btn-m" id="btnEAgain">↺ &nbsp;Mirar otra vez</button>
+          <a class="btn-m" href="index.html">← &nbsp;Volver a la sucursal</a>
+        </div>
+        <p class="ecert" id="ecert" style="display:none"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot-light">
+  <span>© <span id="year"></span> · Olor a Libros · Sucursal de Hogwarts</span>
+  <nav><a href="index.html">Portada</a><a href="ceremonia.html">La ceremonia</a><a href="varita.html">El Taller</a></nav>
+  <span>El espejo no recoge datos: ya lo sabe todo y no le interesa contarlo</span>
+</footer>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+$('#year').textContent=new Date().getFullYear();
+
+(function(el){for(let i=0;i<30;i++){const m=document.createElement('span');
+  m.style.left=Math.random()*100+'%'; m.style.top=(35+Math.random()*65)+'%';
+  m.style.setProperty('--dd',(10+Math.random()*12)+'s');
+  m.style.setProperty('--ddel',(-Math.random()*14)+'s');
+  m.style.setProperty('--dx',((Math.random()*50)-25)+'px');
+  el.appendChild(m);}})($('#dust'));
+
+const DESIRES={
+ belong:{name:'LOS TUYOS ALREDEDOR',
+  scene:['Una mesa larga. Mantel de diario, no de fiesta.','Alguien levanta la vista y dice «llega tarde, siéntate» como si llevaras años viniendo.','Tu sitio está puesto. Siempre lo estuvo.'],
+  desire:'No deseas cosas: deseas gente. Y que se queden.',
+  shadow:'Bajo ese deseo vive el miedo a que un día la mesa esté puesta y falte tu sitio. La teoría del apego lo describiría como ansia de base segura; la terapia de esquemas, como una necesidad de pertenencia que no se cubrió del todo y siguió sonando. El espejo, que no usa esas palabras, lo llama simplemente: gente.',
+  gift:'Cuando ese deseo lo das en vez de recibirlo, eres quien pone la mesa, quien escribe primero, quien recuerda los cumpleaños. Tu hambre de hogar se ha convertido, sin que te des cuenta, en el hogar de otros.',
+  question:'¿A quién sigues esperando para sentarte tú?',
+  ps:'(P. D.: en el grupo hay ahora mismo alguien guardándote sitio sin saberlo. Siéntate.)'},
+ seen:{name:'SER VISTO',
+  scene:['Una sala llena. Alguien cuenta una historia y dice tu nombre: «fue idea suya».','Nadie te mira a ti: miran lo que hiciste. Por fin, con los ojos bien abiertos.','Y esta vez nadie añade «pero nadie se dio cuenta».'],
+  desire:'Deseas que lo que hiciste en silencio, por fin, tenga testigos.',
+  shadow:'Bajo ese deseo vive la creencia temprana de que solo se te mira por lo que haces, no por lo que eres. Adler lo habría llamado compensación: destacar para que la falta deje de doler. Deci y Ryan dirían que pide reconocimiento; el espejo dice que pide testigos.',
+  gift:'Cuando ese deseo lo das en vez de recibirlo, eres quien se fija en el esfuerzo callado de los demás y lo dice en voz alta, justo el día que hacía falta. Tu sed de reconocimiento se ha vuelto, en otros, el alivio de existir.',
+  question:'¿Qué harías hoy si nadie fuera a aplaudirlo?',
+  ps:'(P. D.: alguien del grupo releyó tu último mensaje dos veces y sonrió. No te lo dijo. Cosas del espejo.)'},
+ understand:{name:'ENTENDERLO TODO',
+  scene:['Una biblioteca sin paredes, con la luz justa de las tardes largas.','En tu mano, el libro exacto: el que responde lo que llevas media vida preguntando en vano.','Lo abres por la página marcada. Alguien, antes que tú, subrayó tu misma duda.'],
+  desire:'Deseas la respuesta que nadie supo darte… y poder dártela tú, por fin, sin que duela.',
+  shadow:'Bajo ese deseo vive la necesidad de que el dolor tenga sentido para no quedarse a solas con él. La teoría de la autodeterminación lo leería como hambre de competencia y significado; el espejo lo lee como una biblioteca entera esperando a alguien.',
+  gift:'Cuando ese deseo lo das en vez de recibirlo, eres quien escucha hasta el final y luego hace la pregunta que nadie había hecho. Tu búsqueda de respuestas se ha vuelto, para otros, un lugar donde por fin sentirse entendidos.',
+  question:'¿Qué dolor seguiría teniendo sentido aunque nadie lo entendiera?',
+  ps:'(P. D.: tu próxima pregunta incómoda va a salvarle la tarde a alguien del grupo. Ya lo verás.)'},
+ road:{name:'EL CAMINO ABIERTO',
+  scene:['Un andén sin relojes. Un billete sin fecha ni destino escritos.','El viento huele a sitios que no conocen tu nombre ni tus deudas.','Nadie te llama para volver. Todavía.'],
+  desire:'Deseas que nada te retenga: ni el miedo, ni la costumbre, ni el qué dirán.',
+  shadow:'Bajo ese deseo vive el miedo a que quedarse sea cerrarse. En psicología se diría autonomía como necesidad básica; en tu historia, quizá, autonomía como refugio. El espejo no distingue entre las dos: solo ve la puerta abierta.',
+  gift:'Cuando ese deseo lo das en vez de recibirlo, eres quien no corta alas: quien anima a irse, quien celebra las vueltas, quien no cobra peajes. Tu hambre de horizonte se ha vuelto, en otros, el permiso que nadie les daba.',
+  question:'¿De qué huyes que no se queda donde lo dejas?',
+  ps:'(P. D.: el grupo es tu posada, no tu ancla. Las posadas existen para marcharse… y para volver.)'},
+ refuge:{name:'LA CALMA A SALVO',
+  scene:['Una casa en silencio, recién pasada la tormenta.','Los tuyos duermen; se oye una nevera, un grifo, la vida pequeña.','Tú velas en la cocina, con la luz baja. No para que te lo agradezcan: para que no se rompa.'],
+  desire:'Deseas que nada malo llegue a los que quieres. Y si llega, llegar tú primero.',
+  shadow:'Bajo ese deseo vive el cuidador que no pide: quien aprendió temprano que querer es sostener. La teoría del apego lo llamaría refugio seguro dado y no recibido; el espejo lo llama la luz de la cocina.',
+  gift:'Cuando ese deseo lo das en vez de recibirlo, eres la luz encendida de la cocina a las tres de la mañana. Tu hambre de calma se ha vuelto, para los que llegan rotos, un techo.',
+  question:'¿Quién te cuida cuando tú no puedes más?',
+  ps:'(P. D.: hay una luz encendida en alguna cocina que te espera. Puede que aún no sepas cuál.)'},
+ repair:{name:'LO QUE PUDO SER',
+  scene:['Una puerta entreabierta que reconoces al instante: es aquella.','Dentro, alguien espera con dos tazas y una pregunta que quedó a medias.','Esta vez llegas a tiempo. Esta vez sabes qué decir.'],
+  desire:'Deseas volver a un momento concreto y, esta vez, hacerlo bien.',
+  shadow:'Bajo ese deseo vive la escena que se repite hasta que alguien la absuelva. La investigación sobre el duelo lo llama vínculos continuados: seguir unido a lo perdido sin soltarlo, como Harry vuelve al espejo a ver a su familia. El espejo lo llama una puerta entreabierta.',
+  gift:'Cuando ese deseo lo das en vez de recibirlo, eres quien perdona primero y pregunta «¿estás bien?» antes que «¿qué hiciste?». Tu hambre de arreglar lo roto se ha vuelto, para otros, segundas oportunidades.',
+  question:'¿Qué dirías hoy si supieras que por fin será escuchado?',
+  ps:'(P. D.: hay una conversación esperándote con menos miedo del que crees. El espejo no da fechas, pero da direcciones.)'}};
+const DUMBLE={name:'REGALAR',
+  scene:['Un par de calcetines de lana gruesa. Nuevos, calentísimos, del color exacto del otoño.','Y, al lado, alguien con frío a quien dárselos.','El espejo, por una vez, sonríe antes que tú.'],
+  desire:'No quieres recibir: quieres tener a quién. Que ya es bastante magia.',
+  shadow:'Lo que el espejo calla: llevas siglos diciendo que no deseas nada. El espejo lleva siglos discrepando, con educación.',
+  gift:'Lo que el espejo admira: que incluso tu deseo más secreto piensa primero en los pies fríos de otra persona.',
+  question:'¿A quién le debes unos calcetines?',
+  ps:'(Sí, incluso tú, Albus.)'};
+
+const EQ=[
+ {q:'Sé honesto: ¿qué envidias, aunque te dé vergüenza admitirlo?',o:[['A los que se juntan en una mesa llena y no cuentan quién falta.',{belong:3,refuge:1}],['A los que aplauden por un esfuerzo que no tuvieron que pedir.',{seen:3,road:1}],['A los que hacen la maleta ligera y se van sin mirar atrás.',{road:3,seen:1}],['A los que entienden lo que les pasa mientras les pasa.',{understand:3,repair:1}]]},
+ {q:'Hay un recuerdo al que vuelves sin querer. ¿Qué hay en él?',o:[['Gente: una cocina, voces, una risa que no sabía que era felicidad.',{belong:3,refuge:1}],['Un momento en el que fuiste importante: alguien te miró con orgullo.',{seen:3,belong:1}],['Un lugar abierto: viento, camino, la sensación de que todo cabía.',{road:3,understand:1}],['Una conversación, o un silencio, que hoy sabrías hacer mejor.',{repair:3,understand:1}]]},
+ {q:'Fuego en casa. Solo puedes salvar una cosa. ¿Cuál agarras?',o:[['La foto en la que estamos todos. Incluso los que ya no están.',{belong:3,repair:1}],['El cuaderno donde escribo lo que no digo en voz alta.',{seen:3,understand:1}],['Nada: despierto a los míos y salimos juntos. Las cosas son cosas.',{refuge:3,belong:1}],['El pasaporte y una bolsa: hay cosas que solo se curan yéndose.',{road:3,repair:1}]]},
+ {q:'Si alguien que ya no puede (o que aún no se ha atrevido) te dijera una frase esta noche, ¿cuál elegirías?',o:[['«Estoy orgulloso de ti. Siempre lo estuve, aunque no lo dije.»',{seen:3,belong:1}],['«Ya no hace falta que seas fuerte. Ahora estoy yo.»',{refuge:3,belong:1}],['«Vete. Yo te lo sostengo todo hasta que vuelvas.»',{road:3,refuge:1}],['«Perdóname. Y perdónate tú: no fue culpa tuya.»',{repair:3,understand:1}]]},
+ {q:'En un libro o una película, ¿qué escena te deja el nudo en la garganta siempre?',o:[['La vuelta: alguien abre la puerta y está todo el mundo, con la cena caliente.',{belong:3,refuge:1}],['Cuando por fin reconocen en público al que llevaba razón en silencio.',{seen:3,repair:1}],['El que deja atrás lo conocido y echa a andar, libre, sin mirar atrás.',{road:3,understand:1}],['La disculpa que llega tarde… pero llega.',{repair:3,belong:1}]]},
+ {q:'Son las tres de la mañana y no duermes. ¿Qué te pide el pecho?',o:[['Compañía: una luz encendida en la cocina y alguien que no pregunte.',{belong:3,refuge:1}],['Una prueba: una señal de que lo que construyo no es en vano.',{seen:3,understand:1}],['Una ventana abierta: aire, noche, y el mundo todavía enorme.',{road:3,understand:1}],['Una respuesta: la frase exacta que explique esto que siento y lo calme.',{understand:3,refuge:1}]]},
+ {q:'Imagina que dentro de cinco años todo salió bien. ¿Qué es lo primero que cambia?',o:[['Hay gente nueva alrededor de una mesa que antes estaba vacía.',{belong:3,refuge:1}],['Alguien por fin dice en voz alta lo que costó.',{seen:3,repair:1}],['Puedo irme a cualquier parte sin pedir permiso.',{road:3,understand:1}],['Entiendo por fin lo que me pasó… y lo explico sin que tiemble la voz.',{understand:3,repair:1}]]},
+ {q:'¿Qué te juraste, de niño, que no volvería a pasarte?',o:[['Que nadie volviera a irse sin despedirse.',{belong:3,repair:1}],['Que nadie volviera a reírse de lo que yo quería.',{seen:3,road:1}],['Que nadie volviera a decidir por mí.',{road:3,understand:1}],['Que mi casa dejara de ser un lugar frágil.',{refuge:3,belong:1}]]},
+ {q:'Y ahora te pregunta el espejo: ¿qué es lo que más temes que te enseñe?',o:[['Que lo que quiero es tan simple que da risa: compañía.',{belong:3,refuge:1}],['Que llevo la vida haciéndolo todo bien para que alguien lo note… y nadie lo nota.',{seen:3,repair:1}],['Que nunca me fui del todo de donde nací.',{road:3,belong:1}],['Que lo que busco no tiene nombre, y me pasaré la vida traduciéndolo.',{understand:3,road:1}]]},
+ {q:'El espejo te ofrece un minuto dentro de lo que muestra. Solo uno. ¿Qué haces con él?',o:[['Sentarme a la mesa. No decir nada. Solo estar ahí mientras dure.',{belong:3,refuge:1}],['Mirarme a los ojos dentro de esa escena y creérmelo, por una vez.',{seen:3,refuge:1}],['Caminar hasta el final del camino y ver qué hay después de la curva.',{road:3,understand:1}],['Decir lo que no dije. Escuchar lo que no escuché.',{repair:3,belong:1}]]}];
+
+const WHISPERS={2:'El vaho se mueve. Algo, debajo, empieza a tener forma.',
+ 5:'El cristal está tibio. No es mal síntoma: es que hay algo cerca.',
+ 8:'El vaho se espesa un poco más. Eso que acabas de decir pesa: el espejo lo sostiene contigo.'};
+const SEALS=['✦','','✧','❖'];
+const ROMAN=['I','II','III','IV','V','VI','VII','VIII','IX','X'];
+
+function type(el,text,speed=34){
+  return new Promise(res=>{
+    if(REDUCED){el.textContent=text;res();return}
+    el.textContent='';
+    const caret=document.createElement('span');caret.className='caret caret-s';caret.setAttribute('aria-hidden','true');
+    const tn=document.createTextNode('');el.append(tn,caret);
+    let i=0;
+    const iv=setInterval(()=>{tn.textContent=text.slice(0,++i);
+      if(i>=text.length){clearInterval(iv);caret.remove();res()}},speed);
+  });
+}
+async function typeLines(el,lines,speed=46){
+  for(const l of lines){
+    const p=document.createElement('p'); el.appendChild(p);
+    await type(p,l,speed);
+    await wait(REDUCED?60:420);
+  }
+}
+
+const eScreens={eintro:$('#scr-eintro'),equiz:$('#scr-equiz'),eword:$('#scr-eword'),ereveal:$('#scr-ereveal')};
+function showE(k){Object.values(eScreens).forEach(s=>s.classList.remove('on'));const el=eScreens[k];el.classList.add('on');el.scrollTop=0;}
+
+for(let i=0;i<10;i++){const p=document.createElement('span');p.className='mcandle';$('#mprogress').appendChild(p)}
+const mcandles=$$('.mcandle');
+const outCandles=n=>mcandles.forEach((c,i)=>c.classList.toggle('out',i<n));
+
+let ezName='aprendiz', ezi=0, elocked=false, escore={}, eFinal=null, eWord='';
+
+type($('#eintroBubble'),
+ 'Lo encontraron en un aula vacía, detrás de una puerta que nadie recuerda haber abierto. Junto al marco, un cartel escrito a mano: «No deje su corazón desatendido». El Espejo de Oesed no muestra tu cara ni tu futuro: muestra el deseo más profundo y más desesperado de tu corazón. No juzga lo que ve. Tampoco lo cuenta. Serán diez preguntas… y al final, una palabra tuya. Contesta con lo que es verdad, no con lo que queda bien: el espejo nota la diferencia. Y si alguna te pesa demasiado, responde lo primero que salga. El espejo entiende de armaduras.',40);
+
+// Efecto inicial de niebla que se disipa lentamente al cargar
+setTimeout(()=>{
+  const fog=$('#mirrorIntro .mirror-fog');
+  if(fog){
+    fog.style.transition='opacity 3s ease';
+    fog.style.opacity='0.6';
+  }
+}, 1200);
+
+$('#eForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const v=$('#ename').value.trim();
+  ezName=v? v[0].toUpperCase()+v.slice(1) : 'Aprendiz';
+  $('#mirrorIntro').classList.add('unveiled');
+  await wait(REDUCED?200:900);
+  showE('equiz'); elocked=true; outCandles(0);
+  await type($('#ewhisper'),`Ponte delante, ${ezName}. Respira. El espejo ya te está leyendo.`,30);
+  elocked=false; askE(0);
+});
+
+async function askE(i){
+  ezi=i; outCandles(i);
+  $('#egnum').textContent=`Pregunta ${ROMAN[i]} · de X`;
+  const card=$('#egcard');
+  card.classList.remove('in'); void card.offsetWidth; card.classList.add('in');
+  const box=$('#egopts'); box.innerHTML='';
+  EQ[i].o.forEach((o,j)=>{
+    const b=document.createElement('button'); b.className='gopt'; b.type='button';
+    b.style.setProperty('--d',(.15+j*.1)+'s');
+    b.innerHTML=`<span class="gseal">${SEALS[j]}</span><span>${o[0]}</span>`;
+    b.addEventListener('click',()=>chooseE(b,o[1]));
+    box.appendChild(b);
+  });
+  await type($('#egtext'),EQ[i].q,30);
+}
+function chooseE(btn,w){
+  if(elocked)return; elocked=true;
+  $$('#egopts .gopt').forEach(b=>{b.disabled=true; if(b!==btn)b.classList.add('faded')});
+  btn.classList.add('chosen');
+  for(const k in w) escore[k]=(escore[k]||0)+w[k];
+  setTimeout(async()=>{
+    if(ezi+1<EQ.length){
+      const wh=WHISPERS[ezi];
+      if(wh) await type($('#ewhisper'),wh,30);
+      elocked=false; askE(ezi+1);
+    } else { outCandles(10); elocked=false; showE('eword'); }
+  }, REDUCED?250:900);
+}
+
+function proceedWord(){ showE('ereveal'); beginReveal(); }
+$('#wordForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  eWord=$('#eword').value.trim().slice(0,40);
+  proceedWord();
+});
+$('#btnSkipWord').addEventListener('click', ()=>{ eWord=''; proceedWord(); });
+
+function topDesire(){
+  const en=Object.entries(escore);
+  const mx=Math.max(...en.map(e=>e[1]));
+  const tops=en.filter(e=>e[1]===mx).map(e=>e[0]);
+  return tops[(Math.random()*tops.length)|0];
+}
+
+async function beginReveal(){
+  const isDum=['dumbledore','albus'].includes(ezName.trim().toLowerCase());
+  eFinal=isDum? DUMBLE : DESIRES[topDesire()];
+  const mirror=$('#mirrorReveal');
+  
+  // Efecto de niebla inicial más densa antes de revelar
+  const revealFog=$('#revealFog');
+  if(revealFog){
+    revealFog.style.opacity='1';
+    revealFog.style.filter='blur(12px)';
+  }
+  
+  await type($('#eline'),'La última vela se apaga sola. No es un mal presagio: es respeto.',34);
+  await wait(REDUCED?200:700);
+  
+  // Niebla que comienza a disiparse
+  if(revealFog){
+    revealFog.style.transition='opacity 3s ease, filter 3s ease';
+    revealFog.style.opacity='0.3';
+    revealFog.style.filter='blur(6px)';
+  }
+  
+  mirror.classList.add('clear');
+  await type($('#eline'),'El vaho se retira del cristal, despacio, como quien pide permiso.',34);
+  await wait(REDUCED?200:900);
+  await typeLines($('#escene'),eFinal.scene,46);
+  if(eWord){
+    await wait(REDUCED?150:600);
+    await type($('#eline'),`Y en el centro, sin que nadie lo nombre: ${eWord}.`,38);
+  }
+  await wait(REDUCED?200:800);
+  await type($('#eline'),'Tu deseo tiene nombre. Lleva años esperándote.',34);
+  const nm=$('#ename-out'); nm.textContent=eFinal.name; nm.classList.add('flip-in');
+  document.querySelector('#scr-ereveal .reveal-wrap').classList.add('shown');
+  await wait(REDUCED?300:1500);
+  await type($('#edesire'),eFinal.desire,40);
+  await wait(REDUCED?200:700);
+  $('#eshadow-p').textContent=eFinal.shadow; $('#eshadow').classList.add('on');
+  await wait(REDUCED?300:1600);
+  $('#egift-p').textContent=eFinal.gift; $('#egift').classList.add('on');
+  await wait(REDUCED?300:1600);
+  $('#eask-p').textContent=eFinal.question; $('#eask').classList.add('on');
+  await wait(REDUCED?300:1600);
+  await type($('#eline'),'La noche avanza. El espejo te deja elegir, como aquella noche dejó elegir a un niño de once años.',34);
+  $('#echoice').classList.add('on');
+}
+
+$('#btnStay').addEventListener('click', async ()=>{
+  $('#echoice').style.display='none';
+  const ep=$('#eepilogue');
+  await typeLines(ep,[
+    'Te quedas.',
+    'El minuto dura lo que tú decides: el espejo tiene toda la eternidad y esta noche te la presta.',
+    'Cuando por fin levantas la vista, el cristal está frío otra vez. Lo que arde dentro de tu pecho, no.',
+    eWord? `Y en el centro de todo, ${eWord}, exactamente donde lo necesitabas.`
+          : 'Y en el centro de todo, eso que no has dicho en voz alta. El espejo lo guarda por ti.',
+    `Detrás de ti, alguien carraspea. Dumbledore, que fingía no estar mirando, te pone una mano en el hombro: «Es hermoso, ¿verdad? No olvides vivir, ${ezName}: lo que viste también se construye, en dosis pequeñas, de este lado del cristal.»`
+  ],38);
+  const ps=document.createElement('p'); ps.className='ps'; ps.textContent=eFinal.ps; ep.appendChild(ps);
+  finishReveal();
+});
+$('#btnLeave').addEventListener('click', async ()=>{
+  $('#echoice').style.display='none';
+  const ep=$('#eepilogue');
+  await typeLines(ep,[
+    'Te vas sin mirar atrás.',
+    'El espejo guarda tu secreto con la discreción de los muebles antiguos: no lo repetirá, no lo juzgará, no lo olvidará.',
+    eWord? `Te llevas la escena contigo. ${eWord} no se queda atrás: viaja donde tú viajes.`
+          : 'Te llevas la escena contigo, incluida la parte que no has nombrado. Esa también es tuya.',
+    'En el pasillo, Dumbledore finge pasar por casualidad. Asiente una sola vez, como quien reconoce a un igual, y sigue de largo.',
+    'Esa noche duermes de un tirón. Y al despertar, sin saber por qué, tratas a la gente con un poco más de cuidado. Esta noche, no.'
+  ],38);
+  const ps=document.createElement('p'); ps.className='ps'; ps.textContent=eFinal.ps; ep.appendChild(ps);
+  finishReveal();
+});
+
+function finishReveal(){
+  $('#eactions').style.display='flex';
+  const cert=$('#ecert'); cert.style.display='block';
+  cert.textContent=`Consulta atendida el ${new Intl.DateTimeFormat('es-ES',{day:'numeric',month:'long',year:'numeric'}).format(new Date())} · El espejo recomienda mirarlo poco y vivir mucho.`;
+}
+$('#btnECopy').addEventListener('click', async ()=>{
+  const centro=eWord? ` Y en el centro: ${eWord}.`:'';
+  const txt=`🪞 El Espejo de Oesed me mostró ${eFinal.name}: «${eFinal.desire}».${centro} — ${ezName}, Olor a Libros · Sucursal de Hogwarts.`;
+  try{ await navigator.clipboard.writeText(txt); toastMsg('El espejo te presta sus palabras. Devuélvelas cuando termines.'); }
+  catch{ toastMsg('El hechizo de copia se empañó… inténtalo otra vez.'); }
+});
+$('#btnEAgain').addEventListener('click', ()=>{
+  escore={}; ezi=0; eWord=''; outCandles(0);
+  const wi=$('#eword'); if(wi) wi.value='';
+  $('#escene').innerHTML=''; $('#eepilogue').innerHTML='';
+  $('#ename-out').classList.remove('flip-in'); $('#ename-out').textContent='';
+  $('#edesire').textContent=''; $('#eline').textContent='';
+  $('#eshadow').classList.remove('on'); $('#egift').classList.remove('on'); $('#eask').classList.remove('on');
+  $('#echoice').classList.remove('on'); $('#echoice').style.display='';
+  $('#eactions').style.display='none'; $('#ecert').style.display='none';
+  document.querySelector('#scr-ereveal .reveal-wrap').classList.remove('shown');
+  $('#mirrorReveal').classList.remove('clear');
+  showE('eintro');
+  type($('#eintroBubble'),'¿Otra vez delante? El espejo no se cansa de ti. Pero recuerda lo del cartel: mirar mucho y vivir poco es el único error que no perdona.',36);
+});
+function toastMsg(t){const el=$('#toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2800)}
+</script>
+<script src="magia.js" defer></script>
+</body>
+</html>

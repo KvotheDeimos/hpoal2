@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Taller de Ollivander — Olor a Libros · Sucursal de Hogwarts</title>
+<meta name="description" content="La varita elige al mago: 14 mediciones, 16 maderas y 5 núcleos. Taller oficial de la Sucursal de Hogwarts de Olor a Libros.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Olor a Libros · Sucursal de Hogwarts">
+<meta property="og:title" content="El Taller de Ollivander">
+<meta property="og:description" content="El Sombrero te lee la mente: 18 preguntas y una casa gritada al Gran Comedor.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.taller{position:relative;min-height:100vh;min-height:100svh;overflow:hidden;background:radial-gradient(130% 100% at 50% 0%, #2b1d10 0%, #191108 55%, #0c0805 100%)}
+.shelves{position:absolute;inset:0;opacity:.5;pointer-events:none}
+.shelf{position:absolute;left:0;right:0;display:flex;justify-content:center;gap:6px;align-items:flex-end;padding:0 4%;border-bottom:6px solid #3a2513;box-shadow:0 10px 22px rgba(0,0,0,.55)}
+.shelf.s1{top:5%;height:96px}.shelf.s2{top:25%;height:86px}.shelf.s3{top:45%;height:76px}
+.wbox-sh{border-radius:2px;position:relative;box-shadow:inset 0 0 0 1px rgba(0,0,0,.35), inset 0 -10px 14px rgba(0,0,0,.28)}
+.wbox-sh::after{content:'';position:absolute;left:16%;right:16%;top:40%;height:2px;background:rgba(212,169,78,.32)}
+.motes span{position:absolute;width:3px;height:3px;border-radius:50%;background:#e8cf9a;opacity:0;animation:mote var(--md) linear infinite;animation-delay:var(--mdel)}
+@keyframes mote{0%{transform:translate(0,0);opacity:0}15%{opacity:.45}100%{transform:translate(var(--mx),-62vh);opacity:0}}
+.lamp{position:absolute;top:-40px;left:50%;width:340px;height:220px;margin-left:-170px;background:radial-gradient(closest-side,rgba(255,214,140,.22),transparent 70%);filter:blur(6px)}
+.ollie-top{display:flex;justify-content:space-between;align-items:center;gap:var(--sp-4);margin-bottom:var(--sp-1)}
+.ollie-sign{font-family:'Cinzel Decorative',serif;font-weight:700;color:var(--gold-2);letter-spacing:.14em;font-size:clamp(1rem,2.6vw,var(--fs-3));text-align:center}
+.ollie-sign small{display:block;font-family:'IM Fell English',serif;font-style:italic;font-weight:400;color:#d4a574;letter-spacing:.2em;font-size:.72rem;margin-top:var(--sp-1)}
+.linkback{background:none;border:none;color:var(--gold);font:600 .85rem 'EB Garamond',serif;letter-spacing:.12em;text-transform:uppercase;padding:var(--sp-2) var(--sp-1);text-decoration:none}
+.linkback:hover{color:var(--gold-2)}
+.olor-tag{text-align:center;font-family:'IM Fell English',serif;font-style:italic;color:#d4a574;font-size:.95rem;letter-spacing:.1em}
+.wandlist{display:flex;flex-direction:column;gap:var(--sp-4);max-width:680px;margin:0 auto;width:100%}
+.wandbox{position:relative;display:flex;align-items:center;gap:var(--sp-4);overflow:hidden;background:linear-gradient(160deg,#f2e4c2,#e2cf9e);border:1px solid #caa96a;border-radius:var(--r-s);padding:var(--sp-4);color:var(--ink);box-shadow:0 14px 34px rgba(0,0,0,.45);opacity:0;transform:translateY(14px);transition:opacity .5s ease var(--d),transform .5s ease var(--d),box-shadow .4s,border-color .4s}
+.wandlist.in .wandbox{opacity:1;transform:none}
+.wandbox .wname{flex:1;font:600 1.02rem/1.35 'EB Garamond',serif}
+.wandbox .wname small{display:block;font:italic 400 .85rem 'IM Fell English',serif;color:#7a5a2a}
+.wandbox .wsvg{width:clamp(90px,22vw,160px);flex:none;filter:drop-shadow(0 4px 8px rgba(0,0,0,.3));transition:filter .4s}
+.wandbox.next .wsvg{filter:drop-shadow(0 0 16px rgba(242,205,123,.6))}
+.wandbox.truew .wsvg{filter:drop-shadow(0 0 24px rgba(242,205,123,.8))}
+.wandbox .btn{padding:var(--sp-2) var(--sp-4);font-size:.85rem}
+.wandbox.next{border-color:var(--gold);box-shadow:0 0 26px rgba(242,205,123,.4)}
+.wandbox.next .btn{animation:pulseBtn 1.6s ease-in-out infinite}
+@keyframes pulseBtn{50%{transform:scale(1.07)}}
+.wandbox.dead{opacity:.42;filter:grayscale(.7);animation:shake .45s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}50%{transform:translateX(5px)}75%{transform:translateX(-3px)}}
+.wandbox.truew{border-color:var(--gold);box-shadow:0 0 40px rgba(242,205,123,.5)}
+.wcard{background:linear-gradient(160deg,#f2e4c2,#e2cf9e);color:var(--ink);border:1px solid #caa96a;border-radius:var(--r-s);padding:var(--sp-6);max-width:700px;margin:0 auto;width:100%;position:relative;box-shadow:0 26px 64px rgba(0,0,0,.55), inset 0 0 60px rgba(112,78,28,.14);text-align:center;overflow:hidden}
+.wcard::before{content:'';position:absolute;inset:-2px;pointer-events:none;background:radial-gradient(120% 100% at 50% 0%, rgba(242,205,123,.12), transparent 60%);opacity:0;transition:opacity .6s}
+.wcard.revealed::before{opacity:1}
+.wcard::after{content:'';position:absolute;width:26px;height:26px;border:2px solid var(--gold-dim);opacity:.7;bottom:9px;right:9px;border-left:0;border-top:0}
+.wcard .wsvg-big{width:min(430px,82%);margin:var(--sp-2) auto var(--sp-4);filter:drop-shadow(0 8px 16px rgba(60,38,10,.45));transition:filter .6s,transform .6s}
+.wcard.revealed .wsvg-big{filter:drop-shadow(0 0 28px rgba(242,205,123,.7));transform:scale(1.03)}
+.wcard h3{font-family:'Cinzel Decorative',serif;font-weight:900;font-size:clamp(1.35rem,4vw,var(--fs-4));color:#5c3d16;line-height:1.25;margin-bottom:var(--sp-2)}
+.wcard h3.prank{color:#8a6d00}
+.wspecs{font-family:'IM Fell English',serif;font-style:italic;color:#7a5a2a;margin-bottom:var(--sp-4);letter-spacing:.08em}
+.wdesc{text-align:left;font-size:1.02rem;color:#3f2a12}
+.wdesc p{margin-bottom:var(--sp-3)}
+.wdesc b{color:#6b4423}
+.wdesc .rare{border-left:3px solid #8a6d00;padding-left:var(--sp-3);font-style:italic;color:#5c4510}
+.wcard .r-actions{margin-top:var(--sp-4);display:flex;justify-content:center;gap:var(--sp-4);flex-wrap:wrap}
+.wcard .btn{background:rgba(60,38,14,.08);color:#6b4423;border-color:#b59355}
+.wcard .btn:hover{background:#6b4423;color:#f2e4c2;border-color:#6b4423;box-shadow:0 10px 22px rgba(60,38,10,.35)}
+.wfine{margin-top:var(--sp-4);font-family:'IM Fell English',serif;font-style:italic;font-size:.88rem;color:#7a5a2a}
+.r-kicker{text-align:center;font-size:var(--fs-0);letter-spacing:.42em;text-transform:uppercase;color:#8a6227;margin-top:var(--sp-2)}
+@media (max-width:760px){.wandbox{flex-wrap:wrap}.wandbox .wsvg{width:100%;order:3}}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<div class="toast" id="toast" role="status"></div>
+<noscript><p style="max-width:600px;margin:60px auto;text-align:center;font-size:1.15rem;color:#e9e2d2">🪄 El Taller necesita JavaScript: las varitas se niegan a funcionar sin chispa.</p></noscript>
+
+<section class="ceremony taller" id="taller" aria-label="Taller de Ollivander">
+  <div class="backdrop" aria-hidden="true">
+    <div class="shelves" id="shelvesT"></div>
+    <div class="motes" id="motesT"></div>
+    <div class="lamp"></div>
+  </div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <div class="screen on" id="scr-wand">
+    <div class="quiz-wrap">
+      <div class="ollie-top">
+        <a class="linkback" href="index.html">← Portada</a>
+        <div class="ollie-sign">OLLIVANDER'S<small>Fabricantes de varitas desde el 382 a.C. · Callejón Diagon</small></div>
+        <span style="width:90px"></span>
+      </div>
+      <p class="olor-tag">📖 Olor a Libros presenta: su sucursal oficial de varitas</p>
+      <div class="quiz-top">
+        <div class="bubble" id="wandBubble" aria-live="polite" style="max-width:640px"></div>
+      </div>
+      <form class="scroll-form" id="wandForm" style="margin:0 auto">
+        <label for="wandName">El señor Ollivander necesita un nombre para el registro de varitas. (No mientas: las varitas se enteran.)</label>
+        <div class="form-row">
+          <input id="wandName" type="text" maxlength="24" placeholder="Tu nombre, aquí…" autocomplete="off">
+          <button class="seal-btn" type="submit">
+            <span class="seal" aria-hidden="true">O</span>
+            <span class="seal-label">Entrar<br>al taller</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="screen" id="scr-wandq">
+    <div class="quiz-wrap">
+      <div class="ollie-top">
+        <a class="linkback" href="index.html">← Salir del taller</a>
+        <div class="ollie-sign">OLLIVANDER'S<small>La cinta mide sola… no te muevas</small></div>
+        <span style="width:90px"></span>
+      </div>
+      <div class="qprogress" id="wprogress" aria-hidden="true"></div>
+      <div class="qcard" id="wcard">
+        <div class="qnum" id="wqnum"></div>
+        <h3 class="qtext" id="wqtext"></h3>
+        <div class="opts" id="wopts"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="scr-wandt">
+    <div class="quiz-wrap">
+      <div class="ollie-top">
+        <span style="width:90px"></span>
+        <div class="ollie-sign">OLLIVANDER'S<small>Prueba en orden: la que brilla primero</small></div>
+        <span style="width:90px"></span>
+      </div>
+      <div class="quiz-top">
+        <div class="bubble" id="tryBubble" aria-live="polite" style="max-width:640px"></div>
+      </div>
+      <div class="wandlist" id="wandlist"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="scr-wandr">
+    <div class="quiz-wrap">
+      <div class="ollie-top">
+        <a class="linkback" href="ceremonia.html">↑ La ceremonia</a>
+        <div class="ollie-sign">OLLIVANDER'S<small>La varita elige al mago</small></div>
+        <span style="width:90px"></span>
+      </div>
+      <div class="wcard" id="wresult"></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="varitas">
+  <div class="sec-head reveal">
+    <div class="kicker">❖ Taller de Ollivander</div>
+    <h2>El lenguaje de las varitas</h2>
+    <p class="lead">Ollivander creía que la madera tiene «percepción y preferencias casi humanas»: dieciséis especies en sus estantes, cada una con su carácter. Y en el cajón cerrado, cinco núcleos: los tres de siempre… y dos que no enseña a cualquiera.</p>
+  </div>
+  <div class="woods-grid" id="woodsGrid"></div>
+  <div class="cores-grid" id="coresGrid"></div>
+  <p class="ollie-quote reveal">«La varita elige al mago, señor mío…<br>No siempre se explica por qué.»<br><b>— Garrick Ollivander</b></p>
+</section>
+
+<footer class="foot-light">
+  <span>© <span id="year"></span> · Olor a Libros · Sucursal de Hogwarts</span>
+  <nav><a href="index.html">Portada</a><a href="ceremonia.html">La ceremonia</a><a href="index.html#casas">Las casas</a></nav>
+  <span>El limón es la base de todo</span>
+</footer>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+$('#year').textContent=new Date().getFullYear();
+
+const WOODS={
+ acebo:{n:'Acebo',c1:'#d9c9a3',c2:'#8a7448',d:'Madera protectora que repele la mala intención. Elige a quienes atraviesan peligros por un propósito mayor, y suele acabar en manos de quienes no buscan gloria: solo hacer lo necesario.'},
+ tejo:{n:'Tejo',c1:'#7a4034',c2:'#3a1d16',d:'Madera con poder sobre la vida y la muerte. Reserva su lealtad para naturalezas fuertes e independientes, capaces de cargar con destinos que otros no soportarían.'},
+ sauco:{n:'Saúco',c1:'#c9c2b0',c2:'#6f6a58',d:'La más rara y de peor fama: difícil de dominar y cargada de magia enorme. Solo se queda con quien tiene un destino fuera de lo común, aunque el mundo lo llame raro.'},
+ vid:{n:'Vid',c1:'#9a8f6a',c2:'#5c5233',d:'Sensible a las personalidades ocultas: busca a quienes guardan más de lo que muestran, y a aquellos con un propósito vasto que aún no han nombrado.'},
+ sauce:{n:'Sauce',c1:'#b09468',c2:'#6b5433',d:'Consuela y cura. Elige a quienes cargan inseguridades o heridas antiguas, y les devuelve, hechizo a hechizo, la confianza que el mundo les quitó.'},
+ roble:{n:'Roble',c1:'#8a6238',c2:'#4a3116',d:'Leal, constante, amiga en las tormentas. Pide a cambio una amistad verdadera: no soporta a quien traiciona su palabra.'},
+ ebano:{n:'Ébano',c1:'#3b3b40',c2:'#151518',d:'No se doblega ante la presión ni la moda. Pertenece a quienes se atreven a ser exactamente quienes son, aunque el mundo prefiera otra cosa.'},
+ cedro:{n:'Cedro',c1:'#a06a3c',c2:'#5c3a1c',d:'De mirada penetrante: ve lo que otros esconden. Protege con ferocidad silenciosa a quienes considera suyos. Nunca subestimes su calma.'},
+ abeto:{n:'Abeto',c1:'#a89272',c2:'#5f4c33',d:'La madera superviviente: resiste donde otras se quiebran. Compañera de quienes han mirado de frente a la oscuridad y han seguido caminando.'},
+ avellano:{n:'Avellano',c1:'#b08050',c2:'#66452a',d:'Refleja el corazón de su dueño: brilla con sus alegrías y se apaga con sus penas. Exige un vínculo emocional honesto, y lo devuelve multiplicado.'},
+ endrino:{n:'Endrino',c1:'#4a3a4a',c2:'#241a24',d:'Madera de guerrero: gana su lealtad en la dificultad. Desconfiada al principio, ferozmente fiel después de haber sufrido contigo. No la heredes: gánatela.'},
+ serbal:{n:'Serbal',c1:'#b8a088',c2:'#6f5a44',d:'Protectora contra la magia oscura y contra la propia vanidad. Elige cabezas claras y corazones limpios: rara vez se equivoca de dueño.'},
+ cipres:{n:'Ciprés',c1:'#7a6a4a',c2:'#3f3524',d:'La madera del sacrificio noble: elige a quienes darán más de lo que se les pide, a veces todo. Honra y gravedad en cada hechizo.'},
+ pino:{n:'Pino',c1:'#c2a878',c2:'#77603c',d:'Sensible a lo nuevo: técnicas frescas, ideas que aún no existen. Elige a quienes miran adelante y envejecen despacio.'},
+ cerezo:{n:'Cerezo',c1:'#c98a8a',c2:'#7a4444',d:'Rara y exigente: poder enorme solo en manos de autodisciplina verdadera. Fría con el caos, brillante con el dominio de sí.'},
+ nogal:{n:'Nogal negro',c1:'#5a4433',c2:'#2e211a',d:'Busca brillantez y rapidez: entiende antes de que termines la frase. Pierde brillo si su dueño se llena de dudas; gana fuego cuando confía.'}};
+const CORES={
+ fenix:{n:'pluma de fénix',icon:'🪶',d:'El núcleo de mayor alcance y más independiente: aprende despacio, elige con exigencia y nunca obedece por inercia. Sus varitas parecen tener voluntad propia.'},
+ dragon:{n:'fibra de corazón de dragón',icon:'🐉',d:'Poder puro y aprendizaje veloz. Espectacular, cálida, impetuosa: se une con fuerza y pide a cambio una vida a la altura de su fuego.'},
+ unicornio:{n:'pelo de unicornio',icon:'🦄',d:'El núcleo más fiel y constante: magia limpia, sin altibajos, y el más difícil de tentar por las artes oscuras. Lealtad hecha núcleo.'},
+ testral:{n:'pelo de cola de thestral',icon:'🪽',d:'Único y misterioso: inestable en manos no preparadas, letalmente sereno en quien ha mirado a la muerte a la cara y sigue en pie. Ollivander no lo vende: lo confía.'},
+ veela:{n:'cabello de veela',icon:'💫',d:'Magia que se hereda y canta: encanto, gracia y un brillo que abre puertas antes de que llames. Caprichoso con los extraños, devoto con los de su sangre.'}};
+const FLEX={
+ rigida:{n:'rígida',d:'Una voluntad que no se dobla: cuando decide, decide.'},
+ firme:{n:'firme',d:'Sólida en lo esencial, con margen para lo inesperado.'},
+ flexible:{n:'flexible',d:'Adaptable y abierta: se ajusta al camino sin romperse.'},
+ elastica:{n:'elástica',d:'Viva y curiosa: disfruta el cambio tanto como su dueño.'}};
+const PRANK={
+ wood:{n:'Marabú',c1:'#8a7a2e',c2:'#4a3f14',d:'Madera invasora que sobrevive a cualquier clima, a cualquier poda y a cualquier lunes. Elige a quienes lo aguantan todo con una cara sospechosamente tranquila.'},
+ core:{n:'núcleo de limón',icon:'🍋',d:'Núcleo cítrico de acidez sin precedentes. Porque el limón es la base de todo. No se discute: es ciencia mágica.'},
+ flex:'con ralladura', len:'13¾'};
+
+const WQUESTIONS=[
+ {q:'Estás ante una puerta cerrada que nadie abre en siglos. ¿Qué sientes?',o:[['Ganas de abrirla, cueste lo que cueste.',{w:{acebo:2,tejo:1},c:{dragon:3}}],['Respeto: algunas puertas se cierran por algo.',{w:{cedro:2,roble:1},c:{unicornio:3}}],['Curiosidad: ¿qué historia esconde?',{w:{vid:2,avellano:1},c:{fenix:3}}],['Precaución: primero piensa en qué puede salir.',{w:{abeto:2,ebano:1},c:{unicornio:2}}]]},
+ {q:'Alguien a quien quieres está en peligro, pero te pidió no intervenir.',o:[['Voy igualmente: no podría perdonármelo.',{w:{acebo:3},c:{dragon:3}}],['Respeto su deseo, pero me quedo cerca, alerta.',{w:{sauce:3},c:{unicornio:3}}],['Busco otra forma: ayudar sin desobedecer.',{w:{vid:2,avellano:2},c:{fenix:3}}],['Calculo el riesgo y actúo en el momento justo.',{w:{ebano:2,abeto:1},c:{dragon:2,fenix:1}}]]},
+ {q:'¿Qué guardas de tu infancia que no tirarías jamás?',o:[['Algo que huele a hogar.',{w:{cedro:2,roble:2},c:{unicornio:3}}],['Secretos: mi infancia fue solo mía.',{w:{tejo:2,ebano:2},c:{fenix:3}}],['Cicatrices que me enseñaron algo.',{w:{abeto:2,acebo:1},c:{dragon:3}}],['Sueños: todavía creo en algunos.',{w:{avellano:2,sauce:1},c:{fenix:2,unicornio:1}}]]},
+ {q:'¿Cuál es tu relación con el agua?',o:[['La necesito cerca: me calma.',{w:{sauce:3},c:{unicornio:3}}],['Me atraen las tormentas y el mar bravo.',{w:{abeto:2,acebo:1},c:{dragon:3}}],['Simplemente está ahí: no pienso en ella.',{w:{roble:2},c:{dragon:1,unicornio:1}}],['Me fascina lo que esconde el fondo.',{w:{tejo:2,vid:2},c:{fenix:3}}]]},
+ {q:'¿Qué ven los demás en ti que tú no ves?',o:[['Un fuego que no se apaga.',{w:{acebo:1,abeto:1},c:{dragon:3}}],['Una calma que serena.',{w:{sauce:1,cedro:1},c:{unicornio:3}}],['Un misterio que no logran descifrar.',{w:{tejo:1,ebano:1},c:{fenix:3}}],['Una fuerza que no se rompe.',{w:{roble:2,abeto:1},c:{unicornio:2,dragon:1}}]]},
+ {q:'Si tu varita describiera tu forma de querer…',o:[['Feroz: daría la vida por los míos.',{w:{acebo:2,roble:2},c:{dragon:3}}],['Constante: incluso cuando nadie mira.',{w:{cedro:2},c:{unicornio:3}}],['Libre: sin jaulas ni dueños.',{w:{avellano:2},c:{fenix:3}}],['Profunda: pocos, pero para siempre.',{w:{tejo:2,sauce:1},c:{fenix:2,unicornio:1}}]]},
+ {q:'Los planes cambian en el último momento. Tú…',o:[['Fluyo con el cambio: es parte del viaje.',{f:{flexible:2,elastica:1}}],['Me adapto, pero mantengo mi norte.',{f:{firme:2,flexible:1}}],['Me resisto: el orden me importa.',{f:{rigida:2, firme:1}}],['Me ilusiona: ahí nacen las ideas.',{f:{elastica:2,flexible:1}}]]},
+ {q:'En un grupo, tu voz es…',o:[['La primera en sonar: abro camino.',{l:2}],['La que aparece cuando hace falta.',{l:1}],['La callada que escucha más que habla.',{l:-1}],['La que hace reír a todos.',{l:1}]]},
+ {q:'Y dime sin pensar: ¿qué no perdonarías jamás?',o:[['La traición a los míos.',{c:{unicornio:4}}],['La cobardía de no intentarlo.',{c:{dragon:4}}],['Que decidan mi camino por mí.',{c:{fenix:4}}]]},
+ {q:'Última medición: ¿qué juramento te resulta imposible romper?',o:[['Volver siempre a por los míos.',{c:{unicornio:4}}],['No dejar nada a medias.',{c:{dragon:4}}],['No pertenecer a nadie más que a mí.',{c:{fenix:4}}]]},
+ {q:'Has estado donde otros no pueden ir. ¿Qué viste allí?',o:[['Lo que nadie quiere ver. Y aun así, miré.',{t:4,w:{tejo:2}}],['Que hay cosas que solo se entienden perdiéndolas.',{t:3,w:{cipres:2}}],['Prefiero no hablar de eso.',{w:{ebano:2},c:{unicornio:2}}],['Que sigo en pie.',{w:{abeto:2},c:{dragon:3}}]]},
+ {q:'¿Qué heredaste que no elegiste?',o:[['Un encanto que abre puertas antes de que llame.',{v:4,w:{cerezo:1}}],['Un apellido o una historia que pesa.',{v:3,w:{nogal:2}}],['Nada: todo lo mío lo hice yo.',{w:{ebano:2},c:{fenix:2}}],['El oficio de cuidar.',{w:{sauce:2},c:{unicornio:3}}]]},
+ {q:'Cuando todo se rompe, ¿qué te pide el cuerpo?',o:[['Silencio y un plan.',{w:{cedro:2,ebano:2}}],['Gente: el ruido de los míos.',{w:{roble:2,sauce:1}}],['Aire: moverme, cambiar de escena.',{w:{pino:2,vid:1}}],['Escribirlo o dibujarlo hasta entenderlo.',{w:{avellano:2,vid:2}}]]},
+ {q:'Y dime: ¿qué frase te sienta como un insulto?',o:[['«Siempre igual: nunca cambias.»',{w:{pino:3,vid:2}}],['«No te metas: no es tu guerra.»',{w:{acebo:3,cipres:2}}],['«Qué suerte tienes.»',{w:{nogal:3,endrino:2}}],['«Eso no se te da bien.»',{w:{cerezo:3,abeto:2}}]]}];
+const wLines=n=>[
+ `Mmm… sí. Dime, ${n}: ante lo desconocido, ¿qué sientes?`,
+ `La cinta mide sola… no te muevas. Hablemos de los tuyos.`,
+ `Todos guardamos algo de la infancia. ¿Qué guardas tú?`,
+ `El agua no miente, ${n}. La gente sí. El agua, nunca.`,
+ `Los demás ven cosas que tú no ves. ¿Cuáles?`,
+ `Y el amor, ${n}… ¿cómo ama tu magia?`,
+ `Un ajuste de muñeca: ¿cómo te llevas con el cambio?`,
+ `Y tu voz en el grupo… déjame escucharla. Sin miedo: aquí no hay spoilers.`,
+ `Ahora sin tiempo para pensar: ¿qué no perdonarías jamás?`,
+ `Y el juramento que no puedes romper… ese también elige núcleo.`,
+ `Has estado donde otros no pueden ir. ¿Qué viste allí, ${n}?`,
+ `¿Qué heredaste que no elegiste? El taller también mira linajes.`,
+ `Cuando todo se rompe, ¿qué te pide el cuerpo?`,
+ `Última: ¿qué frase te sienta como un insulto?`];
+const ROMAN=['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV'];
+const SEALS=['✦','☾','✧','❖'];
+
+let wid=0;
+function wandSVG(c1,c2,cls){
+  const id='wg'+(wid++);
+  return `<svg class="${cls||'wsvg'}" viewBox="0 0 320 36" aria-hidden="true">
+  <defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="${c2}"/><stop offset=".4" stop-color="${c1}"/><stop offset="1" stop-color="${c1}"/>
+  </linearGradient></defs>
+  <path d="M70 12 L298 16 Q312 18 298 20 L70 24 Z" fill="url(#${id})" stroke="#1d1006" stroke-width="1.2"/>
+  <rect x="8" y="10" width="64" height="16" rx="8" fill="${c2}" stroke="#1d1006" stroke-width="1.2"/>
+  <circle cx="26" cy="18" r="6.5" fill="none" stroke="${c1}" stroke-width="1.4" opacity=".65"/>
+  <circle cx="42" cy="18" r="6.5" fill="none" stroke="${c1}" stroke-width="1.4" opacity=".65"/>
+  <circle cx="58" cy="18" r="6.5" fill="none" stroke="${c1}" stroke-width="1.4" opacity=".65"/>
+  <circle cx="300" cy="18" r="2.4" fill="${c1}" opacity=".8"/>
+</svg>`;
+}
+
+const BOXCOLS=['#6b4a2f','#7d5a33','#55361c','#8a6a3f','#5f4026','#75543a'];
+(function(el){ if(!el)return;
+  ['s1','s2','s3'].forEach((cls,r)=>{
+    const sh=document.createElement('div'); sh.className='shelf '+cls;
+    for(let i=0,n=18-r*3;i<n;i++){
+      const b=document.createElement('div'); b.className='wbox-sh';
+      b.style.width=(14+Math.random()*18)+'px';
+      b.style.height=(52+Math.random()*38)+'px';
+      b.style.background=`linear-gradient(160deg, ${BOXCOLS[(Math.random()*BOXCOLS.length)|0]}, #3a2513)`;
+      sh.appendChild(b);
+    }
+    el.appendChild(sh);
+  });
+})($('#shelvesT'));
+(function(el){ if(!el)return;
+  for(let i=0;i<26;i++){const m=document.createElement('span');
+    m.style.left=Math.random()*100+'%'; m.style.top=(40+Math.random()*60)+'%';
+    m.style.setProperty('--md',(9+Math.random()*10)+'s');
+    m.style.setProperty('--mdel',(-Math.random()*12)+'s');
+    m.style.setProperty('--mx',((Math.random()*60)-30)+'px');
+    el.appendChild(m);}
+})($('#motesT'));
+
+$('#woodsGrid').innerHTML=Object.values(WOODS).map((w,i)=>
+  `<div class="woodcard reveal" style="--rd:${(i%3)*.08}s">${wandSVG(w.c1,w.c2)}<h4>${w.n}</h4><p>${w.d}</p></div>`).join('');
+$('#coresGrid').innerHTML=Object.values(CORES).map((c,i)=>
+  `<div class="corecard reveal" style="--rd:${i*.1}s"><div class="cicon">${c.icon}</div><h4>${c.n}</h4><p>${c.d}</p></div>`).join('');
+
+function type(el,text,hat,speed=26){
+  return new Promise(res=>{
+    if(REDUCED){el.textContent=text;res();return}
+    el.textContent='';
+    const caret=document.createElement('span');caret.className='caret';caret.setAttribute('aria-hidden','true');
+    const tn=document.createTextNode('');el.append(tn,caret);
+    let i=0;
+    const iv=setInterval(()=>{tn.textContent=text.slice(0,++i);
+      if(i>=text.length){clearInterval(iv);caret.remove();res()}},speed);
+  });
+}
+const wScreens={wand:$('#scr-wand'),wandq:$('#scr-wandq'),wandt:$('#scr-wandt'),wandr:$('#scr-wandr')};
+function showT(key){Object.values(wScreens).forEach(s=>s.classList.remove('on'));const el=wScreens[key];el.classList.add('on');el.scrollTop=0;}
+
+let wq=0, wlocked=false, wandFinal=null, tryIdx=0, daniPranked=false, tallerGreeted=false;
+let wscore={w:{},c:{},f:{}}, cPrim={}, tScore=0, vScore=0, wlen=0, wizName='aprendiz';
+const wb=$('#wandBubble'), tb=$('#tryBubble');
+const isDani=()=>wizName.trim().toLowerCase()==='dani';
+
+const OLLIE_INTRO="Buenas tardes… sí, sí, pasa. Cuidado con la caja del suelo: dentro hay una varita fracasada y con muy genio. Todas lo tienen antes de encontrar a su dueño. Como ciertas personas los lunes. El señor Ollivander, para servirle: sucursal oficial de Olor a Libros.";
+new IntersectionObserver((es,ob)=>{es.forEach(x=>{if(x.isIntersecting&&!tallerGreeted){tallerGreeted=true;type(wb,OLLIE_INTRO);ob.disconnect()}})},{threshold:.25}).observe($('#taller'));
+
+$('#wandForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const v=$('#wandName').value.trim();
+  if(v) wizName=v[0].toUpperCase()+v.slice(1);
+  wscore={w:{},c:{},f:{}}; cPrim={}; tScore=0; vScore=0; wlen=0; wq=0; tryIdx=0;
+  showT('wandq'); wlocked=true;
+  await type(wb,`No te muevas, ${wizName}… la cinta trabaja sola y no acepta quejas. Y mientras mide, mi lengua pregunta: respóndeme con sinceridad. Las varitas notan las mentiras, y yo también: llevo demasiado tiempo en este mostrador.`);
+  wlocked=false; askW(0);
+});
+for(let i=0;i<14;i++){const p=document.createElement('span');p.className='pcandle';$('#wprogress').appendChild(p)}
+const wpcandles=$$('#wprogress .pcandle');
+const lightW=n=>wpcandles.forEach((p,i)=>p.classList.toggle('lit',i<n));
+
+async function askW(i){
+  wq=i; lightW(i);
+  $('#wqnum').textContent=`Medición ${ROMAN[i]} · de XIV`;
+  $('#wqtext').textContent=WQUESTIONS[i].q;
+  const box=$('#wopts'); box.innerHTML='';
+  WQUESTIONS[i].o.forEach((o,j)=>{
+    const b=document.createElement('button'); b.className='opt'; b.type='button';
+    b.style.setProperty('--d',(.12+j*.08)+'s');
+    b.innerHTML=`<span class="opt-seal">${SEALS[j%4]}</span><span>${o[0]}</span>`;
+    b.addEventListener('click',()=>chooseW(b,o[1]));
+    box.appendChild(b);
+  });
+  const card=$('#wcard');
+  card.classList.remove('in'); void card.offsetWidth; card.classList.add('in');
+  await type(wb,wLines(wizName)[i]);
+}
+function chooseW(btn,pay){
+  if(wlocked)return; wlocked=true;
+  $$('#wopts .opt').forEach(b=>{b.disabled=true; if(b!==btn)b.classList.add('faded')});
+  btn.classList.add('chosen');
+  if(pay.w)for(const k in pay.w) wscore.w[k]=(wscore.w[k]||0)+pay.w[k];
+  if(pay.c){
+    for(const k in pay.c) wscore.c[k]=(wscore.c[k]||0)+pay.c[k];
+    const pk=Object.entries(pay.c).sort((a,b)=>b[1]-a[1])[0];
+    if(pk&&pk[1]>=3) cPrim[pk[0]]=(cPrim[pk[0]]||0)+1;
+  }
+  if(pay.f)for(const k in pay.f) wscore.f[k]=(wscore.f[k]||0)+pay.f[k];
+  if(pay.l) wlen+=pay.l;
+  if(pay.t) tScore+=pay.t;
+  if(pay.v) vScore+=pay.v;
+  setTimeout(async()=>{
+    if(wq+1<WQUESTIONS.length){ wlocked=false; askW(wq+1); }
+    else { lightW(14); wlocked=false;
+      if(isDani()&&!daniPranked){ showPrank(); } else { buildTrial(); } }
+  }, REDUCED?250:800);
+}
+function topKey(obj){
+  const en=Object.entries(obj);
+  if(!en.length)return null;
+  const mx=Math.max(...en.map(e=>e[1]));
+  const tops=en.filter(e=>e[1]===mx).map(e=>e[0]);
+  return tops[(Math.random()*tops.length)|0];
+}
+function topCore(){
+  const base=Object.assign({},wscore.c);
+  for(const k in cPrim){ if(cPrim[k]>=3) base[k]=(base[k]||0)+3; }
+  if(tScore>=4) base.testral=(base.testral||0)+tScore+2;
+  if(vScore>=4) base.veela=(base.veela||0)+vScore+2;
+  const en=Object.entries(base);
+  if(!en.length)return 'unicornio';
+  const mx=Math.max(...en.map(e=>e[1]));
+  let tops=en.filter(e=>e[1]===mx).map(e=>e[0]);
+  if(tops.length>1){
+    const best=Math.max(...tops.map(k=>cPrim[k]||0));
+    const filt=tops.filter(k=>(cPrim[k]||0)===best);
+    if(filt.length) tops=filt;
+  }
+  return tops[(Math.random()*tops.length)|0];
+}
+function showPrank(){
+  $('#wresult').innerHTML=`
+    <p class="r-kicker">Ollivander's · registro sin precedentes</p>
+    ${wandSVG(PRANK.wood.c1,PRANK.wood.c2,'wsvg-big')}
+    <h3 class="prank">Marabú y núcleo de limón</h3>
+    <p class="wspecs">${PRANK.len} pulgadas · carácter ${PRANK.flex}</p>
+    <div class="wdesc">
+      <p><b>La madera.</b> ${PRANK.wood.d}</p>
+      <p><b>El núcleo.</b> ${PRANK.core.d}</p>
+      <p><b>El veredicto.</b> Ollivander se ha quitado las gafas. En cuarenta años de oficio no había visto nada igual. El limón, dice, es la base de todo. Al parecer, estabas destinado a sazonar el destino.</p>
+    </div>
+    <div class="r-actions"><button class="btn" id="btnPrank">🍋 &nbsp;Acepto mi destino cítrico</button></div>
+    <p class="wfine">Nota del registro: es la primera varita que huele bien desde 1987.</p>`;
+  showT('wandr');
+  $('#btnPrank').addEventListener('click',()=>{
+    $('#wresult').innerHTML=`
+      <p class="r-kicker">Ollivander's · comunicado urgente</p>
+      <h3 class="prank" style="font-size:clamp(1.8rem,6vw,3rem)">ES BROMA, DANI.</h3>
+      <div class="wdesc" style="text-align:center">
+        <p>¿Núcleo de limón? Por favor. Ollivander lleva dos minutos riéndose en la trastienda y dice que no sale hasta calmarse. La varita de marabú ha vuelto a su caja; la caja ha pedido un abrazo y se lo hemos dado.</p>
+        <p>El limón será la base de todo, Dani, pero tu varita no. Ahora, entre lágrimas de risa: vamos con la de verdad.</p>
+      </div>
+      <div class="r-actions"><button class="btn" id="btnReal">🪄 &nbsp;Dame mi varita de verdad</button></div>
+      <p class="wfine">Olor a Libros no se hace responsable de las risas de Ollivander.</p>`;
+    $('#btnReal').addEventListener('click',()=>{ daniPranked=true; buildTrial(); });
+  });
+}
+function updateTrial(){
+  const boxes=$$('#wandlist .wandbox');
+  boxes.forEach((b,i)=>{
+    const btn=b.querySelector('button');
+    const done=b.classList.contains('dead')||b.classList.contains('truew');
+    b.classList.toggle('next', i===tryIdx && !done);
+    btn.disabled = done || (i!==tryIdx);
+  });
+}
+
+/* ══ FIX: las líneas del trial viven a nivel de script, no dentro de buildTrial ══ */
+function getTrialLines(){
+  return [
+    `Tres candidatas, ${wizName}. Empieza por la que brilla: el señor Ollivander es muy de protocolos. Agítala con dignidad, que no es una sartén.`,
+    `Mmm… interesante. La segunda varita parece reconocer algo en ti. Continúa.`,
+    `Ahora… la última. La que ha esperado. Tócala como quien saluda a un viejo amigo.`
+  ];
+}
+
+function buildTrial(){
+  const wood=topKey(wscore.w)||'roble';
+  const core=topCore();
+  const flex=topKey(wscore.f)||'flexible';
+  let len=10+wlen; len=Math.max(9,Math.min(14,len));
+  const quarters=['','¼','½','¾'][wizName.length%4];
+  wandFinal={wood,core,flex,len:len+quarters};
+  const others=Object.keys(WOODS).filter(k=>k!==wood).sort(()=>Math.random()-.5).slice(0,2);
+  const coresKeys=Object.keys(CORES);
+  const list=$('#wandlist'); list.innerHTML=''; list.classList.remove('in');
+  tryIdx=0;
+  const specs=others.map(k=>`${WOODS[k].n.toLowerCase()} y ${CORES[coresKeys[(Math.random()*coresKeys.length)|0]].n}, ${(9+((Math.random()*5)|0))} pulgadas`);
+  const items=[
+    {label:specs[0],wood:others[0],true:false},
+    {label:specs[1],wood:others[1],true:false},
+    {label:'Una caja sin etiqueta, apartada en un estante desde hace años…',wood:wood,true:true}
+  ];
+  items.forEach((it,idx)=>{
+    const d=document.createElement('div'); d.className='wandbox'; d.style.setProperty('--d',(idx*.14)+'s');
+    d.innerHTML=`${wandSVG(WOODS[it.wood].c1,WOODS[it.wood].c2)}
+      <div class="wname">${it.label}<small>${it.true?'':'probablemente no, pero probemos'}</small></div>
+      <button class="btn" type="button">Probar</button>`;
+    d.querySelector('button').addEventListener('click',()=>tryWand(d,it,idx));
+    list.appendChild(d);
+  });
+  updateTrial();
+  showT('wandt');
+  requestAnimationFrame(()=>{ list.classList.add('in'); updateTrial(); });
+  type(tb,getTrialLines()[0]);
+}
+
+/* ══ FIX: tryWand usa getTrialLines() y el catch no rehabilita varitas ya procesadas ══ */
+async function tryWand(box,it,idx){
+  if(idx!==tryIdx){
+    type(tb,`En orden, ${wizName}: prueba primero la caja que brilla. Luego esa. Y al final… la misteriosa.`);
+    return;
+  }
+  const btn=box.querySelector('button'); btn.disabled=true;
+  try{
+    if(!it.true){
+      burst(box,['#9aa7b8','#c9d2dd'],14,70);
+      box.classList.add('dead');
+      tryIdx++;
+      const lines=getTrialLines();
+      const line=lines[idx]||lines[0];
+      updateTrial();
+      await type(tb,line);
+      tb.scrollIntoView({behavior:REDUCED?'auto':'smooth',block:'nearest'});
+    } else {
+      box.classList.add('truew');
+      burst(box,['#ffd88a','#f2cd7b','#fff3cf'],60,180);
+      updateTrial();
+      await type(tb,`¡Ah!… Mira esas chispas. La varita te ha elegido, ${wizName}. Yo habría apostado una caja de galeones… pero nunca apuesto: es malo para el negocio.`);
+      await wait(REDUCED?300:1200);
+      showWandResult();
+    }
+  }catch(err){
+    console.error(err);
+    const done=box.classList.contains('dead')||box.classList.contains('truew');
+    if(!done) btn.disabled=false;
+    type(tb,'Mmm… la varita se ha quedado atascada en el forro del bolsillo. Prueba otra vez, por favor.');
+  }
+}
+function showWandResult(){
+  const W=WOODS[wandFinal.wood], C=CORES[wandFinal.core], F=FLEX[wandFinal.flex];
+  const raro=['testral','veela'].includes(wandFinal.core);
+  $('#wresult').innerHTML=`
+    <p class="r-kicker">Ollivander's · registro de varitas</p>
+    ${wandSVG(W.c1,W.c2,'wsvg-big')}
+    <h3>${W.n} y ${C.n}</h3>
+    <p class="wspecs">${wandFinal.len} pulgadas · carácter ${F.n}</p>
+    <div class="wdesc">
+      <p><b>La madera.</b> ${W.d}</p>
+      <p><b>El núcleo.</b> ${C.d}</p>
+      <p><b>El carácter.</b> ${F.d}</p>
+      ${raro?'<p class="rare"><b>El aviso.</b> Ollivander baja la voz: «Este núcleo no está en el mostrador: está detrás del mostrador. Quien lo lleva, carga con ello. Cuídalo… y cuídate.»</p>':''}
+    </div>
+    <div class="r-actions">
+      <button class="btn" id="btnWCopy">⎘ &nbsp;Copiar mi varita</button>
+      <button class="btn" id="btnWAgain">↺ &nbsp;Probar otra vez</button>
+    </div>
+    <p class="wfine">Ollivander ruega no agitarla cerca de la cara. Ni de la sopa de Navidad. · Para Olor a Libros, Sucursal de Hogwarts.</p>`;
+  showT('wandr');
+  setTimeout(()=>$('#wresult').classList.add('revealed'), 50);
+  $('#btnWCopy').addEventListener('click',async()=>{
+    const txt=`🪄 Ollivander's eligió para mí: ${W.n.toLowerCase()} y ${C.n}, ${wandFinal.len} pulgadas, carácter ${F.n}. — ${wizName}, Olor a Libros · Sucursal de Hogwarts.`;
+    try{ await navigator.clipboard.writeText(txt); toastMsg('Tu varita está copiada para el grupo ✓'); }
+    catch{ toastMsg('El hechizo de copia falló… inténtalo de nuevo'); }
+  });
+  $('#btnWAgain').addEventListener('click',()=>{ showT('wand'); type(wb,"¿Otra vez? Muy bien: la cinta ya te conoce, así que iremos más rápido. Extiende el brazo."); });
+}
+function burst(container,colors,n,dist){
+  if(REDUCED)return;
+  for(let i=0;i<n;i++){
+    const p=document.createElement('span'); const a=Math.random()*Math.PI*2, d=60+Math.random()*dist;
+    p.style.cssText=`position:absolute;left:50%;top:32%;width:${5+Math.random()*7}px;height:${5+Math.random()*7}px;z-index:5;pointer-events:none;
+      background:${colors[(Math.random()*colors.length)|0]};opacity:0;border-radius:${Math.random()<.5?'50%':'1px'};
+      box-shadow:0 0 10px ${colors[1]||colors[0]};
+      animation:spark ${(.9+Math.random()*.9).toFixed(2)}s cubic-bezier(.15,.6,.3,1) ${(Math.random()*.25).toFixed(2)}s forwards;
+      --dx:${Math.cos(a)*d}px;--dy:${Math.sin(a)*d-60}px;--rr:${(Math.random()*720-360)|0}deg`;
+    container.appendChild(p); setTimeout(()=>p.remove(),2400);
+  }
+}
+if(!document.getElementById('sparkKF')){
+  const st=document.createElement('style'); st.id='sparkKF';
+  st.textContent='@keyframes spark{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--rr))}}';
+  document.head.appendChild(st);
+}
+function toastMsg(t){const el=$('#toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2600)}
+const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{threshold:.15});
+$$('.reveal').forEach(el=>io.observe(el));
+</script>
+<script src="magia.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Bosque Prohibido — Olor a Libros · Sucursal de Hogwarts</title>
+<meta name="description" content="Una noche entre los árboles: relato interactivo del Bosque Prohibido, Sucursal de Hogwarts de Olor a Libros.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Olor a Libros · Sucursal de Hogwarts">
+<meta property="og:title" content="El Bosque Prohibido">
+<meta property="og:description" content="Una noche entre los árboles. Relato interactivo del capítulo 15.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+:root{--sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:24px;--sp-6:32px;--sp-7:48px;
+ --fs-1:1.0625rem;--fs-2:1.2rem;--fs-3:1.4rem;--r-s:4px;--r-m:8px;
+ --gold:#d9a94e;--gold-2:#f2cd7b;--gold-dim:#8a6c33;--ivory:#ece6d8;--muted:#a79f92;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#06100a;color:var(--ivory);font-family:'EB Garamond',Georgia,serif;font-size:var(--fs-1);line-height:1.65;overflow-x:hidden}
+.screen{position:absolute;inset:0;z-index:2;overflow-y:auto;opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease,visibility .5s}
+.screen.on{opacity:1;visibility:visible;transform:none}
+.btn{background:rgba(12,10,20,.55);border:1px solid var(--gold-dim);color:var(--gold-2);padding:12px 26px;font:600 .95rem 'EB Garamond',serif;letter-spacing:.1em;border-radius:var(--r-s);transition:.3s;text-decoration:none;display:inline-block}
+.btn:hover{background:var(--gold);color:#241505}
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);z-index:90;opacity:0;pointer-events:none;background:#f3e6c6;color:#3a2712;font-family:'IM Fell English',serif;font-style:italic;padding:12px 26px;border-radius:3px;box-shadow:0 16px 40px rgba(0,0,0,.5);transition:.45s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.seal-btn{display:flex;align-items:center;gap:12px;background:none;border:none;padding:4px}
+.seal{width:58px;height:58px;flex:none;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 34% 30%,#b3131f,#6f0710 72%);color:var(--gold-2);font-family:'Cinzel Decorative',serif;font-weight:900;font-size:1.6rem}
+.seal-label{text-align:left;font-family:'IM Fell English',serif;font-style:italic;font-size:1rem;line-height:1.25;color:#5c3d16}
+.form-row{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.countdown{display:flex;gap:12px;flex-wrap:wrap}
+.cd-tile{background:rgba(43,26,9,.92);border:1px solid rgba(212,169,78,.4);border-radius:4px;padding:12px 14px 10px;min-width:80px}
+.cd-tile span{display:block;font-family:'Cinzel Decorative',serif;font-weight:900;font-size:1.75rem;color:var(--gold-2)}
+.cd-tile small{display:block;font:600 .62rem 'EB Garamond',serif;letter-spacing:.24em;text-transform:uppercase;color:#b7a37b;margin-top:4px}
+.r-actions{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:8px}
+/* enlaces de salida */
+.bback{align-self:flex-start;font:600 .85rem 'EB Garamond',serif;letter-spacing:.12em;text-transform:uppercase;color:#9fc7a5;text-decoration:none;opacity:.85}
+.bback:hover{color:#d8f0a0;opacity:1}
+.bexit{position:absolute;top:12px;right:16px;z-index:6;font:600 .8rem 'EB Garamond',serif;letter-spacing:.12em;text-transform:uppercase;color:#9fc7a5;text-decoration:none;opacity:.55}
+.bexit:hover{opacity:1;color:#d8f0a0}
+
+.bosque{position:relative;min-height:100vh;min-height:100svh;overflow:hidden;
+  background:linear-gradient(180deg,#08120c 0%,#0a1a10 40%,#06100a 75%,#040a06 100%)}
+.trees{position:absolute;left:0;right:0;pointer-events:none;will-change:transform}
+.trees svg{width:100%;height:auto;display:block}
+.trees.t1{bottom:-2%;opacity:.9}
+.trees.t2{bottom:6%;opacity:.6}
+.trees.t3{bottom:14%;opacity:.35}
+.bfog{position:absolute;left:-10%;right:-10%;height:34%;border-radius:50%;filter:blur(50px);pointer-events:none}
+.bfog.b1{bottom:-6%;background:radial-gradient(closest-side,rgba(120,160,130,.20),transparent 70%);animation:bdrift 30s ease-in-out infinite alternate}
+.bfog.b2{bottom:16%;background:radial-gradient(closest-side,rgba(90,130,110,.14),transparent 70%);animation:bdrift 40s ease-in-out infinite alternate-reverse}
+@keyframes bdrift{from{transform:translateX(-4%)}to{transform:translateX(5%)}}
+.firefly{position:absolute;width:4px;height:4px;border-radius:50%;background:#d8f0a0;
+  box-shadow:0 0 8px 2px rgba(216,240,160,.55);opacity:0;animation:fly var(--fd) ease-in-out infinite;animation-delay:var(--fdel);pointer-events:none}
+@keyframes fly{0%,100%{opacity:0;transform:translate(0,0)}20%{opacity:.9}50%{opacity:.5;transform:translate(var(--fx),var(--fy))}80%{opacity:.85;transform:translate(calc(var(--fx)*-.6),calc(var(--fy)*-.4))}}
+.mars{position:absolute;top:9%;right:14%;width:7px;height:7px;border-radius:50%;background:#ff5a3c;
+  box-shadow:0 0 14px 4px rgba(255,90,60,.5);animation:marsPulse 4s ease-in-out infinite}
+@keyframes marsPulse{0%,100%{box-shadow:0 0 10px 3px rgba(255,90,60,.4)}50%{box-shadow:0 0 20px 7px rgba(255,90,60,.65)}}
+.lantern{position:fixed;inset:0;pointer-events:none;z-index:4;opacity:0;transition:opacity .6s;mix-blend-mode:screen;
+  background:radial-gradient(240px circle at var(--lx,50%) var(--ly,50%), rgba(255,200,110,.16), rgba(255,180,80,.05) 45%, transparent 70%)}
+.lantern.on{opacity:1}
+.bwrap{position:relative;z-index:2;min-height:100%;display:flex;flex-direction:column;justify-content:center;gap:var(--sp-5);
+  padding:var(--sp-6) var(--sp-5);max-width:820px;margin:0 auto}
+.btitle{font-family:'Cinzel Decorative',serif;font-weight:900;font-size:clamp(2rem,7vw,4rem);color:#cfe8cf;text-align:center;
+  text-shadow:0 0 40px rgba(120,200,140,.25);line-height:1.1}
+.bsub{text-align:center;font-family:'IM Fell English',serif;font-style:italic;color:#9fc7a5;font-size:var(--fs-2)}
+.bcard{background:rgba(8,18,12,.72);border:1px solid rgba(150,200,160,.25);border-radius:var(--r-m);
+  padding:var(--sp-6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  box-shadow:0 20px 50px rgba(0,0,0,.5), inset 0 0 60px rgba(60,120,80,.06)}
+.bcard .seal-label{color:#cfe8cf}
+.btext p{color:#d6e6d8;font-size:var(--fs-2);line-height:1.7;margin-bottom:var(--sp-4)}
+.btext p:last-child{margin-bottom:0}
+.bvoice{border-left:3px solid rgba(150,200,160,.5);padding:var(--sp-3) var(--sp-4);margin:var(--sp-4) 0;
+  font-family:'IM Fell English',serif;font-style:italic;color:#bfe0c2;font-size:var(--fs-2);background:rgba(120,200,140,.06)}
+.bvoice b{color:#d8f0a0;font-style:normal}
+.bchoices{display:grid;gap:var(--sp-3);margin-top:var(--sp-5)}
+.bchoice{text-align:left;background:rgba(120,200,140,.06);border:1px solid rgba(150,200,160,.3);border-radius:var(--r-s);
+  padding:var(--sp-4);color:#d6e6d8;font:500 var(--fs-1)/1.5 'EB Garamond',serif;transition:.3s;position:relative;overflow:hidden}
+.bchoice:hover:not(:disabled){background:rgba(120,200,140,.14);border-color:rgba(180,230,190,.5);transform:translateX(6px)}
+.bchoice:disabled{opacity:.4;cursor:default}
+.bchoice.chosen{background:rgba(120,200,140,.2);border-color:#d8f0a0;color:#eaffea}
+.bend{text-align:center}
+.bend .btitle{font-size:clamp(1.8rem,6vw,3.2rem);color:#d8f0a0}
+.bend-line{font-family:'IM Fell English',serif;font-style:italic;color:#bfe0c2;font-size:var(--fs-3);margin:var(--sp-4) 0}
+.bomens{display:flex;flex-wrap:wrap;justify-content:center;gap:var(--sp-3);margin:var(--sp-4) 0}
+.omen{display:inline-flex;align-items:center;gap:8px;background:rgba(120,200,140,.1);border:1px solid rgba(180,230,190,.35);
+  border-radius:99px;padding:6px 14px;font:600 .85rem 'EB Garamond',serif;color:#d8f0a0}
+.omen.none{opacity:.6;border-style:dashed}
+.btraits{display:grid;gap:var(--sp-2);max-width:420px;margin:var(--sp-5) auto 0}
+.btrait{display:grid;grid-template-columns:90px 1fr 26px;gap:var(--sp-3);align-items:center;font-size:.9rem;color:#9fc7a5}
+.btrait .bar{height:7px;border-radius:99px;background:rgba(150,200,160,.15);overflow:hidden}
+.btrait .bar span{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#5c9a6c,#d8f0a0);transition:width 1.2s cubic-bezier(.2,.7,.2,1)}
+.sil{position:absolute;pointer-events:none;opacity:0;transition:opacity 1.4s ease}
+.sil.show{opacity:1}
+.sil.cloak{right:8%;bottom:22%;width:120px}
+.sil.centaur{left:6%;bottom:18%;width:160px}
+@media (max-width:700px){.sil.cloak{width:80px;right:4%}.sil.centaur{width:110px;left:2%}}
+@keyframes tremble{0%,100%{transform:translateX(0)}25%{transform:translateX(-2px) rotate(-1deg)}75%{transform:translateX(2px) rotate(1deg)}}
+</style>
+</head>
+<body>
+<div class="toast" id="toast" role="status"></div>
+<div class="lantern" id="lantern" aria-hidden="true"></div>
+
+<section class="bosque" id="bosque">
+  <div class="trees t3" data-plx="0.10" aria-hidden="true">
+    <svg viewBox="0 0 1440 300" preserveAspectRatio="none"><g fill="#0d2417"><path d="M0 300 L60 120 L120 300 Z M140 300 L210 90 L280 300 Z M320 300 L390 110 L460 300 Z M500 300 L570 95 L640 300 Z M680 300 L750 115 L820 300 Z M860 300 L930 90 L1000 300 Z M1040 300 L1110 110 L1180 300 Z M1220 300 L1290 95 L1360 300 Z M1380 300 L1440 130 L1440 300 Z"/></g></svg>
+  </div>
+  <div class="trees t2" data-plx="0.20" aria-hidden="true">
+    <svg viewBox="0 0 1440 300" preserveAspectRatio="none"><g fill="#0a1c11"><path d="M0 300 L80 100 L160 300 Z M200 300 L290 70 L380 300 Z M420 300 L510 90 L600 300 Z M640 300 L730 75 L820 300 Z M860 300 L950 95 L1040 300 Z M1080 300 L1170 70 L1260 300 Z M1300 300 L1390 90 L1440 300 Z"/></g></svg>
+  </div>
+  <div class="trees t1" data-plx="0.35" aria-hidden="true">
+    <svg viewBox="0 0 1440 300" preserveAspectRatio="none"><g fill="#06120b"><path d="M0 300 L100 60 L200 300 Z M240 300 L350 40 L460 300 Z M500 300 L610 60 L720 300 Z M760 300 L870 45 L980 300 Z M1020 300 L1130 60 L1240 300 Z M1280 300 L1390 50 L1440 300 Z"/></g></svg>
+  </div>
+  <div class="bfog b1" aria-hidden="true"></div>
+  <div class="bfog b2" aria-hidden="true"></div>
+  <div class="mars" aria-hidden="true"></div>
+  <div id="fireflies" aria-hidden="true"></div>
+  <svg class="sil cloak" id="silCloak" viewBox="0 0 120 160" aria-hidden="true"><path d="M60 8 C40 20 30 50 28 90 C26 130 34 152 60 156 C86 152 94 130 92 90 C90 50 80 20 60 8 Z" fill="#050a06"/><path d="M60 20 C52 26 48 40 48 56 C56 50 64 50 72 56 C72 40 68 26 60 20 Z" fill="#020503"/></svg>
+  <svg class="sil centaur" id="silCentaur" viewBox="0 0 160 140" aria-hidden="true"><path d="M20 130 L26 90 C30 76 44 70 60 70 L96 70 C110 70 118 78 120 90 L126 130 L116 130 L110 96 L104 130 L94 130 L96 92 L64 92 L66 130 L56 130 L50 96 L44 130 L34 130 L38 92 Z" fill="#0a140c"/><path d="M96 70 C100 54 108 44 118 40 C116 52 112 60 108 66 Z" fill="#0a140c"/><circle cx="120" cy="38" r="8" fill="#0a140c"/></svg>
+
+  <div class="screen on" id="scr-cerrado">
+    <div class="bwrap">
+      <a class="bback" href="index.html">← Volver a la sucursal</a>
+      <h1 class="btitle">El Bosque Prohibido</h1>
+      <p class="bsub">Aún no es la hora. Los árboles no abren hasta el jueves.</p>
+      <div class="bcard" style="text-align:center">
+        <div class="btext" style="text-align:center"><p id="cerradoTxt">El sendero está cerrado. Vuelve cuando caiga la noche del jueves.</p></div>
+        <div class="countdown" id="bcount" style="justify-content:center;margin-top:var(--sp-4)">
+          <div class="cd-tile"><span id="bc-d">–</span><small>días</small></div>
+          <div class="cd-tile"><span id="bc-h">–</span><small>horas</small></div>
+          <div class="cd-tile"><span id="bc-m">–</span><small>min</small></div>
+          <div class="cd-tile"><span id="bc-s">–</span><small>seg</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="scr-aviso">
+    <div class="bwrap">
+      <a class="bback" href="index.html">← Volver a la sucursal</a>
+      <h1 class="btitle">Un aviso antes de entrar</h1>
+      <div class="bcard">
+        <div class="btext">
+          <p>Este cruce atraviesa el <b>capítulo 15</b> de La Piedra Filosofal: el unicornio, la figura entre los árboles y lo que Firenze cuenta bajo las estrellas.</p>
+          <p>Si aún no has llegado ahí en la relectura, el bosque esperará. Nadie te juzgará por volver.</p>
+        </div>
+        <div class="bchoices">
+          <button class="bchoice" id="avEntrar">He leído el capítulo 15 · entro</button>
+          <a class="bchoice" href="index.html">Aún no · vuelvo otro día</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="scr-nombre">
+    <div class="bwrap">
+      <h1 class="btitle">El Bosque Prohibido</h1>
+      <p class="bsub">Una noche entre los árboles · Sucursal de Hogwarts</p>
+      <form class="bcard" id="bForm">
+        <div class="btext"><p>Hagrid necesita saber a quién tiene que sacar de ahí si algo sale mal. Di tu nombre.</p></div>
+        <div class="form-row" style="margin-top:var(--sp-4)">
+          <input id="bname" type="text" maxlength="24" placeholder="Tu nombre…" autocomplete="off" style="flex:1;min-width:180px;background:rgba(120,200,140,.08);border:1px solid rgba(150,200,160,.35);border-radius:var(--r-s);padding:var(--sp-3);font:500 var(--fs-2) 'EB Garamond',serif;color:#d6e6d8">
+          <button class="seal-btn" type="submit"><span class="seal" aria-hidden="true">🌲</span><span class="seal-label">Entrar<br>al bosque</span></button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="screen" id="scr-relato">
+    <a class="bexit" href="index.html">salir ✕</a>
+    <div class="bwrap">
+      <div class="bcard">
+        <div class="btext" id="btext"></div>
+        <div class="bvoice" id="bvoice" hidden></div>
+        <div class="bchoices" id="bchoices"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="scr-final">
+    <div class="bwrap">
+      <div class="bcard bend">
+        <p class="bsub">Lo que el bosque vio en ti</p>
+        <h1 class="btitle" id="fTitle"></h1>
+        <p class="bend-line" id="fLine"></p>
+        <div class="bomens" id="fOmens"></div>
+        <div class="btext" id="fText" style="text-align:left"></div>
+        <div class="btraits" id="fTraits"></div>
+        <div class="r-actions" style="margin-top:var(--sp-6)">
+          <button class="btn" id="fCopy">⎘ &nbsp;Copiar lo que vi</button>
+          <button class="btn" id="fAgain">↺ &nbsp;Otra noche</button>
+          <a class="btn" href="index.html">← &nbsp;Volver a la sucursal</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const FINE=matchMedia('(pointer: fine)').matches;
+
+/* 🔒 PRODUCCIÓN: abre el jueves 10 sept 2026, 20:00 (hora local). */
+const UNLOCK=new Date('2026-09-10T20:00:00');
+
+// Sistema de decisiones y coraje
+let courageScore = 50; // 0-100
+let decisionPath = []; // ['valiente', 'prudente', 'astuto']
+let currentScene = 0;
+
+// Efectos atmosféricos
+function setAtmosphere(intensity) {
+  const body = document.body;
+  if (intensity === 'high') {
+    body.style.background = 'linear-gradient(180deg,#0a1a10 0%,#1a0a0a 40%,#0f0606 75%,#0a0404 100%)';
+    $('.bfog.b1').style.opacity = '0.4';
+    $('.bfog.b2').style.opacity = '0.3';
+  } else if (intensity === 'medium') {
+    body.style.background = 'linear-gradient(180deg,#08120c 0%,#0a1a10 40%,#06100a 75%,#040a06 100%)';
+    $('.bfog.b1').style.opacity = '0.25';
+    $('.bfog.b2').style.opacity = '0.2';
+  } else {
+    body.style.background = 'linear-gradient(180deg,#08120c 0%,#0a1a10 40%,#06100a 75%,#040a06 100%)';
+    $('.bfog.b1').style.opacity = '0.2';
+    $('.bfog.b2').style.opacity = '0.14';
+  }
+}
+
+function showTremble(text) {
+  return `<span style="animation:tremble 0.3s ease-in-out infinite;display:inline-block">${text}</span>`;
+}
+
+(function(){
+  const ff=$('#fireflies');
+  for(let i=0;i<18;i++){const s=document.createElement('span');s.className='firefly';
+    s.style.left=(4+Math.random()*92)+'%'; s.style.top=(20+Math.random()*70)+'%';
+    s.style.setProperty('--fd',(6+Math.random()*8)+'s'); s.style.setProperty('--fdel',(-Math.random()*10)+'s');
+    s.style.setProperty('--fx',((Math.random()*80)-40)+'px'); s.style.setProperty('--fy',((Math.random()*60)-30)+'px');
+    ff.appendChild(s);}
+  if(!REDUCED){
+    const layers=$$('.trees'); let tick=false;
+    addEventListener('scroll',()=>{ if(tick)return; tick=true;
+      requestAnimationFrame(()=>{ const y=scrollY;
+        layers.forEach(l=>{ l.style.transform=`translateY(${y*parseFloat(l.dataset.plx)}px)`; });
+        tick=false; }); },{passive:true});
+  }
+  if(!REDUCED&&FINE){
+    const lan=$('#lantern');
+    addEventListener('pointermove',e=>{ if(e.pointerType!=='mouse')return;
+      lan.classList.add('on'); lan.style.setProperty('--lx',e.clientX+'px'); lan.style.setProperty('--ly',e.clientY+'px');
+    },{passive:true});
+    document.addEventListener('mouseleave',()=>lan.classList.remove('on'));
+  }
+})();
+
+const S={cerrado:$('#scr-cerrado'),aviso:$('#scr-aviso'),nombre:$('#scr-nombre'),relato:$('#scr-relato'),final:$('#scr-final')};
+function show(k){Object.values(S).forEach(x=>x.classList.remove('on'));S[k].classList.add('on');S[k].scrollTop=0;}
+function storeGet(k){ try{ return sessionStorage.getItem(k); }catch(e){ return null; } }
+function storeSet(k,v){ try{ sessionStorage.setItem(k,v); }catch(e){} }
+function openGate(){ if(storeGet('bosque_aviso')==='ok'){ show('nombre'); } else { show('aviso'); } }
+$('#avEntrar').addEventListener('click',()=>{ storeSet('bosque_aviso','ok'); show('nombre'); });
+
+let T={coraje:0,saber:0,lealtad:0,asombro:0};
+let OM={};
+let TOLD=null;
+let NAME='aprendiz';
+
+const OMENS={
+ pelo:{icon:'🤍',n:'un pelo de unicornio'},
+ calor:{icon:'🐾',n:'el calor de quien tembló contigo'},
+ palabra:{icon:'⭐',n:'la palabra de Firenze'}
+};
+
+const N={
+ n0:{t:["El sol se ha puesto detrás de la cabaña y el cielo se ha vuelto del color de un moretón. Hagrid os reúne con un farol en cada mano y esa cara seria que solo le ves cuando habla del bosque. «Detención», dice, y la palabra pesa más que él. «Y va a ser en el Bosque Prohibido.»",
+ "Draco protesta en voz baja. Hermione aprieta el farol. Fang, que es un perro del tamaño de un ternero y con el valor de un ratón, se esconde detrás de las piernas de Hagrid. Eso, curiosamente, es lo que más te tranquiliza: si hasta Fang tiene miedo, es que el miedo es normal."],
+  v:["Hagrid","«No es un castigo pa que sufráis, ¿eh? Es pa que veáis lo que hay ahí fuera y aprendáis a respetarlo. Que es peor. Y pa que veáis que el bosque no es malo: es grande. Que no es lo mismo.»"],
+  c:[{l:"Ir con Hagrid y con Fang.",n:'A1',tr:{lealtad:1}},{l:"Ir con Hermione y Draco.",n:'B1',tr:{saber:1}}]},
+ A1:{t:["El borde del bosque no es una línea: es una puerta que se traga la luz. En cuanto das el primer paso, los sonidos de la cabaña se apagan detrás de ti como una puerta que se cierra.",
+ "Hagrid levanta el farol. La luz apenas alcanza unos pasos. El resto es tuyo."],
+  c:[{l:"Alzar la linterna y mirar lejos.",n:'A1b',tr:{asombro:1}},{l:"Bajar la linterna y leer el suelo.",n:'A1b',tr:{saber:1}},{l:"Pegarte a Hagrid y no soltar su manga.",n:'A1b',tr:{lealtad:1}}]},
+ A1b:{t:["Camináis en fila. Los árboles se cierran a vuestra espalda con un crujido que no es viento, y de pronto entiendes que el bosque no te deja salir: te deja entrar, que no es lo mismo.",
+ "Algo cruza las copas sin hacer ruido de pájaro. Fang gime bajito. Hagrid finge no oírlo, que es su manera de tener miedo sin decírselo a nadie."],
+  c:[{l:"Seguir el rastro de luz.",n:'A2'}]},
+ A2:{t:["Y entonces lo ves: un rastro plateado sobre las hojas, como si la luna se hubiera derramado y nadie la hubiera recogido. Sangre de unicornio. Aún brilla.",
+ "El rastro sigue hacia el interior, hacia donde el farol no llega. Hagrid se ha quedado muy quieto, y eso te asusta más que cualquier ruido."],
+  c:[{l:"Acercarte al rastro y tocarlo.",n:'A3',tr:{coraje:2},om:['pelo']},{l:"Llamar a Hagrid antes de tocar nada.",n:'A3b',tr:{saber:1,lealtad:1}},{l:"Quedarte junto a Fang y esperar.",n:'A3c',tr:{lealtad:2},om:['calor']}]},
+ A3:{t:["Te agachas junto al rastro. La sangre está tibia, y eso es lo peor: significa que sea lo que sea sigue cerca. Un pelo largo y plateado se te queda enredado en los dedos y no lo sueltas.",
+ "Entre los árboles, una figura encapuchada se inclina sobre algo blanco. No hace ningún ruido. Tu cicatriz empieza a arder como si alguien acercara una aguja."],
+  sil:'cloak',
+  c:[{l:"Sostenerle la mirada.",n:'C1',tr:{coraje:2}},{l:"No mirar atrás y retroceder despacio.",n:'C1',tr:{coraje:1,saber:1}}]},
+ A3b:{t:["«¡Hagrid!», llamas, y tu voz suena demasiado pequeña entre los árboles. Hagrid aparece con el farol en alto y la figura se desliza entre la maleza sin prisa, como quien sabe que nadie la va a seguir.",
+ "El frío que deja a su paso se te mete en los huesos y no se va. Hagrid mira el rastro un rato largo sin decir nada. Luego dice, muy bajito: «Eso no bebe agua.»"],
+  c:[{l:"Seguir el rastro con Hagrid.",n:'C1',tr:{saber:1,lealtad:1}}]},
+ A3c:{t:["Te quedas donde estás, con la mano en el cuello de Fang. El perro tiembla tanto que acabas abrazándolo tú a él, y durante un segundo ridículo y perfecto los dos os consoláis mutuamente. Su calor es lo único vivo en un radio de metros.",
+ "Cuando alzas la vista, la figura encapuchada ya se ha ido. Pero el claro donde estaba sigue brillando débilmente, como una brasa que no se decide a apagarse."],
+  sil:'cloak',
+  c:[{l:"Acercarte al claro con Fang.",n:'C1',tr:{lealtad:1}}]},
+ B1:{t:["El borde del bosque se traga la luz de la cabaña en cuanto cruzáis. Draco protesta en voz baja todo el camino; el farol de Hermione, en cambio, no tiembla.",
+ "Aunque, si te fijas bien, a Hermione se le aprieta la mano alrededor del asa. No tiene miedo de ir. Tiene miedo de lo que hay. Que no es lo mismo."],
+  c:[{l:"Alzar la linterna y mirar lejos.",n:'B1b',tr:{asombro:1}},{l:"Bajar la linterna y leer el suelo.",n:'B1b',tr:{saber:1}},{l:"Caminar pegado a Hermione.",n:'B1b',tr:{lealtad:1}}]},
+ B1b:{t:["Los árboles se cierran a vuestra espalda con un crujido que no es viento. Draco deja de protestar de golpe, y ese silencio nuevo es peor que sus quejas.",
+ "Algo cruza las copas sin hacer ruido de pájaro. Hermione alza el farol un palmo más, como quien sube el volumen para no oír otra cosa."],
+  c:[{l:"Seguir el rastro de luz.",n:'B2'}]},
+ B2:{t:["Y entonces Draco lo ve primero: un rastro plateado sobre las hojas, como luna derramada. Sangre de unicornio. Y más allá, entre los árboles, una figura encapuchada inclinada sobre algo blanco.",
+ "Draco sale corriendo sin mirar atrás, que es exactamente lo que esperabas de él y aun así te decepciona. Hermione no corre. Hermione observa."],
+  sil:'cloak',
+  c:[{l:"Seguir a Draco.",n:'B3a',tr:{lealtad:1}},{l:"Quedarte con Hermione.",n:'B3b',tr:{lealtad:2},om:['calor']},{l:"Avanzar tú hacia el claro.",n:'B3c',tr:{coraje:2},om:['pelo']}]},
+ B3a:{t:["Corres tras Draco hasta que lo alcanzas, hecho un ovillo contra un tronco. No dice nada, pero no se separa de ti el resto de la noche, y eso, viniendo de Draco, es casi una disculpa.",
+ "Cuando por fin mira hacia el claro, lo hace por encima de tu hombro. Necesita que estés delante. Se lo permites."],
+  c:[{l:"Volver juntos hacia el claro.",n:'C1',tr:{lealtad:1}}]},
+ B3b:{t:["Te quedas junto a Hermione. Ella no corre: observa. «Eso no es un animal», murmura, y su calma te presta la que a ti te falta. Su mano encuentra la tuya un segundo y no la suelta hasta que hace falta.",
+ "Juntas veis cómo la figura se desliza entre los árboles, y cómo algo blanco y roto queda detrás, brillando débilmente."],
+  c:[{l:"Avanzar juntas al claro.",n:'C1',tr:{saber:1,lealtad:1}}]},
+ B3c:{t:["Avanzas sola hacia el claro. Cada paso cruje como una advertencia. La figura alza la cabeza justo cuando tu cicatriz se enciende, y el bosque entero contiene el aliento.",
+ "Un pelo largo y plateado se te queda enredado en los dedos del rastro. No lo sueltas."],
+  sil:'cloak',
+  c:[{l:"No bajar la mirada.",n:'C1',tr:{coraje:2}}]},
+ C1:{t:["Un casco cruje entre los árboles y la figura se retira sin prisa, como quien aplaza algo en vez de abandonarlo. De la sombra sale un centauro de pelaje blanco, y sus ojos reflejan el bosque entero, incluida tú.",
+ "Detrás de él, el claro sigue brillando débilmente. Lo que sea que estaba bebiendo ahí ya no está. Pero el hueco que deja aún se ve."],
+  v:["Firenze","«Los humanos no deberíais beber lo que bebe esa cosa. Pero tú no has venido a beber. Has venido a mirar. Eso ya te distingue, hija de los hombres.»"],
+  sil:'centaur',
+  c:[{l:"Subir a su lomo y dejar que te saque.",n:'C2',tr:{saber:1}},{l:"Preguntarle qué dicen las estrellas.",n:'C3',tr:{asombro:2},om:['palabra']},{l:"Volver sola, por donde viniste.",n:'C4',tr:{coraje:2}}]},
+ C2:{t:["Firenze te alza como quien no pesa nada y echáis a andar entre los árboles sin tocar el suelo. Desde su lomo el bosque no da miedo: da vértigo, que es otra cosa.",
+ "No habla durante el camino. Pero su silencio no es vacío: es un silencio que te sostiene, como el de alguien que ya sabe cómo acaba esto y te lo está dejando vivir a ti."],
+  c:[{l:"Bajar en el claro y volver a la cabaña.",n:'D0'}]},
+ C3:{t:["Firenze te enseña el cielo como quien lee un mapa antiguo. Te nombra constelaciones que ningún libro de Hogwarts menciona, y te señala una estrella que arde demasiado roja.",
+ "«Marte», dice, y su voz baja un tono. «Arde así cuando viene la guerra. Y hay algo en este bosque que la está llamando.» Te lo guarda en los bolsillos como una palabra robada."],
+  v:["Firenze","«Recuerda lo que te dije esta noche. Y no se lo cuentes a quien no lo pueda cargar.»"],
+  sil:'centaur',
+  c:[{l:"Subir ahora a su lomo.",n:'C2',tr:{saber:1}},{l:"Bajar sola y volver caminando.",n:'C4',tr:{coraje:1}}]},
+ C4:{t:["Vuelves sola, por donde viniste, con la cicatriz aún tibia y la espalda recta. No corres. Caminas. Y el bosque, que respeta pocas cosas, respeta eso.",
+ "Cada crujido bajo tus pies suena a pregunta. No respondes a ninguna. Pero no bajas la mirada ni una sola vez, y eso el bosque lo anota."],
+  c:[{l:"Salir al claro y volver a la cabaña.",n:'D0',tr:{coraje:1}}]},
+ D0:{t:["Amanece gris sobre la cabaña. Hagrid os espera con la cara de quien no ha dormido y un té que nadie quiere. Fang se te echa encima como si no te hubiera visto en años.",
+ "Lo que viviste anoche no cabe en una taza de té. Lo sabes tú, lo sabe Hagrid, y lo sabe el bosque, que se ha quedado callado detrás de los árboles como quien espera a ver qué haces con lo que te dio."],
+  c:[{l:"Contárselo al grupo, esa misma noche.",n:'FIN',tr:{lealtad:1},told:true},{l:"Guardártelo, por ahora.",n:'FIN',tr:{saber:1},told:false}]}
+};
+
+const FINALES={
+ E_plen:{t:"El que se llevó el bosque entero",l:"El bosque vio en ti a alguien que no se va con las manos vacías.",
+  t2:["Vuelves con un pelo plateado en el bolsillo, una palabra de centauro en la cabeza y el calor de alguien que tembló contigo todavía en la mano. Tres cosas que no deberías tener y que no vas a devolver.","No es codicia. Es memoria. Y el bosque, que lo ve todo, no te las quita: te las deja, que es su manera de confiar."]},
+ E_sab:{t:"El que volvió con Firenze",l:"El bosque vio en ti a alguien que prefiere la verdad aunque duela.",
+  t2:["Firenze te cuenta lo que los centauros ven y los hombres no, y tú no apartas la vista de nada. Cuando por fin te deja en el claro, sabes cosas que no querías saber y que ya no puedes des-saber.","No es un castigo lo que te llevas esa noche. Es una carga. Y las cargas, bien llevadas, son lo único que de verdad te hace crecer."]},
+ E_lea:{t:"El que no soltó a los suyos",l:"El bosque vio en ti a alguien que no cuenta sin los suyos.",
+  t2:["Vuelves con los tuyos, aunque el bosque tire de ti en otra dirección. Esa noche nadie se pierde, y eso, en el Bosque Prohibido, ya es una especie de milagro pequeño y terco.","Hagrid no lo dice, pero al salir te pone la mano en el hombro un segundo de más. Es su manera de dar las gracias sin ponerse tierno."]},
+ E_ast:{t:"El que leyó las estrellas",l:"El bosque vio en ti a alguien que mira hacia arriba incluso con miedo.",
+  t2:["Te bajan del lomo con el cielo todavía en los ojos. Marte arde demasiado rojo y tú ya sabes qué significa, y esa noche no duermes: no por miedo, sino por todo lo que acabas de ver.","Los centauros no confían en los humanos. Pero esa noche, uno de ellos te enseñó el cielo. Eso no se lo han enseñado a casi nadie."]},
+ E_cor:{t:"El que no miró atrás",l:"El bosque vio en ti a alguien que no baja la mirada.",
+  t2:["Sales del bosque con la cicatriz aún tibia y la espalda recta. No corriste. Caminaste. Y el bosque, que respeta pocas cosas, respeta eso.","Al salir, Hagrid te mira un rato largo sin decir nada. Luego asiente, una sola vez, como quien reconoce a un igual y no lo va a decir en voz alta."]}
+};
+
+function paint(id){
+  if(id==='FIN') return finish(computed());
+  const n=N[id];
+  $('#btext').innerHTML=n.t.map(p=>`<p>${p}</p>`).join('');
+  const v=$('#bvoice');
+  if(n.v){ v.hidden=false; v.innerHTML=`<b>${n.v[0]}:</b> ${n.v[1]}`; } else v.hidden=true;
+  $('#silCloak').classList.toggle('show', n.sil==='cloak');
+  $('#silCentaur').classList.toggle('show', n.sil==='centaur');
+  const box=$('#bchoices'); box.innerHTML='';
+  n.c.forEach(c=>{
+    const b=document.createElement('button'); b.className='bchoice'; b.type='button'; b.textContent=c.l;
+    b.addEventListener('click',()=>{
+      if(b.disabled)return;
+      $$('#bchoices .bchoice').forEach(x=>x.disabled=true);
+      b.classList.add('chosen');
+      if(c.tr) for(const k in c.tr) T[k]+=c.tr[k];
+      if(c.om) c.om.forEach(o=>OM[o]=true);
+      if(c.told!==undefined) TOLD=c.told;
+      setTimeout(()=>paint(c.n), REDUCED?150:650);
+    });
+    box.appendChild(b);
+  });
+  show('relato'); $('#scr-relato').scrollTop=0;
+}
+function computed(){
+  if(Object.keys(OM).length>=3) return 'E_plen';
+  const order=['coraje','lealtad','asombro','saber'];
+  const map={coraje:'E_cor',lealtad:'E_lea',asombro:'E_ast',saber:'E_sab'};
+  const sorted=order.slice().sort((a,b)=>T[b]-T[a]);
+  return map[sorted[0]];
+}
+function finish(id){
+  const F=FINALES[id];
+  $('#fTitle').textContent=F.t;
+  $('#fLine').textContent=F.l;
+  $('#fText').innerHTML=F.t2.map(p=>`<p>${p}</p>`).join('');
+  const keys=Object.keys(OM);
+  $('#fOmens').innerHTML = keys.length
+    ? keys.map(k=>`<span class="omen">${OMENS[k].icon} ${OMENS[k].n}</span>`).join('')
+    : `<span class="omen none">nada más que el silencio</span>`;
+  const tot=Object.values(T).reduce((a,b)=>a+b,0)||1;
+  $('#fTraits').innerHTML=Object.entries(T).map(([k,v])=>
+    `<div class="btrait"><span>${k}</span><span class="bar"><span data-w="${Math.round(v/tot*100)}"></span></span><span>${v}</span></div>`).join('');
+  show('final');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{ $$('#fTraits .bar span').forEach(s=>s.style.width=s.dataset.w+'%'); }));
+  window.__fin=F;
+}
+$('#fCopy').addEventListener('click',async()=>{
+  const F=window.__fin||FINALES.E_sab;
+  const om=Object.keys(OM).length? Object.keys(OM).map(k=>OMENS[k].n).join(', ') : 'nada más que el silencio';
+  const told = TOLD===true? 'Y se lo conté al grupo, porque esas cosas no se guardan.' : (TOLD===false? 'Y me lo guardé, porque hay noches que no se cuentan.' : '');
+  const txt=`🌲 Esa noche, en el Bosque Prohibido, el bosque vio en mí: ${F.t}. "${F.l}" Me llevé: ${om}. ${told} — ${NAME}, Olor a Libros · Sucursal de Hogwarts.`;
+  try{ await navigator.clipboard.writeText(txt); toastMsg('Lo que viste queda copiado.'); }
+  catch{ toastMsg('No pude copiarlo… inténtalo otra vez.'); }
+});
+$('#fAgain').addEventListener('click',()=>{ T={coraje:0,saber:0,lealtad:0,asombro:0}; OM={}; TOLD=null; show('nombre'); });
+
+$('#bForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const v=$('#bname').value.trim();
+  NAME=v? v[0].toUpperCase()+v.slice(1):'Aprendiz';
+  T={coraje:0,saber:0,lealtad:0,asombro:0}; OM={}; TOLD=null;
+  paint('n0');
+});
+
+function toastMsg(t){const el=$('#toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2600)}
+
+let gateOpened=false, cdInt=null;
+function tick(){
+  try{
+    const diff=UNLOCK-new Date();
+    if(diff<=0){
+      if(!gateOpened){ gateOpened=true; openGate(); }
+      if(cdInt) clearInterval(cdInt);
+      return;
+    }
+    $('#bc-d').textContent=Math.floor(diff/864e5);
+    $('#bc-h').textContent=String(Math.floor(diff/36e5)%24).padStart(2,'0');
+    $('#bc-m').textContent=String(Math.floor(diff/6e4)%60).padStart(2,'0');
+    $('#bc-s').textContent=String(Math.floor(diff/1e3)%60).padStart(2,'0');
+  }catch(e){
+    if(!gateOpened){ gateOpened=true; try{ openGate(); }catch(e2){} }
+    if(cdInt) clearInterval(cdInt);
+  }
+}
+tick();
+cdInt=setInterval(tick,1000);
+</script>
+<script src="magia.js" defer></script>
+</body>
+</html>

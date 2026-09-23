@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 · La Sala Menester · Olor a Libros</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=EB+Garamond:ital,wght@0,400;1,400&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.menester{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--sp-5);text-align:center;padding:var(--sp-6);position:relative;overflow:hidden}
+.m404{font-family:'Cinzel Decorative',serif;font-weight:900;font-size:clamp(4rem,18vw,9rem);color:var(--gold);text-shadow:0 0 60px rgba(217,169,78,.35);line-height:1}
+.mtitle{font-family:'Cinzel Decorative',serif;font-size:var(--fs-4);color:var(--ivory)}
+.mtext{max-width:52ch;color:var(--muted);font-size:var(--fs-2);font-style:italic;font-family:'IM Fell English',serif}
+.door-gone{width:150px;height:200px;border:2px dashed rgba(212,169,78,.4);border-radius:80px 80px 6px 6px;position:relative;opacity:.6}
+.door-gone::after{content:'?';position:absolute;inset:0;display:grid;place-items:center;font-family:'Cinzel Decorative',serif;font-size:3rem;color:rgba(212,169,78,.5)}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<main class="menester">
+  <div class="door-gone" aria-hidden="true"></div>
+  <div class="m404">404</div>
+  <h1 class="mtitle">La Sala Menester</h1>
+  <p class="mtext">La página que buscas no existe… o existe y simplemente no quiere ser encontrada hoy. La Sala Menester solo aparece para quien de verdad la necesita, y parece que esto no era lo que necesitabas.</p>
+  <a class="btn" href="/">← Volver al Gran Comedor</a>
+</main>
+<script src="magia.js" defer></script>
+</body>
+</html>

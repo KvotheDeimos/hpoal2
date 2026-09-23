@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olor a Libros · Sucursal de Hogwarts</title>
+<meta name="description" content="La Sucursal de Hogwarts del club Olor a Libros: descubre tu casa, tu varita y tu deseo ante el Espejo de Oesed.">
+<meta name="theme-color" content="#0a0913">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Olor a Libros · Sucursal de Hogwarts">
+<meta property="og:title" content="El Sombrero Seleccionador y el Taller de Ollivander">
+<meta property="og:description" content="La sucursal de Hogwarts del club Olor a Libros: descubre tu casa, tu varita y tu deseo ante el Espejo de Oesed.">
+<meta property="og:url" content="https://TU-SITIO.netlify.app/">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+<style>
+/* ── Estilos específicos del index (portal, topbar, copa, crónicas, puertas) ── */
+.topbar{position:relative;z-index:6;padding:var(--sp-3) var(--sp-6);background:rgba(10,9,19,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid rgba(212,169,78,.2)}
+.vestibulo{position:relative;overflow:hidden;padding:clamp(48px,6vw,84px) var(--sp-5);background:linear-gradient(180deg,#140c06 0%,#0d0703 48%,#070402 100%);border-bottom:2px solid rgba(138,104,51,.4)}
+.vestibulo::before{content:'';position:absolute;top:20%;left:50%;transform:translateX(-50%);width:980px;height:600px;border-radius:50%;filter:blur(60px);pointer-events:none;background:radial-gradient(closest-side,rgba(217,169,78,.10),rgba(217,169,78,.02) 60%,transparent)}
+.copa-head{position:relative;text-align:center;max-width:820px;margin:0 auto clamp(28px,4vw,48px)}
+.copa-kicker{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border:1px solid rgba(217,169,78,.4);border-radius:99px;background:rgba(34,20,6,.9);font:700 .68rem 'Cinzel Decorative',serif;letter-spacing:.25em;text-transform:uppercase;color:#fcedba;margin-bottom:12px}
+.copa-head h2{font-family:'Cinzel Decorative',serif;font-weight:900;font-size:clamp(2rem,5vw,3.4rem);letter-spacing:.02em;background:linear-gradient(90deg,#b88a3b,#fcedba 50%,#e8bb57);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 0 rgba(0,0,0,.9))}
+.copa-head p{color:#dcd3c2;font-size:var(--fs-2);margin-top:8px;line-height:1.6}
+.copa-leader{display:inline-block;margin-top:16px;padding:10px 24px;border:1px solid rgba(202,169,106,.7);border-radius:8px;background:linear-gradient(90deg,#24170c,#382312 50%,#24170c);box-shadow:0 10px 24px rgba(0,0,0,.6);font:italic .95rem 'IM Fell English',serif;color:#e8d2a0}
+.copa-leader b{font-family:'Cinzel Decorative',serif;font-style:normal;color:#ffdf88}
+.relojes{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(16px,2.4vw,32px);max-width:1180px;margin:0 auto}
+.hgcard{position:relative;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;border-radius:180px 180px 12px 12px;border:2px solid #543b1f;padding:16px 14px 22px;background:linear-gradient(180deg,#18110a,#100b06 55%,#080503);box-shadow:0 14px 44px var(--gg),0 20px 60px rgba(0,0,0,.95);transition:transform .5s cubic-bezier(.2,.7,.2,1),border-color .45s;cursor:pointer}
+.hgcard:hover{transform:translateY(-8px);border-color:color-mix(in srgb,var(--gb) 55%,#543b1f)}
+.hgcard::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at top,rgba(0,0,0,.3),rgba(0,0,0,.9))}
+.hg-head{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid rgba(202,169,106,.3);padding-bottom:10px;margin-bottom:8px}
+.hg-id{display:flex;align-items:center;gap:10px;min-width:0}
+.hg-crest{font-size:1.5rem;filter:drop-shadow(0 2px 4px rgba(0,0,0,.8))}
+.hg-name{font:700 .95rem 'Cinzel Decorative',serif;letter-spacing:.08em;text-transform:uppercase;color:#fcedba;line-height:1.1}
+.hg-gemname{display:block;font:italic .68rem 'IM Fell English',serif;color:#caa96a}
+.hg-rank{flex:none;min-width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font:700 .72rem 'Cinzel Decorative',serif;border:1px solid rgba(138,104,51,.6);background:#24170c;color:#dcd3c2;box-shadow:0 4px 10px rgba(0,0,0,.5)}
+.hg-rank.lead{background:linear-gradient(180deg,#caa96a,#8a6833);color:#1a0e04;border-color:#ffeaa7;animation:hgPulse 2s ease-in-out infinite}
+@keyframes hgPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,234,167,.5)}50%{box-shadow:0 0 18px 4px rgba(255,234,167,.35)}}
+.hg-stage{position:relative;z-index:1;width:100%;max-width:240px;margin:4px auto;aspect-ratio:240/440}
+.hg-stage svg{width:100%;height:100%;display:block;filter:drop-shadow(0 10px 25px rgba(0,0,0,.85))}
+.hg-tw{animation:hgTw 2.2s ease-in-out infinite}
+@keyframes hgTw{0%,100%{opacity:.35}50%{opacity:1}}
+.hg-read{position:relative;z-index:2;margin-top:6px;padding:12px 10px;border:1px solid #523d1d;border-radius:8px;text-align:center;background:linear-gradient(90deg,#8a6833,#caa96a 50%,#8a6833);box-shadow:0 8px 20px rgba(0,0,0,.5)}
+.hg-read .num{display:block;font:900 clamp(1.6rem,2.6vw,2.2rem)/1 'Cinzel Decorative',serif;color:#1a0e04}
+.hg-read .lbl{display:block;margin-top:6px;font:700 .58rem 'Cinzel Decorative',serif;letter-spacing:.25em;text-transform:uppercase;color:#38220a}
+.hg-lore{position:relative;z-index:2;margin-top:8px;text-align:center;font:italic .72rem 'IM Fell English',serif;color:#a79883}
+.cronicas{position:relative;padding:clamp(48px,6vw,84px) var(--sp-5);background:linear-gradient(180deg,#0d0a16 0%,#120e1e 60%,#0b0814 100%)}
+.bookshelf{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:var(--sp-4);max-width:1180px;margin:0 auto}
+.dynwrap{max-width:1180px;margin:var(--sp-6) auto 0;padding:var(--sp-5) var(--sp-6);border:2px solid rgba(217,169,78,.35);border-radius:var(--r-m);background:linear-gradient(180deg,rgba(24,17,38,.85),rgba(12,8,22,.9))}
+.dynwrap.has-few{max-width:700px;padding:var(--sp-4) var(--sp-5);text-align:center}
+.dynwrap h3{font:900 clamp(1.4rem,3vw,2.2rem)/1.2 'Cinzel Decorative',serif;color:#fcedba;margin-bottom:var(--sp-2)}
+.dynwrap .tagline{font:italic 1.05rem 'IM Fell English',serif;color:#d4af37;margin-bottom:var(--sp-3)}
+.dynwrap .desc{color:#ded4c3;margin-bottom:var(--sp-4);max-width:70ch}
+.dyngrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:var(--sp-4)}
+.dynwrap.has-few .dyngrid{max-width:500px;margin:0 auto;grid-template-columns:repeat(2,minmax(180px,1fr));justify-content:center;justify-items:center}
+.sealed-note{padding:var(--sp-5);border:1px solid rgba(255,255,255,.12);border-radius:var(--r-s);background:rgba(18,14,27,.8);font:italic .95rem 'IM Fell English',serif;color:#a79f92;display:flex;gap:var(--sp-3);align-items:center}
+.gdoor{position:relative;display:flex;flex-direction:column;justify-content:space-between;min-height:460px;padding:12px 12px 16px;border-radius:170px 170px 12px 12px;border:2px solid #544128;overflow:hidden;text-decoration:none;text-align:center;cursor:pointer;background:linear-gradient(180deg,#1a140e,#110d08 55%,#070503);transition:transform .5s cubic-bezier(.16,1,.3,1),box-shadow .5s,border-color .4s;box-shadow:0 14px 32px rgba(0,0,0,.85);font:inherit;color:inherit}
+.gdoor:hover{transform:translateY(-10px);border-color:var(--gc);box-shadow:0 24px 50px rgba(0,0,0,.9),0 0 28px var(--gg)}
+.gdoor.locked{filter:grayscale(.85) brightness(.75);opacity:.75;cursor:not-allowed}
+.gdoor.locked:hover{transform:none;border-color:#544128;box-shadow:0 14px 32px rgba(0,0,0,.85)}
+.gd-arch{position:relative;width:100%;aspect-ratio:1/.58;overflow:hidden;border-radius:160px 160px 0 0}
+.gd-arch svg{width:100%;height:100%;display:block}
+.gd-rune{position:absolute;top:26px;left:0;right:0;text-align:center;font:700 10px serif;letter-spacing:.35em;text-transform:uppercase;color:#73614a;transition:color .3s,text-shadow .3s;pointer-events:none}
+.gdoor:hover .gd-rune{color:var(--gr);text-shadow:0 0 12px var(--gg)}
+.gd-lantern{position:absolute;top:8px;right:22px;width:14px;height:20px;background:#24170c;border:1px solid #caa96a;display:grid;place-items:center;pointer-events:none}
+.gd-lantern::before{content:'';position:absolute;top:-8px;left:50%;width:1.5px;height:8px;background:rgba(202,169,106,.7)}
+.gd-lantern i{width:6px;height:8px;border-radius:50%;background:#ffd269;box-shadow:0 0 10px #ffd269}
+.gd-leaves{position:relative;flex:1;margin-top:-38px;border-radius:110px 110px 6px 6px;border:2px solid #453018;overflow:hidden;display:flex;box-shadow:inset 0 8px 28px rgba(0,0,0,.95)}
+.gd-leaf{flex:1;position:relative;background:repeating-linear-gradient(90deg,transparent 0 22px,rgba(0,0,0,.5) 22px 23px),linear-gradient(90deg,var(--oak1),var(--oak2))}
+.gd-leaf.r{background:repeating-linear-gradient(90deg,transparent 0 22px,rgba(0,0,0,.5) 22px 23px),linear-gradient(270deg,var(--oak1),var(--oak2))}
+.gd-leaf::before,.gd-leaf::after{content:'';position:absolute;left:50%;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:#3d3126;border:1px solid #7a6452}
+.gd-leaf::before{top:56px}.gd-leaf::after{top:140px}
+.gd-light{position:absolute;top:0;bottom:0;left:50%;width:2px;margin-left:-1px;opacity:0;transition:opacity .5s;background:linear-gradient(180deg,#fff6db,#fcedba,#e8bb57);box-shadow:0 0 25px #fcedba;z-index:5;pointer-events:none}
+.gdoor:hover .gd-light{opacity:1}
+.gd-hinge{position:absolute;left:0;width:104px;height:26px;z-index:6;pointer-events:none}
+.gd-hinge.top{top:52px}.gd-hinge.bot{bottom:64px}
+.gd-mid{position:relative;z-index:7;display:flex;flex-direction:column;align-items:center;gap:8px;padding:6px 4px 10px}
+.gd-medal{width:86px;height:86px;flex:none;border-radius:50%;border:2px solid #caa96a;display:grid;place-items:center;background:radial-gradient(circle at 50% 35%,#2a1a0d,#190f07 60%,#0a0502);box-shadow:0 8px 24px rgba(0,0,0,.9);transition:transform .5s,border-color .4s,box-shadow .4s}
+.gdoor:hover .gd-medal{transform:scale(1.1) rotate(2deg);border-color:#fcedba;box-shadow:0 0 28px var(--gg)}
+.gd-medal svg{width:54px;height:54px}
+.gd-medal .sym{font-size:1.9rem;line-height:1}
+.gd-knob{width:24px;height:18px;margin-top:-12px;background:linear-gradient(180deg,#8a6833,#473418);border:1px solid #caa96a;border-radius:3px 3px 0 0;display:grid;place-items:center}
+.gd-knob i{width:8px;height:8px;border-radius:50%;background:#fcedba}
+.gd-knocker{width:42px;height:42px;margin-top:-10px;border-radius:50%;border:3.5px solid #caa96a;background:rgba(0,0,0,.4)}
+.gd-badge{font:700 9px 'Cinzel Decorative',serif;letter-spacing:.18em;text-transform:uppercase;color:var(--gt);border:1px solid var(--gb2);background:var(--gbg);padding:4px 10px;border-radius:99px;white-space:nowrap}
+.gd-title{font:700 1.05rem/1.3 'Cinzel Decorative',serif;color:#fcedba}
+.gd-sub{font:italic .78rem/1.4 'EB Garamond',serif;color:#cfc5b4}
+.gd-cta{margin-top:auto;width:100%;padding:10px 8px;border-radius:8px;font:700 .66rem 'Cinzel Decorative',serif;letter-spacing:.16em;text-transform:uppercase;color:#caa96a;background:#1a120b;border:1px solid rgba(202,169,106,.4);display:flex;align-items:center;justify-content:center;gap:6px}
+.gd-mist{position:absolute;bottom:-3px;left:0;right:0;height:32px;pointer-events:none;filter:blur(6px);opacity:.15;background:var(--gm)}
+.gd-step{height:16px;margin-top:8px;background:linear-gradient(90deg,#1c150e,#2e2216,#1c150e);border-top:1px solid #8a6c38;border-radius:0 0 6px 6px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;font:600 8px 'Cinzel Decorative',serif;letter-spacing:.25em;text-transform:uppercase;color:#8c7759}
+.gd-step i{width:8px;height:4px;background:rgba(202,169,106,.5);border-radius:2px}
+.gdoor.sm{min-height:340px;padding:8px 8px 12px}
+.gdoor.sm .gd-medal{width:62px;height:62px}.gdoor.sm .gd-medal svg{width:38px;height:38px}.gdoor.sm .gd-medal .sym{font-size:1.5rem}
+.gdoor.sm .gd-title{font-size:.92rem}.gdoor.sm .gd-sub{font-size:.7rem}.gdoor.sm .gd-badge{font-size:8px}
+.gdoor.camara{background:linear-gradient(180deg,#2a3530 0%,#161d18 55%,#0a0d0b 100%);border-color:#41504a}
+.gdoor.camara .gd-leaf,.gdoor.camara .gd-hinge,.gdoor.camara .gd-knob,.gdoor.camara .gd-knocker,.gdoor.camara .gd-light{display:none}
+.gdoor.camara .gd-leaves{position:relative;background:linear-gradient(180deg,#232c26,#141a16 60%,#0b0f0c);border-color:#39463e}
+.gdoor.camara .gd-medal{background:radial-gradient(circle at 50% 40%,#2f3a33,#1a211c 60%,#0c100d);border-color:#5a6a5f}
+.gdoor.camara.open .gd-leaves::after{content:'';position:absolute;top:15%;bottom:15%;left:50%;width:4px;margin-left:-2px;border-radius:2px;background:linear-gradient(#a8ffb2,#2fe877,#1e824c);box-shadow:0 0 20px #58d68d}
+.gdoor.camara.open .gd-medal{filter:brightness(.75) saturate(.8)}
+.gdoor.camara.sello::before{content:'';position:absolute;top:12px;right:12px;width:16px;height:16px;z-index:30;transform:rotate(45deg);background:radial-gradient(circle at 35% 30%,#e8ecef,#9ca3af 60%,#546e7a);box-shadow:0 0 10px rgba(232,236,239,.6)}
+@media (max-width:1000px){.relojes{grid-template-columns:repeat(2,1fr);max-width:640px}}
+@media (max-width:560px){.relojes{grid-template-columns:1fr;max-width:340px}.bookshelf{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<div class="toast" id="toast" role="status"></div>
+
+<div class="brand-olor">
+  <div class="brand-olor-title"><span class="libro-icon">📖</span>Olor a Libros<span class="libro-icon">✨</span></div>
+  <div class="brand-olor-sub">Sucursal de <b>Hogwarts</b> · fundada el día que decidimos releerlo todo</div>
+</div>
+
+<header class="topbar">
+  <div class="topline" id="topline">
+    <div class="brand"><span class="brand-long">✦ Sucursal oficial del club de relectura</span><span class="brand-short">✦ Olor a Libros</span></div>
+    <nav aria-label="Secciones">
+      <a href="#puntos">Copa de las Casas</a>
+      <a href="#cronicas">Crónicas</a>
+      <a href="#tablon">El tablón</a>
+      <a href="#galeria">Retratos</a>
+      <a href="#casas">Las casas</a>
+      <a href="#museo">El museo</a>
+      <a href="ceremonia.html">Ceremonia</a>
+      <a href="varita.html">Taller</a>
+      <a href="espejo.html">Espejo</a>
+    </nav>
+    <div class="fecha">1 de septiembre · Gran Comedor</div>
+    <button class="menu-btn" id="menuBtn" aria-label="Abrir menú" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<!-- ═══ 1 · COPA DE LAS CASAS ═══ -->
+<section class="vestibulo" id="puntos">
+  <div class="copa-head">
+    <span class="copa-kicker">🏆 El Gran Vestíbulo · Relojes de la Copa</span>
+    <h2>La Copa de las Casas</h2>
+    <p>Incrustados en la pared de sillería del Gran Vestíbulo, los cuatro relojes de cristal custodian las gemas que reflejan con exactitud la puntuación oficial del club.</p>
+    <div class="copa-leader" id="copaLeader"></div>
+  </div>
+  <div class="relojes" id="relojes"></div>
+</section>
+
+<!-- ═══ 2 · CRÓNICAS POR LIBROS ═══ -->
+<section class="cronicas" id="cronicas">
+  <div class="copa-head">
+    <span class="copa-kicker">❖ La Gran Biblioteca de la Relectura</span>
+    <h2>Las Crónicas por Libros</h2>
+    <p>Cada tomo de la saga guarda sus propias dinámicas y secretos, sin un solo spoiler más allá de donde va leyendo el club.</p>
+  </div>
+  <div class="bookshelf" id="bookShelf"></div>
+  <div class="dynwrap" id="dynWrap"></div>
+</section>
+
+<!-- ═══ 3 · PORTAL / HÉROE ═══ -->
+<section class="portal">
+  <div class="backdrop" aria-hidden="true">
+    <div class="stars" id="stars"></div>
+    <svg class="constellations" viewBox="0 0 1200 400" preserveAspectRatio="none">
+      <g class="const c1"><polyline points="120,80 180,58 240,92 300,68"/><circle cx="120" cy="80" r="3"/><circle cx="180" cy="58" r="3"/><circle cx="240" cy="92" r="3"/><circle cx="300" cy="68" r="3"/></g>
+      <g class="const c2"><polyline points="760,110 820,84 884,112 906,172 842,196 780,176 760,110"/><circle cx="760" cy="110" r="3"/><circle cx="820" cy="84" r="3"/><circle cx="884" cy="112" r="3"/><circle cx="906" cy="172" r="3"/><circle cx="842" cy="196" r="3"/><circle cx="780" cy="176" r="3"/></g>
+      <g class="const c3"><polyline points="470,230 540,258 604,236 668,266"/><circle cx="470" cy="230" r="3"/><circle cx="540" cy="258" r="3"/><circle cx="604" cy="236" r="3"/><circle cx="668" cy="266" r="3"/></g>
+    </svg>
+    <div class="moon"></div>
+    <div class="shoot s1"></div><div class="shoot s2"></div>
+    <div class="snitch"></div>
+    <div class="arch a1"></div><div class="arch a2"></div>
+    <div class="candles" id="candles"></div>
+    <div class="fog f1"></div><div class="fog f2"></div>
+  </div>
+  <div class="castle" aria-hidden="true">
+    <svg viewBox="0 0 1440 280" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="castleHaze" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1c1636" stop-opacity="0.2"/><stop offset="100%" stop-color="#070610" stop-opacity="0.95"/></linearGradient>
+        <radialGradient id="winGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fff4cc"/><stop offset="60%" stop-color="#e8a838"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+      </defs>
+      <g fill="#140f26" opacity="0.6"><path d="M120 180 L140 90 L160 180 Z M310 190 L335 70 L360 190 Z M820 180 L840 85 L860 180 Z M1180 190 L1205 100 L1230 190 Z"/><rect x="325" y="110" width="20" height="80"/><rect x="830" y="120" width="20" height="70"/></g>
+      <g fill="#0b0816">
+        <path d="M0 240 Q180 230 360 250 T720 240 T1080 255 T1440 240 L1440 280 L0 280 Z"/>
+        <path d="M890 240 L890 90 L905 40 L910 15 L915 40 L930 90 L930 240 Z"/><polygon points="885,95 910,25 935,95"/>
+        <g stroke="#0b0714" stroke-width="2"><path d="M910 15 v-14"/></g><g fill="#7f0909"><polygon points="910,1 932,7 910,13"/></g>
+        <path d="M680 240 L680 110 L705 60 L710 35 L715 60 L740 110 L740 240 Z"/><polygon points="675,115 710,45 745,115"/>
+        <g stroke="#0b0714" stroke-width="2"><path d="M710 35 v-14"/></g><g fill="#7f0909"><polygon points="710,21 732,27 710,33"/></g>
+        <polygon points="380,110 540,75 700,110 700,240 380,240"/>
+        <path d="M360 240 L360 100 L375 60 L390 100 L390 240 Z"/>
+        <rect x="180" y="160" width="160" height="50" rx="2"/>
+        <path d="M200 210 Q215 175 230 210 M250 210 Q265 175 280 210 M300 210 Q315 175 330 210" fill="#070610"/>
+        <polygon points="1000,150 1140,120 1280,150 1280,250 1000,250"/>
+        <path d="M1260 240 L1260 115 L1275 75 L1290 115 L1290 240 Z"/>
+      </g>
+      <g fill="url(#winGlow)">
+        <path class="win" d="M420 160 Q426 140 432 160 L432 190 L420 190 Z"/><path class="win" d="M460 160 Q466 140 472 160 L472 190 L460 190 Z"/><path class="win" d="M500 160 Q506 140 512 160 L512 190 L500 190 Z"/><path class="win" d="M540 160 Q546 140 552 160 L552 190 L540 190 Z"/><path class="win" d="M580 160 Q586 140 592 160 L592 190 L580 190 Z"/><path class="win" d="M620 160 Q626 140 632 160 L632 190 L620 190 Z"/>
+        <circle class="win" cx="910" cy="85" r="4.5"/><path class="win" d="M907 125 Q910 115 913 125 L913 140 L907 140 Z"/><path class="win" d="M707 90 Q710 80 713 90 L713 105 L707 105 Z"/>
+      </g>
+      <rect x="0" y="245" width="1440" height="35" fill="url(#castleHaze)"/>
+    </svg>
+  </div>
+  <div class="vignette" aria-hidden="true"></div>
+  <div class="portal-wrap">
+    <div class="portal-hero">
+      <div class="portal-seal" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M10 14 h12 c2 0 3 1 3 2 v18 c0 -1 -1 -2 -3 -2 h-12 Z" fill="currentColor" opacity=".9"/><path d="M38 14 h-12 c-2 0 -3 1 -3 2 v18 c0 -1 1 -2 3 -2 h12 Z" fill="currentColor" opacity=".9"/><path d="M34 6 L18 30" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="35" cy="5" r="2" fill="currentColor"/></svg></div>
+      <div class="kicker">✦ Bienvenido, alumno</div>
+      <h1 class="line-mask"><span>Sucursal de</span></h1>
+      <h1 class="line-mask gold"><span>Hogwarts</span></h1>
+      <div class="orn" aria-hidden="true">✦ ────── ❖ ────── </div>
+      <p class="lead">El lugar donde la relectura de Olor a Libros se convierte en ceremonia, varita y espejo. Pasa: las velas ya están encendidas, el castillo deja las ventanas abiertas por si vuelves tarde, y el sombrero… el sombrero sigue de mal humor.</p>
+      <div class="banners" aria-hidden="true">
+        <span class="banner" style="--ha:#7f0909;--hb:#ffc500" data-relic="G"></span>
+        <span class="banner" style="--ha:#0f3d2a;--hb:#b8cdc2" data-relic="S"></span>
+        <span class="banner" style="--ha:#0e1a40;--hb:#c9a86a" data-relic="R"></span>
+        <span class="banner" style="--ha:#8a6d00;--hb:#ffd95e" data-relic="H"></span>
+      </div>
+      <div class="scroll-cue" style="margin-top:var(--sp-5)">Los relojes y los libros te esperan arriba · el tablón sigue abajo <span class="cue-arrow">▼</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="tablon">
+  <div class="sec-head reveal">
+    <div class="kicker">❖ Vida del club</div>
+    <h2>El tablón de anuncios de la sucursal</h2>
+    <p class="lead">Se clava con chinchetas y con sinceridad. Y este mes, también con una fecha límite: porque la Piedra no se va a leer sola y el Sombrero ya está cansado de esperar.</p>
+  </div>
+  <div class="edict reveal">
+    <span class="edict-stamp">Aviso oficial</span>
+    <h3>La Gran Convocatoria de Cierre</h3>
+    <p class="edict-date">Domingo <b>13 de septiembre</b> · último día para terminar <b>La Piedra Filosofal</b> en la relectura del grupo</p>
+    <div class="countdown" id="countdown" aria-label="Tiempo restante hasta el cierre de la relectura">
+      <div class="cd-tile"><span id="cd-d">–</span><small>días</small></div>
+      <div class="cd-tile"><span id="cd-h">–</span><small>horas</small></div>
+      <div class="cd-tile"><span id="cd-m">–</span><small>min</small></div>
+      <div class="cd-tile"><span id="cd-s">–</span><small>seg</small></div>
+    </div>
+    <p class="edict-fine" id="cd-fine">Pasada la fecha, quien no haya terminado leerá el capítulo 1 en voz alta. Con voces. No está en el reglamento, pero debería.</p>
+  </div>
+  <div class="board">
+    <div class="note reveal" style="--rot:-1.6deg">Cierre de spoilers: hasta el domingo a las 23:59 nadie cuenta el final de la Piedra en este grupo ni en los grupos colindantes. Castigo: pérdida de puntos y una mirada de decepción del Sombrero, que es bastante peor.<sig>— Dirección</sig></div>
+    <div class="note reveal" style="--rot:1.4deg;--rd:.1s">Recompensas de fin de libro confirmadas: galletas (Hostelería), el sillón para quien lea en voz alta (normas de la casa) y la gloria tranquila de haber terminado a tiempo. Sabemos que no seréis todos. Os queremos igual.<sig>— Hostelería y Tesorería</sig></div>
+    <div class="note reveal" style="--rot:-1deg;--rd:.2s">Buzón de confesiones: deja bajo esta nota qué te pareció REALMENTE el final. El Sombrero leerá las mejores en la quedada. Sí, el Sombrero sabe leer. Es un sombrero, no un mueble.<sig>— Secretaría</sig></div>
+    <div class="note reveal" style="--rot:1.8deg;--rd:.3s">Lista de tareas antes del domingo: terminar el libro ☐ · traer picoteo ☐ (Hufflepuff ya se ofreció) · moderar las teorías ☐ (Ravenclaw, respirad) · no llorar en el capítulo final ☐ (Gryffindor, buena suerte con eso).<sig>— El Tablón</sig></div>
+  </div>
+  <p class="board-line reveal">El Tablón recuerda: leer no es una carrera. Salvo hasta el domingo. Hasta el domingo sí es una carrera.</p>
+</section>
+
+<section class="ledger" aria-label="Libro de cuentas de la sucursal">
+  <div class="ledger-inner">
+    <div class="ledger-item reveal"><div class="ledger-num" data-target="132">0</div><div class="ledger-lbl">Casas asignadas</div><div class="ledger-sub">(14 apelaciones, todas denegadas por el Sombrero)</div></div>
+    <div class="ledger-item reveal" style="--rd:.1s"><div class="ledger-num" data-target="87">0</div><div class="ledger-lbl">Varitas entregadas</div><div class="ledger-sub">(3 devueltas por agitarlas como sartenes)</div></div>
+    <div class="ledger-item reveal" style="--rd:.2s"><div class="ledger-num" data-target="412">0</div><div class="ledger-lbl">Minutos ante el Espejo</div><div class="ledger-sub">(Dumbledore lleva la cuenta con el ceño fruncido)</div></div>
+    <div class="ledger-item reveal" style="--rd:.3s"><div class="ledger-num" data-target="1">0</div><div class="ledger-lbl">Limones perdonados</div><div class="ledger-sub">(y porque insistió mucho)</div></div>
+  </div>
+</section>
+
+<section class="block" id="galeria">
+  <div class="sec-head reveal">
+    <div class="kicker">❖ Pasillo del Tercer Piso · Retratos Vivos</div>
+    <h2>La Galería de Retratos Parlantes</h2>
+    <p class="lead">Los lienzos de Hogwarts están vivos: cotillean, vigilan la lectura del club y te desafían si te acercas. Pasa el cursor para verlos reaccionar o toca cualquier marco dorado para entablar conversación.</p>
+  </div>
+  <div class="port-grid" id="portGrid"></div>
+</section>
+
+<div class="trainband" aria-hidden="false">
+  <svg class="tb-mounts" viewBox="0 0 1440 140" preserveAspectRatio="none"><path d="M0,85 Q140,25 320,65 T720,28 T1080,68 T1440,35 L1440,140 L0,140 Z" fill="#120a22"/><path d="M0,105 Q220,55 460,90 T960,62 T1440,80 L1440,140 L0,140 Z" fill="#180e2d"/><circle cx="120" cy="20" r="1" fill="#fff" opacity=".6"/><circle cx="380" cy="15" r="1.2" fill="#ffd700" opacity=".7"/><circle cx="890" cy="18" r="1.4" fill="#fff" opacity=".8"/><circle cx="1180" cy="25" r="1" fill="#ffd700" opacity=".6"/></svg>
+  <div class="tb-cap"></div>
+  <div class="tb-viaduct" id="tbViaduct"></div>
+  <div class="tb-track"><i></i></div>
+  <div class="tb-tip" id="tbTip">🚂 ¡Silbato a toda máquina! Destino: Andén 9¾</div>
+  <div class="tb-train" id="tbTrain" title="¡Haz clic en el Expreso para hacer sonar el silbato!">
+    <svg viewBox="0 0 700 100" width="700" height="100">
+      <defs>
+        <linearGradient id="coachCrimson" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7a141a"/><stop offset="50%" stop-color="#590d12"/><stop offset="100%" stop-color="#38070b"/></linearGradient>
+        <linearGradient id="roofCream" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f3e8cf"/><stop offset="60%" stop-color="#d9c9a7"/><stop offset="100%" stop-color="#aa9a78"/></linearGradient>
+        <linearGradient id="windowGlow" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff3c4"/><stop offset="100%" stop-color="#d49b1e"/></linearGradient>
+        <linearGradient id="locoBoiler" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#96171e"/><stop offset="50%" stop-color="#690d13"/><stop offset="100%" stop-color="#3d070b"/></linearGradient>
+        <linearGradient id="brassGold" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#b38a29"/><stop offset="50%" stop-color="#fcedba"/><stop offset="100%" stop-color="#99701a"/></linearGradient>
+        <linearGradient id="smokeboxDark" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2e272b"/><stop offset="50%" stop-color="#1c1619"/><stop offset="100%" stop-color="#0c090a"/></linearGradient>
+        <radialGradient id="headlampBeam" cx="0%" cy="50%" r="100%"><stop offset="0%" stop-color="rgba(255,243,196,.9)"/><stop offset="35%" stop-color="rgba(255,215,120,.4)"/><stop offset="100%" stop-color="rgba(255,215,120,0)"/></radialGradient>
+      </defs>
+      <g><path d="M4,14 Q80,6 156,14 L158,18 L2,18 Z" fill="url(#roofCream)" stroke="#7d6a45" stroke-width=".8"/><rect x="2" y="54" width="156" height="28" rx="2" fill="url(#coachCrimson)" stroke="#caa96a"/><line x1="2" y1="56" x2="158" y2="56" stroke="#ffd700" stroke-width=".8"/><line x1="2" y1="70" x2="158" y2="70" stroke="#ffd700" stroke-width=".8"/>
+        <rect x="18" y="58" width="16" height="13" rx="1" fill="url(#windowGlow)"/><rect x="48" y="58" width="16" height="13" rx="1" fill="url(#windowGlow)"/><text x="51" y="68" font-size="9">🦉</text><rect x="78" y="58" width="16" height="13" rx="1" fill="url(#windowGlow)"/><rect x="108" y="58" width="16" height="13" rx="1" fill="url(#windowGlow)"/><text x="111" y="68" font-size="9">📚</text>
+        <rect x="6" y="82" width="148" height="3" fill="#181316"/>
+        <g class="tb-wheel"><circle cx="24" cy="82" r="6" fill="#1c1815" stroke="#7a6750" stroke-width="1.5"/><circle cx="24" cy="82" r="2" fill="#caa96a"/></g>
+        <g class="tb-wheel"><circle cx="44" cy="82" r="6" fill="#1c1815" stroke="#7a6750" stroke-width="1.5"/><circle cx="44" cy="82" r="2" fill="#caa96a"/></g>
+        <g class="tb-wheel"><circle cx="116" cy="82" r="6" fill="#1c1815" stroke="#7a6750" stroke-width="1.5"/><circle cx="116" cy="82" r="2" fill="#caa96a"/></g>
+        <g class="tb-wheel"><circle cx="136" cy="82" r="6" fill="#1c1815" stroke="#7a6750" stroke-width="1.5"/><circle cx="136" cy="82" r="2" fill="#caa96a"/></g></g>
+      <rect x="160" y="98" width="8" height="10" fill="#120f14"/>
+      <g transform="translate(168,0)"><path d="M4,50 Q80,42 156,50 L158,54 L2,54 Z" fill="url(#roofCream)" stroke="#7d6a45" stroke-width=".8"/><rect x="2" y="54" width="156" height="28" rx="2" fill="url(#coachCrimson)" stroke="#caa96a"/><line x1="2" y1="56" x2="158" y2="56" stroke="#ffd700" stroke-width=".8"/><line x1="2" y1="70" x2="158" y2="70" stroke="#ffd700" stroke-width=".8"/>
+        <rect x="18" y="58" width="16" height="13" rx="1" fill="url(#windowGlow)"/><rect x="48" y="58" width="16" height="13" rx="1" fill="url(#windowGlow)"/><rect x="78" y="58" width="16" height="13" rx="1" fill="url(#windowGlow)"/><text x="81" y="68" font-size="9">⚡</text><rect x="108" y="58" width="16" height="13" rx="1" fill="url(#windowGlow)"/><text x="111" y="68" font-size="9">🐸</text>
+        <rect x="6" y="82" width="148" height="3" fill="#181316"/>
+        <g class="tb-wheel"><circle cx="24" cy="82" r="6" fill="#1c1815" stroke="#7a6750" stroke-width="1.5"/><circle cx="24" cy="82" r="2" fill="#caa96a"/></g>
+        <g class="tb-wheel"><circle cx="44" cy="82" r="6" fill="#1c1815" stroke="#7a6750" stroke-width="1.5"/><circle cx="44" cy="82" r="2" fill="#caa96a"/></g>
+        <g class="tb-wheel"><circle cx="116" cy="82" r="6" fill="#1c1815" stroke="#7a6750" stroke-width="1.5"/><circle cx="116" cy="82" r="2" fill="#caa96a"/></g>
+        <g class="tb-wheel"><circle cx="136" cy="82" r="6" fill="#1c1815" stroke="#7a6750" stroke-width="1.5"/><circle cx="136" cy="82" r="2" fill="#caa96a"/></g></g>
+      <rect x="334" y="98" width="10" height="6" fill="#261f18"/>
+      <g transform="translate(344,0)"><rect x="2" y="54" width="108" height="28" rx="2" fill="url(#coachCrimson)" stroke="#caa96a"/><line x1="2" y1="56" x2="110" y2="56" stroke="#ffd700" stroke-width=".8"/><line x1="2" y1="70" x2="110" y2="70" stroke="#ffd700" stroke-width=".8"/>
+        <text x="56" y="68" text-anchor="middle" fill="#fcedba" font-size="6.5" font-weight="bold" font-family="Cinzel Decorative, serif" letter-spacing="1.5">HOGWARTS</text>
+        <rect x="6" y="82" width="100" height="3" fill="#181316"/>
+        <g class="tb-wheel"><circle cx="22" cy="82" r="5" fill="#1c1815" stroke="#7a6750" stroke-width="1.5"/><circle cx="22" cy="82" r="2" fill="#caa96a"/></g>
+        <g class="tb-wheel"><circle cx="56" cy="82" r="5" fill="#1c1815" stroke="#7a6750" stroke-width="1.5"/><circle cx="56" cy="82" r="2" fill="#caa96a"/></g>
+        <g class="tb-wheel"><circle cx="90" cy="82" r="5" fill="#1c1815" stroke="#7a6750" stroke-width="1.5"/><circle cx="90" cy="82" r="2" fill="#caa96a"/></g></g>
+      <rect x="452" y="74" width="8" height="8" fill="#201814"/>
+      <g transform="translate(460,0)">
+        <path d="M2,30 Q18,22 46,26 L46,74 L2,74 Z" fill="url(#locoBoiler)" stroke="#caa96a"/>
+        <path d="M12,46 A8,8 0 0,1 28,46 L28,58 L12,58 Z" fill="#ff6b35" stroke="#ffd700"/><circle cx="20" cy="52" r="4" fill="#fff8db" opacity=".8"/><circle cx="18" cy="49" r="2.5" fill="#3a0709"/>
+        <rect x="8" y="62" width="22" height="7" rx="1" fill="#1c0608" stroke="#caa96a" stroke-width=".8"/><text x="19" y="67.5" text-anchor="middle" fill="#fcedba" font-size="5" font-weight="bold" font-family="Cinzel Decorative, serif">5972</text>
+        <rect x="46" y="34" width="102" height="40" fill="url(#locoBoiler)" stroke="#caa96a" stroke-width=".8"/>
+        <line x1="68" y1="34" x2="68" y2="74" stroke="url(#brassGold)" stroke-width="1.5"/><line x1="94" y1="34" x2="94" y2="74" stroke="url(#brassGold)" stroke-width="1.5"/><line x1="120" y1="34" x2="120" y2="74" stroke="url(#brassGold)" stroke-width="1.5"/>
+        <path d="M62,34 L62,25 Q67,22 72,25 L72,34 Z" fill="url(#brassGold)"/><path d="M102,34 L102,23 A7,7 0 0,1 116,23 L116,34 Z" fill="url(#brassGold)"/>
+        <path d="M80,54 Q98,48 116,54" fill="none" stroke="#fcedba" stroke-width="3" stroke-linecap="round"/><path d="M80,54 Q98,48 116,54" fill="none" stroke="#220609" stroke-width="2" stroke-linecap="round"/><text x="98" y="53.5" text-anchor="middle" fill="#fcedba" font-size="3.8" font-weight="bold" font-family="Cinzel Decorative, serif" letter-spacing="0.4">HOGWARTS CASTLE</text>
+        <rect x="148" y="34" width="36" height="40" rx="1" fill="url(#smokeboxDark)" stroke="#caa96a"/><path d="M184,34 A20,20 0 0,1 184,74 Z" fill="#151114" stroke="#caa96a"/><circle cx="186" cy="54" r="2" fill="#ffd700"/>
+        <path d="M158,34 L160,18 L170,18 L172,34 Z" fill="#1c1619" stroke="#caa96a" stroke-width=".8"/><ellipse cx="165" cy="18" rx="7" ry="2" fill="url(#brassGold)"/>
+        <rect x="180" y="70" width="16" height="6" rx="1" fill="#a81a20" stroke="#ffd700" stroke-width=".8"/>
+        <rect x="185" y="44" width="5" height="7" rx="1" fill="url(#brassGold)"/><circle cx="190" cy="47.5" r="3" fill="#fff" stroke="#ffd700" stroke-width=".8"/>
+        <polygon points="193,47.5 250,25 250,70" fill="url(#headlampBeam)" pointer-events="none"/>
+        <rect x="2" y="73" width="190" height="3" fill="#181316"/>
+        <g class="tb-wheel"><circle cx="58" cy="82" r="13" fill="#520c10" stroke="#ffd700" stroke-width="1.5"/><circle cx="58" cy="82" r="8" fill="none" stroke="#caa96a" stroke-width=".8"/><line x1="46" y1="82" x2="70" y2="82" stroke="#caa96a" stroke-width=".8"/><line x1="58" y1="70" x2="58" y2="94" stroke="#caa96a" stroke-width=".8"/><circle cx="58" cy="82" r="3.5" fill="#1c1815"/></g>
+        <g class="tb-wheel"><circle cx="98" cy="82" r="13" fill="#520c10" stroke="#ffd700" stroke-width="1.5"/><circle cx="98" cy="82" r="8" fill="none" stroke="#caa96a" stroke-width=".8"/><line x1="86" y1="82" x2="110" y2="82" stroke="#caa96a" stroke-width=".8"/><line x1="98" y1="70" x2="98" y2="94" stroke="#caa96a" stroke-width=".8"/><circle cx="98" cy="82" r="3.5" fill="#1c1815"/></g>
+        <g class="tb-wheel"><circle cx="138" cy="82" r="13" fill="#520c10" stroke="#ffd700" stroke-width="1.5"/><circle cx="138" cy="82" r="8" fill="none" stroke="#caa96a" stroke-width=".8"/><line x1="126" y1="82" x2="150" y2="82" stroke="#caa96a" stroke-width=".8"/><line x1="138" y1="70" x2="138" y2="94" stroke="#caa96a" stroke-width=".8"/><circle cx="138" cy="82" r="3.5" fill="#1c1815"/></g>
+        <circle cx="166" cy="85" r="7" fill="#1f1a1d" stroke="#caa96a" stroke-width="1.2"/><circle cx="166" cy="85" r="2" fill="#ffd700"/>
+        <circle cx="182" cy="85" r="7" fill="#1f1a1d" stroke="#caa96a" stroke-width="1.2"/><circle cx="182" cy="85" r="2" fill="#ffd700"/>
+        <rect x="58" y="85" width="80" height="2.5" rx="1" fill="#d9c5a0"/>
+      </g>
+    </svg>
+    <div class="tb-steam" id="tbSteam"><i></i><i></i><i></i><i></i></div>
+  </div>
+</div>
+
+<section class="block" id="casas">
+  <div class="sec-head reveal">
+    <div class="kicker">❖ Los cuatro estandartes</div>
+    <h2>Las casas de Hogwarts</h2>
+    <p class="lead">Hace más de mil años, cuatro hechiceros extraordinarios fundaron el colegio y dejaron al Sombrero la tarea de elegir por ellos. Estas son sus casas… y cómo se comportan sus miembros en una relectura de Olor a Libros.</p>
+  </div>
+  <div class="houses-grid" id="housesGrid"></div>
+  <blockquote class="margin-quote reveal">En Olor a Libros no se elige casa: se descubre cuál llevaba años siendo tuya.<sig>— El Tablón, tercera relectura</sig></blockquote>
+</section>
+
+<section class="block" id="museo">
+  <div class="sec-head reveal">
+    <div class="kicker">❖ Colección Oficial de Reliquias</div>
+    <h2>El Museo de la Relectura</h2>
+    <p class="lead">Objetos mágicos bajo campanas de cristal soplado y peanas de caoba. Se ruega no golpear las vitrinas, aunque la Snitch intente escapar.</p>
+  </div>
+  <div class="mus-main" id="musMain"></div>
+  <div class="mus-grid" id="musGrid"></div>
+  <div class="postcards">
+    <figure class="postcard pc1 reveal"><span class="tape t1"></span><span class="tape t2"></span>
+      <div class="pc-art"><span>🧹</span></div>
+      <figcaption>Final de quidditch del 98 · ganamos por 30 puntos y una ceja</figcaption>
+    </figure>
+    <figure class="postcard pc2 reveal" style="--rd:.12s"><span class="tape t1"></span><span class="tape t2"></span>
+      <div class="pc-art"><span>🛋️</span></div>
+      <figcaption>La sala común a las 2 a. m. · alguien dejó el fuego encendido y no fue el fantasma</figcaption>
+    </figure>
+  </div>
+</section>
+
+<div class="ribbon-wrap" aria-hidden="true"><div class="ribbon"><div class="ribbon-track" id="ribbonTrack"></div></div></div>
+
+<footer>
+  <div class="foot-grid">
+    <div>
+      <div class="foot-brand">✦ Sucursal de Hogwarts</div>
+      <div class="foot-brand-olor">Olor a Libros · club de relectura</div>
+      <p style="margin-top:10px">Una web-hechizo para el grupo que relee Harry Potter con más devoción de la que el Ministerio reconoce. Hecha con magia, pergamino y JavaScript.</p>
+    </div>
+    <div>
+      <h5>Las puertas</h5>
+      <ul>
+        <li><a href="#puntos">La Copa de las Casas</a></li>
+        <li><a href="#cronicas">Las Crónicas por Libros</a></li>
+        <li><a href="#tablon">El tablón y la cuenta atrás</a></li>
+        <li><a href="#galeria">La Galería de Retratos</a></li>
+        <li><a href="ceremonia.html">La Ceremonia de Selección</a></li>
+        <li><a href="varita.html">El Taller de Ollivander</a></li>
+        <li><a href="espejo.html">El Espejo de Oesed</a></li>
+        <li><a href="bosque.html">El Bosque Prohibido</a></li>
+        <li><a href="camara.html">La Cámara Secreta</a></li>
+        <li><a href="#casas">Las cuatro casas</a></li>
+        <li><a href="#museo">El Museo de la Relectura</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Pergamino legal</h5>
+      <p>Página fan sin ánimo de lucro, no afiliada a Warner Bros. ni al Wizarding World. Todos los personajes y marcas pertenecen a sus respectivos dueños. El limón, en cambio, es de todos.</p>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>Draco dormiens nunquam titillandus</span>
+    <span>© <span id="year"></span> · Sucursal de Hogwarts · Olor a Libros</span>
+  </div>
+</footer>
+
+<!-- ═══ MODALES ═══ -->
+<div class="pmodal" id="pmodal"><div class="pmodal-box">
+  <button class="pmodal-x" id="pmodalX" aria-label="Cerrar">✕</button>
+  <div class="pmodal-head"><div class="thumb" id="pmThumb"></div><div><span style="font:700 .6rem 'Cinzel Decorative',serif;letter-spacing:.2em;text-transform:uppercase;color:#caa96a">Retrato Parlante Activo</span><h3 id="pmName"></h3><p id="pmTitle"></p></div></div>
+  <div class="pmodal-say" id="pmSay"></div>
+  <span style="display:block;font:700 .68rem 'Cinzel Decorative',serif;letter-spacing:.2em;text-transform:uppercase;color:#caa96a;margin-bottom:10px">¿Qué deseas decirle al retrato?</span>
+  <div id="pmQs"></div>
+</div></div>
+<div class="bmodal" id="bmodal"><div class="bmodal-box">
+  <button class="bmodal-x" id="bmodalX" aria-label="Cerrar">✕</button>
+  <span style="font:700 .6rem 'Cinzel Decorative',serif;letter-spacing:.2em;text-transform:uppercase;color:#825c27">Página de Guarda · Primera Edición en Castellano</span>
+  <h3>Harry Potter y la Piedra Filosofal</h3>
+  <div class="ded"><p>«Para los que vuelven a este libro veintitantos años después. El tren sigue saliendo a las once en punto, las ranas de chocolate todavía se escapan por la ventana y la magia nunca se fue: solo estaba esperando a que volvieras a abrir la primera página.»</p><sig>— Club de Relectura Olor a Libros</sig></div>
+</div></div>
+
+<!-- ═══ SCRIPTS (orden de carga: datos primero, luego UI, luego módulos) ═══ -->
+<script src="js/data.js" defer></script>
+<script src="js/ui.js" defer></script>
+<script src="js/copa.js" defer></script>
+<script src="js/cronicas.js" defer></script>
+<script src="js/retratos.js" defer></script>
+<script src="js/museo.js" defer></script>
+<script src="magia.js" defer></script>
+</body>
+</html>

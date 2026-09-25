@@ -504,11 +504,13 @@ function showEndScreen(){
 
 function copyCard(){
   const text=$('#share-card').dataset.text;
-  navigator.clipboard.writeText(text).then(()=>{
-    const original=$('#share-card').textContent;
-    $('#share-card').textContent='¡Copiado!';
-    setTimeout(()=>{$('#share-card').textContent=original},2000);
-  });
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(()=>{
+      const original=$('#share-card').textContent;
+      $('#share-card').textContent='¡Copiado!';
+      setTimeout(()=>{$('#share-card').textContent=original},2000);
+    }).catch(()=>{});
+  }
 }
 
 function createDrops(){

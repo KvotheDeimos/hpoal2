@@ -5,8 +5,8 @@
 (function () {
   'use strict';
 
-  var PORTR = (typeof PORTRAITS !== 'undefined') ? PORTRAITS : [];
-  var PAINTS = (typeof PAINT !== 'undefined') ? PAINT : {};
+  var PORTR = (typeof window !== 'undefined' && window.PORTRAITS) ? window.PORTRAITS : ((typeof PORTRAITS !== 'undefined') ? PORTRAITS : []);
+  var PAINTS = (typeof window !== 'undefined' && window.PAINT) ? window.PAINT : ((typeof PAINT !== 'undefined') ? PAINT : {});
 
   function snd(name) {
     var s = window.SucursalSound;

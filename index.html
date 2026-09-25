@@ -17,8 +17,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
 </head>
 <body>
 <div class="grain" aria-hidden="true"></div>
@@ -254,7 +252,123 @@
     <h2>Las casas de Hogwarts</h2>
     <p class="lead">Hace más de mil años, cuatro hechiceros extraordinarios fundaron el colegio y dejaron al Sombrero la tarea de elegir por ellos. Estas son sus casas… y cómo se comportan sus miembros en una relectura de Olor a Libros.</p>
   </div>
-  <div class="houses-grid" id="housesGrid"></div>
+  <div class="houses-grid" id="housesGrid">
+    <!-- ═══ I · GRYFFINDOR ═══ -->
+    <article class="house-banner reveal" data-house="Gryffindor" style="--ha:#7f0909;--hb:#ffd700;--rd:0s">
+      <div class="banner-frame">
+        <div class="banner-eyelet" aria-hidden="true"></div>
+        <div class="banner-art" aria-hidden="true">
+          <svg viewBox="0 0 64 64"><path d="M32 3 L36 10 L34 40 L32 46 L30 40 L28 10 Z" fill="currentColor"/><path d="M20 40 H44 L41 45 H23 Z" fill="currentColor"/><rect x="30" y="45" width="4" height="9" rx="1.5" fill="currentColor"/><circle cx="32" cy="57" r="3.4" fill="currentColor"/><circle cx="32" cy="42.4" r="2.1" fill="#b3232a"/></svg>
+        </div>
+        <div class="banner-kicker">CASA I · FUEGO</div>
+        <div class="banner-title-row">
+          <span class="banner-badge" aria-hidden="true">
+            <svg viewBox="0 0 64 64"><path d="M32 3 L36 10 L34 40 L32 46 L30 40 L28 10 Z" fill="currentColor"/><path d="M20 40 H44 L41 45 H23 Z" fill="currentColor"/><rect x="30" y="45" width="4" height="9" rx="1.5" fill="currentColor"/><circle cx="32" cy="57" r="3.4" fill="currentColor"/><circle cx="32" cy="42.4" r="2.1" fill="#b3232a"/></svg>
+          </span>
+          <h3 class="banner-name">GRYFFINDOR</h3>
+        </div>
+        <p class="banner-motto">«Coraje · Osadía · Caballerosidad»</p>
+        <div class="banner-specs">
+          <div class="spec-row"><span class="spec-lbl">FUNDADOR</span><span class="spec-val">Godric Gryffindor</span></div>
+          <div class="spec-row"><span class="spec-lbl">CUALIDADES</span><span class="spec-val">Coraje · Osadía ·<br>Caballerosidad</span></div>
+          <div class="spec-row"><span class="spec-lbl">FANTASMA</span><span class="spec-val">Nick Casi Decapitado</span></div>
+          <div class="spec-row"><span class="spec-lbl">SALA COMÚN</span><span class="spec-val">Torre de Gryffindor, tras<br>la Dama Gorda</span></div>
+          <div class="spec-row"><span class="spec-lbl">RELIQUIA</span><span class="spec-val">La espada de rubíes</span></div>
+        </div>
+        <p class="banner-desc">El estandarte escarlata ondea donde hace falta valentía y un punto de temeridad.</p>
+        <div class="banner-sep" aria-hidden="true"></div>
+        <p class="banner-note">Nota de Olor a Libros: leen los capítulos de batalla en voz alta y con voces.</p>
+        <p class="banner-members"><b>Miembros célebres:</b> <i>Harry Potter · Hermione Granger · Albus Dumbledore · Minerva McGonagall</i></p>
+      </div>
+    </article>
+
+    <!-- ═══ II · SLYTHERIN ═══ -->
+    <article class="house-banner reveal" data-house="Slytherin" style="--ha:#0f3d2a;--hb:#b8cdc2;--rd:0.12s">
+      <div class="banner-frame">
+        <div class="banner-eyelet" aria-hidden="true"></div>
+        <div class="banner-art" aria-hidden="true">
+          <svg viewBox="0 0 64 64"><path d="M40 10c11 2 13 11 4 16-9 6-25 4-25 13 0 8 13 11 21 7 7-4 7-10 3-12" stroke="currentColor" stroke-width="6" fill="none" stroke-linecap="round"/><circle cx="41" cy="9" r="5" fill="currentColor"/><circle cx="42.6" cy="8" r="1.1" fill="#0b0a14"/><path d="M46 9l7-2M46 9l6 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </div>
+        <div class="banner-kicker">CASA II · AGUA</div>
+        <div class="banner-title-row">
+          <span class="banner-badge" aria-hidden="true">
+            <svg viewBox="0 0 64 64"><path d="M40 10c11 2 13 11 4 16-9 6-25 4-25 13 0 8 13 11 21 7 7-4 7-10 3-12" stroke="currentColor" stroke-width="6" fill="none" stroke-linecap="round"/><circle cx="41" cy="9" r="5" fill="currentColor"/><circle cx="42.6" cy="8" r="1.1" fill="#0b0a14"/><path d="M46 9l7-2M46 9l6 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </span>
+          <h3 class="banner-name">SLYTHERIN</h3>
+        </div>
+        <p class="banner-motto">«Ambición · Astucia · Autonomía · Determinación»</p>
+        <div class="banner-specs">
+          <div class="spec-row"><span class="spec-lbl">FUNDADOR</span><span class="spec-val">Salazar Slytherin</span></div>
+          <div class="spec-row"><span class="spec-lbl">CUALIDADES</span><span class="spec-val">Ambición · Astucia<br>· Autonomía ·<br>Determinación</span></div>
+          <div class="spec-row"><span class="spec-lbl">FANTASMA</span><span class="spec-val">El Barón Sanguinario</span></div>
+          <div class="spec-row"><span class="spec-lbl">SALA COMÚN</span><span class="spec-val">Mazmorras, bajo el<br>Lago Negro</span></div>
+          <div class="spec-row"><span class="spec-lbl">RELIQUIA</span><span class="spec-val">El guardapelo de plata</span></div>
+        </div>
+        <p class="banner-desc">Aquí se forjan los que saben exactamente lo que quieren y trazan el camino para conseguirlo.</p>
+        <div class="banner-sep" aria-hidden="true"></div>
+        <p class="banner-note">Nota de Olor a Libros: ya subrayaron las mejores frases del libro. Con bolígrafo verde.</p>
+        <p class="banner-members"><b>Miembros célebres:</b> <i>Merlín · Horace Slughorn · Severus Snape · Regulus Black</i></p>
+      </div>
+    </article>
+
+    <!-- ═══ III · RAVENCLAW ═══ -->
+    <article class="house-banner reveal" data-house="Ravenclaw" style="--ha:#0e1a40;--hb:#c9a86a;--rd:0.24s">
+      <div class="banner-frame">
+        <div class="banner-eyelet" aria-hidden="true"></div>
+        <div class="banner-art" aria-hidden="true">
+          <svg viewBox="0 0 64 64"><path d="M8 46 Q32 32 56 46" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M15 44 L19 27 L25 42 M39 42 L45 27 L49 44" stroke="currentColor" stroke-width="3.6" fill="none" stroke-linejoin="round"/><path d="M32 38 L26 21 L32 8 L38 21 Z" fill="currentColor"/><circle cx="32" cy="43" r="5" fill="currentColor"/><circle cx="32" cy="43" r="2.3" fill="#274b9d"/></svg>
+        </div>
+        <div class="banner-kicker">CASA III · AIRE</div>
+        <div class="banner-title-row">
+          <span class="banner-badge" aria-hidden="true">
+            <svg viewBox="0 0 64 64"><path d="M8 46 Q32 32 56 46" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M15 44 L19 27 L25 42 M39 42 L45 27 L49 44" stroke="currentColor" stroke-width="3.6" fill="none" stroke-linejoin="round"/><path d="M32 38 L26 21 L32 8 L38 21 Z" fill="currentColor"/><circle cx="32" cy="43" r="5" fill="currentColor"/><circle cx="32" cy="43" r="2.3" fill="#274b9d"/></svg>
+          </span>
+          <h3 class="banner-name">RAVENCLAW</h3>
+        </div>
+        <p class="banner-motto">«Inteligencia · Ingenio · Pensamiento independiente»</p>
+        <div class="banner-specs">
+          <div class="spec-row"><span class="spec-lbl">FUNDADOR</span><span class="spec-val">Rowena Ravenclaw</span></div>
+          <div class="spec-row"><span class="spec-lbl">CUALIDADES</span><span class="spec-val">Inteligencia ·<br>Ingenio ·<br>Pensamiento<br>independiente</span></div>
+          <div class="spec-row"><span class="spec-lbl">FANTASMA</span><span class="spec-val">La Dama Gris</span></div>
+          <div class="spec-row"><span class="spec-lbl">SALA COMÚN</span><span class="spec-val">Torre oeste, tras la<br>puerta-águila</span></div>
+          <div class="spec-row"><span class="spec-lbl">RELIQUIA</span><span class="spec-val">La diadema perdida</span></div>
+        </div>
+        <p class="banner-desc">El nido de las mentes despiertas: curiosidad, creatividad y pensamiento independiente.</p>
+        <div class="banner-sep" aria-hidden="true"></div>
+        <p class="banner-note">Nota de Olor a Libros: hicieron una tabla de teorías que nadie pidió. La leímos todos. Dos veces.</p>
+        <p class="banner-members"><b>Miembros célebres:</b> <i>Filius Flitwick · Luna Lovegood · Garrick Ollivander</i></p>
+      </div>
+    </article>
+
+    <!-- ═══ IV · HUFFLEPUFF ═══ -->
+    <article class="house-banner reveal" data-house="Hufflepuff" style="--ha:#8a6d00;--hb:#ffd95e;--rd:0.36s">
+      <div class="banner-frame">
+        <div class="banner-eyelet" aria-hidden="true"></div>
+        <div class="banner-art" aria-hidden="true">
+          <svg viewBox="0 0 64 64"><path d="M18 11 H46 L44 29 Q42 40 32 40 Q22 40 20 29 Z" fill="currentColor"/><path d="M18 14 Q6 16 10 26 Q13 32 20 30" stroke="currentColor" stroke-width="3.5" fill="none"/><path d="M46 14 Q58 16 54 26 Q51 32 44 30" stroke="currentColor" stroke-width="3.5" fill="none"/><rect x="29.5" y="40" width="5" height="8" fill="currentColor"/><path d="M21 53 H43 L39 48 H25 Z" fill="currentColor"/></svg>
+        </div>
+        <div class="banner-kicker">CASA IV · TIERRA</div>
+        <div class="banner-title-row">
+          <span class="banner-badge" aria-hidden="true">
+            <svg viewBox="0 0 64 64"><path d="M18 11 H46 L44 29 Q42 40 32 40 Q22 40 20 29 Z" fill="currentColor"/><path d="M18 14 Q6 16 10 26 Q13 32 20 30" stroke="currentColor" stroke-width="3.5" fill="none"/><path d="M46 14 Q58 16 54 26 Q51 32 44 30" stroke="currentColor" stroke-width="3.5" fill="none"/><rect x="29.5" y="40" width="5" height="8" fill="currentColor"/><path d="M21 53 H43 L39 48 H25 Z" fill="currentColor"/></svg>
+          </span>
+          <h3 class="banner-name">HUFFLEPUFF</h3>
+        </div>
+        <p class="banner-motto">«Lealtad · Justicia · Esfuerzo honesto»</p>
+        <div class="banner-specs">
+          <div class="spec-row"><span class="spec-lbl">FUNDADOR</span><span class="spec-val">Helga Hufflepuff</span></div>
+          <div class="spec-row"><span class="spec-lbl">CUALIDADES</span><span class="spec-val">Lealtad · Justicia ·<br>Esfuerzo honesto</span></div>
+          <div class="spec-row"><span class="spec-lbl">FANTASMA</span><span class="spec-val">El Fray Gordito</span></div>
+          <div class="spec-row"><span class="spec-lbl">SALA COMÚN</span><span class="spec-val">Junto a las cocinas, tras<br>el bodegón</span></div>
+          <div class="spec-row"><span class="spec-lbl">RELIQUIA</span><span class="spec-val">La copa de oro</span></div>
+        </div>
+        <p class="banner-desc">El corazón más justo del castillo: paciencia, trabajo honesto y lealtad inquebrantable.</p>
+        <div class="banner-sep" aria-hidden="true"></div>
+        <p class="banner-note">Nota de Olor a Libros: traen el picoteo a las quedadas de lectura. La historia los recordará.</p>
+        <p class="banner-members"><b>Miembros célebres:</b> <i>Newt Scamander · Nymphadora Tonks · Cedric Diggory · Pomona Sprout</i></p>
+      </div>
+    </article>
+  </div>
   <blockquote class="margin-quote reveal">En Olor a Libros no se elige casa: se descubre cuál llevaba años siendo tuya.<sig>— El Tablón, tercera relectura</sig></blockquote>
 </section>
 

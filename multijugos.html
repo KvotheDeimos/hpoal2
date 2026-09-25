@@ -503,7 +503,7 @@
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(shareText).then(function () {
           if (window.toastMsg) window.toastMsg('✨ Tarjeta copiada al portapapeles');
-        });
+        }).catch(function () {});
       } else {
         if (window.toastMsg) window.toastMsg('Copia este texto: ' + res.title);
       }

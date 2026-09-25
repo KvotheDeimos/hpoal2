@@ -15,13 +15,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Cinzel+Decorative:wght@700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IM+Fell+English:ital@0;1&family=Pinyon+Script&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
+:root {
+  --spine-glow: rgba(202, 169, 106, 0.15);
+  --spine-border: #4a341e;
+  --cover-border: #caa96a;
+}
+
 .diario-page {
   position: relative; min-height: 100vh; min-height: 100svh;
   background: radial-gradient(120% 90% at 50% 20%, #1a120c 0%, #0d0906 55%, #050302 100%);
   color: #eeddc5; overflow-x: hidden;
 }
 
-/* Luces tenues de vela */
 .candle-glow {
   position: absolute; top: 15%; left: 50%; transform: translate(-50%, -50%);
   width: 650px; height: 450px; border-radius: 50%; pointer-events: none;
@@ -66,7 +71,6 @@
   max-width: 640px; margin-bottom: 12px; line-height: 1.45;
 }
 
-/* Nota mágica de privacidad */
 .privacy-badge {
   display: inline-flex; align-items: center; gap: 8px;
   background: rgba(30, 18, 10, 0.7); border: 1px solid rgba(202, 169, 106, 0.3);
@@ -74,11 +78,12 @@
   color: #caa96a; margin-bottom: 20px;
 }
 
-/* El Tomo del Diario con pautado y textura antigua */
+/* ── El Tomo con energía reactiva ── */
 .book-spine {
   position: relative; width: 100%; max-width: 720px;
-  background: #140d07; border: 3px solid #4a341e; border-radius: 12px;
-  padding: 14px; box-shadow: 0 30px 75px rgba(0,0,0,0.96), 0 0 35px rgba(202, 169, 106, 0.15);
+  background: #140d07; border: 3px solid var(--spine-border); border-radius: 12px;
+  padding: 14px; box-shadow: 0 30px 75px rgba(0,0,0,0.96), 0 0 35px var(--spine-glow);
+  transition: border-color 1.2s ease, box-shadow 1.2s ease;
 }
 .book-cover {
   position: relative; min-height: 520px;
@@ -86,10 +91,16 @@
   background-image:
     repeating-linear-gradient(transparent, transparent 37px, rgba(168, 125, 70, 0.18) 37px, rgba(168, 125, 70, 0.18) 38px),
     radial-gradient(circle at 50% 30%, #fcf7eb 0%, #edd9b5 70%, #d8be92 100%);
-  border: 1.5px solid #caa96a; border-radius: 8px;
+  border: 1.5px solid var(--cover-border); border-radius: 8px;
   box-shadow: inset 0 0 50px rgba(92, 59, 24, 0.35);
   padding: 30px 28px 24px; display: flex; flex-direction: column; justify-content: space-between;
   color: #2b1a09; overflow: hidden;
+  transition: border-color 1.2s ease, background-image 2s ease;
+}
+.book-cover.stained {
+  background-image:
+    repeating-linear-gradient(transparent, transparent 37px, rgba(168, 125, 70, 0.18) 37px, rgba(168, 125, 70, 0.18) 38px),
+    radial-gradient(circle at 50% 30%, #f0e4cc 0%, #d8b888 70%, #b8925a 100%);
 }
 .book-cover::before {
   content: ''; position: absolute; top: 0; bottom: 0; left: 44px; width: 1.5px;
@@ -101,44 +112,48 @@
   display: flex; justify-content: space-between; user-select: none;
 }
 
-/* Área de conversación / tinta */
 .ink-log {
   flex: 1; display: flex; flex-direction: column; gap: 20px; margin-bottom: 18px;
-  min-height: 280px; max-height: 380px; overflow-y: auto; padding-right: 6px;
+  min-height: 280px; max-height: 420px; overflow-y: auto; padding-right: 6px;
 }
 
-/* Manuscrito auténtico */
-.ink-entry {
-  position: relative; line-height: 1.5;
-}
+.ink-entry { position: relative; line-height: 1.5; }
 .ink-user {
   font-family: 'Caveat', cursive, serif;
   font-size: 1.85rem; font-weight: 700;
-  color: #0b1a30; /* Tinta azul-negra intensa */
+  color: #0b1a30;
   text-align: right; padding-right: 16px;
   letter-spacing: 0.02em;
   text-shadow: 0 0 1px rgba(11, 26, 48, 0.4);
+  transition: color 1.2s ease, filter 2s ease, opacity 2.5s ease;
 }
 .ink-user.absorbed {
-  animation: inkAbsorb 2.8s cubic-bezier(.4, 0, .2, 1) forwards;
+  color: #5c3418;
+  filter: blur(2.5px);
+  opacity: 0.08;
 }
-@keyframes inkAbsorb {
-  0% { opacity: 1; filter: blur(0); }
-  50% { opacity: 0.45; filter: blur(2px); color: #523114; }
-  100% { opacity: 0.08; filter: blur(4px); color: #78522c; }
+.ink-user.defiant-strike {
+  color: #901018 !important;
+  text-decoration: line-through;
+  opacity: 0.6 !important;
 }
 
 .ink-riddle {
   font-family: 'Pinyon Script', cursive, serif;
   font-size: 2.15rem; font-weight: 400;
-  color: #660a12; /* Tinta carmesí oscura de Tom Riddle */
+  color: #660a12;
   text-align: left; padding-left: 24px;
   letter-spacing: 0.03em;
   border-left: 2.5px solid rgba(144, 24, 34, 0.4);
   text-shadow: 0 0 1px rgba(102, 10, 18, 0.5);
 }
+.ink-riddle.final {
+  color: #4a0408;
+  border-left-color: rgba(168, 30, 42, 0.8);
+  font-size: 2.3rem;
+}
 
-/* ── PLUMA DIRECTAMENTE SOBRE CADA PALABRA (Inline Quill) ── */
+/* ── Pluma sobre cada letra ── */
 .quill-pen-cursor {
   display: inline-block;
   position: relative;
@@ -163,20 +178,59 @@
   100% { transform: rotate(3deg) translate(2px, -2px); }
 }
 
-/* Sugerencias de confesiones e inquietudes de Hogwarts */
+/* ── Chips progresivos por ronda ── */
 .prompt-chips {
   display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;
+  min-height: 34px;
 }
 .prompt-chip {
   background: rgba(202, 169, 106, 0.15); border: 1px dashed rgba(120, 82, 44, 0.4);
   border-radius: 20px; padding: 5px 13px; font: italic .9rem 'IM Fell English', serif;
-  color: #5c3b18; cursor: pointer; transition: all .2s;
+  color: #5c3b18; cursor: pointer; transition: all .3s;
+  animation: chipFade 0.5s ease-out;
+}
+@keyframes chipFade {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
 }
 .prompt-chip:hover {
   background: rgba(105, 21, 30, 0.15); border-color: #69151e; color: #69151e;
 }
+.prompt-chip.urgent {
+  background: rgba(144, 24, 34, 0.15); border: 1.5px solid #901018; color: #901018;
+  font-weight: 600; animation: pulseChip 2s infinite alternate;
+}
+@keyframes pulseChip {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.03); box-shadow: 0 0 10px rgba(144,24,34,0.3); }
+}
 
-/* Formulario para escribir */
+/* ── La Falsa Elección ── */
+.choice-box {
+  display: flex; gap: 14px; justify-content: center; margin-top: 14px; flex-wrap: wrap;
+}
+.btn-choice {
+  background: linear-gradient(180deg, #2b1410, #140806); color: #ecd8bf;
+  border: 1.5px solid #caa96a; border-radius: 8px; padding: 10px 18px;
+  font: 700 .82rem 'Cinzel Decorative', serif; cursor: pointer;
+  transition: transform .2s, box-shadow .2s;
+}
+.btn-choice:hover {
+  transform: translateY(-2px); box-shadow: 0 4px 16px rgba(144,24,34,0.5);
+  border-color: #ffcccc; color: #fff;
+}
+
+/* ── Input poseído ── */
+.write-input.possessed {
+  color: #8a1018 !important; font-weight: 600;
+  background: rgba(255, 235, 235, 0.85); border-color: #8a1018;
+  animation: inputPulse 1.5s ease-in-out infinite;
+}
+@keyframes inputPulse {
+  0%, 100% { box-shadow: 0 0 12px rgba(105, 21, 30, 0.3); }
+  50% { box-shadow: 0 0 22px rgba(168, 30, 42, 0.6); }
+}
+
 .write-box {
   display: flex; gap: 10px; border-top: 1px solid rgba(120, 82, 44, 0.3);
   padding-top: 14px;
@@ -184,7 +238,7 @@
 .write-input {
   flex: 1; background: rgba(255,255,255,0.65); border: 1.5px solid #a87d46;
   border-radius: 6px; padding: 12px 16px; font: italic 1.15rem 'IM Fell English', serif;
-  color: #1f1208; outline: none; transition: border-color .3s, background .3s;
+  color: #1f1208; outline: none; transition: all .4s ease;
 }
 .write-input:focus {
   background: rgba(255,255,255,0.88); border-color: #69151e;
@@ -199,17 +253,70 @@
 .write-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,0.5); border-color: #ffd700; }
 .write-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-/* Tarjeta final: Lo que Tom Riddle se quedó de ti */
+/* ── Tarjeta final: pergamino quemado ── */
 .soul-card {
-  margin-top: 24px; background: #0c0805; border: 2px solid #caa96a;
-  border-radius: 14px; padding: 32px 26px; text-align: center;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 30px rgba(144, 24, 34, 0.4);
-  width: 100%; max-width: 640px; animation: cardRise .8s cubic-bezier(.2,.8,.2,1);
+  margin-top: 24px;
+  background: radial-gradient(circle at 50% 40%, #170a09 0%, #0d0605 75%, #050202 100%);
+  border: 2px solid #8a1822; border-radius: 14px; padding: 34px 28px;
+  box-shadow: inset 0 0 40px rgba(144, 24, 34, 0.5), 0 25px 60px rgba(0,0,0,0.95);
+  width: 100%; max-width: 660px; animation: cardRise .8s cubic-bezier(.2,.8,.2,1);
+  position: relative; overflow: hidden;
+}
+.soul-card::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(circle at 10% 10%, rgba(255, 60, 20, 0.08) 0%, transparent 40%),
+              radial-gradient(circle at 90% 90%, rgba(255, 60, 20, 0.08) 0%, transparent 40%);
 }
 @keyframes cardRise { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
-.soul-kicker { font: 700 .72rem 'Cinzel Decorative', serif; letter-spacing: .3em; text-transform: uppercase; color: #caa96a; }
-.soul-title { font: 900 1.9rem 'Cinzel Decorative', serif; color: #ffcccc; margin: 10px 0 16px; text-shadow: 0 0 16px rgba(168, 30, 42, 0.7); }
-.soul-quote { font: italic 1.15rem/1.65 'IM Fell English', serif; color: #eeddc5; margin-bottom: 24px; background: rgba(255,255,255,0.04); padding: 18px; border-radius: 8px; border-left: 3px solid #a81e2a; text-align: left; }
+
+.soul-kicker { font: 700 .72rem 'Cinzel Decorative', serif; letter-spacing: .3em; text-transform: uppercase; color: #caa96a; text-align: center; }
+.soul-title { font: 900 1.9rem 'Cinzel Decorative', serif; color: #ffcccc; margin: 10px 0 16px; text-shadow: 0 0 16px rgba(168, 30, 42, 0.7); text-align: center; }
+
+.soul-grid {
+  display: grid; gap: 14px; margin-bottom: 22px; text-align: left;
+}
+.soul-item {
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(168, 30, 42, 0.25);
+  border-radius: 8px; padding: 14px 16px;
+}
+.soul-item-label {
+  font: 700 .68rem 'Cinzel Decorative', serif; letter-spacing: .15em; text-transform: uppercase;
+  color: #caa96a; margin-bottom: 4px;
+}
+.soul-item-val {
+  font: italic 1.15rem 'IM Fell English', serif; color: #eeddc5; line-height: 1.45;
+}
+.soul-item-val.keyword {
+  font-family: 'Pinyon Script', cursive; font-weight: 400; font-size: 2.4rem;
+  color: #ff9999; letter-spacing: .05em; text-shadow: 0 0 10px rgba(144, 24, 34, 0.6);
+}
+.soul-item-val.distortion {
+  color: #f7c9c9; border-left: 2px solid #8a1822; padding-left: 10px;
+  font-family: 'Pinyon Script', cursive; font-size: 1.4rem;
+}
+
+/* ── Rúbrica SVG T. M. Riddle ── */
+.riddle-signature {
+  display: flex; flex-direction: column; align-items: center; margin: 18px 0;
+}
+.sig-svg {
+  width: 140px; height: 50px; filter: drop-shadow(0 0 8px rgba(144,24,34,0.7));
+  animation: signatureAppear 1.5s ease-out 0.5s both;
+}
+@keyframes signatureAppear {
+  0% { opacity: 0; transform: translateY(10px) rotate(-3deg); }
+  100% { opacity: 1; transform: none; }
+}
+.sig-caption {
+  font: italic .75rem 'IM Fell English', serif; color: #8a1018; letter-spacing: .2em;
+  margin-top: 6px;
+}
+
+.soul-warning {
+  font: italic .95rem/1.55 'EB Garamond', serif; color: #bca085;
+  border-top: 1px dashed rgba(202, 169, 106, 0.3); padding-top: 14px; margin-bottom: 22px; text-align: center;
+}
+
 .soul-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 .btn-diary {
   padding: 12px 22px; border-radius: 8px; font: 700 .84rem 'Cinzel Decorative', serif;
@@ -221,6 +328,11 @@
 .btn-diary.sec:hover { background: rgba(202,169,106,0.1); color: #fff; }
 
 .hidden { display: none !important; }
+
+@media (max-width: 600px) {
+  .choice-box { flex-direction: column; }
+  .btn-choice { width: 100%; }
+}
 </style>
 </head>
 <body class="diario-page">
@@ -247,7 +359,7 @@
     <span>✨ Ficción mágica interactiva · La tinta vive únicamente en tu navegador.</span>
   </div>
 
-  <div class="book-spine">
+  <div class="book-spine" id="bookSpine">
     <div class="book-cover" id="bookCover">
 
       <div class="book-date">
@@ -255,14 +367,13 @@
         <span id="turnCounter">Página en blanco · Entrada 1 de 3</span>
       </div>
 
-      <!-- Registro de tinta viva -->
       <div class="ink-log" id="inkLog"></div>
 
-      <!-- Sugerencias de confesiones de Hogwarts -->
-      <div class="prompt-chips" id="promptChips">
-        <span class="prompt-chip" data-text="A veces siento que no encajo en mi casa y que nadie en el colegio me comprende.">«No encajo en mi casa de Hogwarts»</span>
-        <span class="prompt-chip" data-text="Dicen que la Cámara de los Secretos ha vuelto a abrirse... ¿qué ocurrió en 1943?">«La Cámara de los Secretos y 1943»</span>
-        <span class="prompt-chip" data-text="Tengo miedo de no ser lo bastante fuerte y fallar a quienes esperan tanto de mí.">«Tengo miedo de no ser lo bastante fuerte»</span>
+      <div class="prompt-chips" id="promptChips"></div>
+
+      <div class="choice-box hidden" id="choiceBox">
+        <button type="button" class="btn-choice" id="btnStay">🖋️ Seguir escribiendo</button>
+        <button type="button" class="btn-choice" id="btnClose">📕 Cerrar el diario de golpe</button>
       </div>
 
       <form class="write-box" id="writeForm">
@@ -274,11 +385,41 @@
     </div>
   </div>
 
-  <!-- Tarjeta de desenlace -->
   <article class="soul-card hidden" id="soulCard">
     <div class="soul-kicker">❖ El diario ha cerrado sus páginas</div>
     <h2 class="soul-title" id="soulTitle">Lo que Tom Riddle se quedó de ti</h2>
-    <div class="soul-quote" id="soulQuote"></div>
+    
+    <div class="soul-grid">
+      <div class="soul-item">
+        <div class="soul-item-label">La palabra que más te delató:</div>
+        <div class="soul-item-val keyword" id="cardKeyword">«SOLEDAD»</div>
+      </div>
+      <div class="soul-item">
+        <div class="soul-item-label">La confesión más vulnerable:</div>
+        <div class="soul-item-val" id="cardConfession">«...»</div>
+      </div>
+      <div class="soul-item">
+        <div class="soul-item-label">La distorsión que Tom te devolvió:</div>
+        <div class="soul-item-val distortion" id="cardDistortion">«...»</div>
+      </div>
+    </div>
+
+    <div class="riddle-signature">
+      <svg class="sig-svg" viewBox="0 0 160 55" fill="none">
+        <path d="M 15 28 Q 28 8 40 28 M 28 12 L 28 42" stroke="#8a1018" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="46" cy="40" r="2" fill="#8a1018"/>
+        <path d="M 55 42 L 55 14 L 68 32 L 80 14 L 80 42" stroke="#8a1018" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="86" cy="40" r="2" fill="#8a1018"/>
+        <path d="M 96 42 L 96 14 Q 115 12 115 25 Q 115 34 102 34 L 118 44 Q 130 46 142 40 Q 152 32 145 22 Q 135 15 145 8 Q 155 12 152 24" stroke="#8a1018" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <span class="sig-caption">T. M. RIDDLE</span>
+    </div>
+
+    <div class="soul-warning">
+      <i>«Nunca confíes en nada que pueda pensar por sí mismo si no puedes ver dónde tiene el cerebro.»</i><br>
+      — Arthur Weasley, tras la pesadilla de la Cámara Secreta
+    </div>
+
     <div class="soul-actions">
       <button class="btn-diary" id="copyDiaryCard">📋 Copiar mi tarjeta</button>
       <button class="btn-diary sec" id="resetDiaryBtn">🔄 Abrir de nuevo</button>
@@ -300,12 +441,93 @@
   var log = $('#inkLog');
   var turnEl = $('#turnCounter');
   var promptChips = $('#promptChips');
+  var choiceBox = $('#choiceBox');
+  var btnStay = $('#btnStay');
+  var btnClose = $('#btnClose');
+  var spine = $('#bookSpine');
+  var cover = $('#bookCover');
 
   var step = 0;
   var userEntries = [];
+  var extractedKeywords = [];
   var isWriting = false;
+  var isPossessed = false;
 
-  /* ── SVG de la Pluma (Plumín en el origen de cada letra) ── */
+  /* ── Paleta de energía absorbida (4 estadios) ── */
+  var STAGE_THEMES = [
+    { glow: 'rgba(202, 169, 106, 0.15)', border: '#4a341e', cover: '#caa96a' },
+    { glow: 'rgba(215, 110, 40, 0.35)', border: '#6a331e', cover: '#c47d52' },
+    { glow: 'rgba(168, 20, 32, 0.65)', border: '#8a1824', cover: '#9e2a36' },
+    { glow: 'rgba(200, 10, 25, 0.95)', border: '#5a0810', cover: '#720e18' }
+  ];
+
+  function updateDiaryEnergy(st) {
+    var theme = STAGE_THEMES[Math.min(st, 3)];
+    spine.style.setProperty('--spine-glow', theme.glow);
+    spine.style.setProperty('--spine-border', theme.border);
+    spine.style.setProperty('--cover-border', theme.cover);
+  }
+
+  /* ── Chips progresivos por ronda ── */
+  var CHIPS_BY_ROUND = [
+    [
+      { label: '«No encajo en mi casa de Hogwarts»', text: 'A veces siento que no encajo en mi propia casa de Hogwarts y que nadie me comprende.' },
+      { label: '«Tengo miedo de fallar a todos»', text: 'Tengo miedo constante de no ser lo bastante fuerte y fallar a los que esperan tanto de mí.' },
+      { label: '«Me siento invisible en el Gran Comedor»', text: 'Finjo que todo está bien, pero me siento completamente invisible entre tanta gente en el castillo.' }
+    ],
+    [
+      { label: '«No confío en los profesores ni en Dumbledore»', text: 'No confío en lo que nos cuentan los profesores; sospecho que Dumbledore nos oculta la verdad.' },
+      { label: '«Mis amigos no saben quién soy en realidad»', text: 'Mis propios compañeros de casa no conocen mis verdaderos pensamientos ni lo que deseo.' },
+      { label: '«Dicen que la Cámara de los Secretos se abrió...»', text: 'He oído susurros sobre la Cámara de los Secretos. Dime qué pasó en 1943.' }
+    ],
+    [
+      { label: '«Te diré el nombre de quien me hace sentir pequeño»', text: 'Hay alguien en este castillo que me hace sentir pequeño todos los días y te lo voy a contar.', urgent: true }
+    ]
+  ];
+
+  function renderChips(roundIndex) {
+    promptChips.innerHTML = '';
+    var list = CHIPS_BY_ROUND[roundIndex] || [];
+    list.forEach(function (c) {
+      var span = document.createElement('span');
+      span.className = 'prompt-chip' + (c.urgent ? ' urgent' : '');
+      span.dataset.text = c.text;
+      span.textContent = c.label;
+      promptChips.appendChild(span);
+    });
+    promptChips.style.display = list.length ? 'flex' : 'none';
+  }
+
+  promptChips.addEventListener('click', function (e) {
+    var chip = e.target.closest('.prompt-chip');
+    if (!chip || isWriting || isPossessed) return;
+    input.value = chip.dataset.text;
+    input.focus();
+  });
+
+  /* ── Extractor de palabras cargadas ── */
+  var CHARGED_LEXICON = [
+    'invisible', 'encajo', 'miedo', 'fallar', 'solo', 'soledad', 'débil', 'fuerte', 'dumbledore',
+    'mentira', 'castillo', 'profesores', 'cámara', 'camara', 'monstruo', 'pequeño', 'oculto',
+    'casa', 'amigos', 'suficiente', 'verdad', 'callar', 'humillado', 'nadie', 'sangre',
+    'raro', 'extraño', 'incomprendido', 'confianza', 'traición', 'secreto', 'culpa', 'vergüenza',
+    'odio', 'amor', 'querer', 'esperar', 'esperanza', 'nombre'
+  ];
+
+  function extractChargedWord(sentence) {
+    var words = sentence.toLowerCase().replace(/[^a-záéíóúüñ\s]/g, ' ').split(/\s+/).filter(function (w) { return w.length > 3; });
+    for (var i = 0; i < words.length; i++) {
+      if (CHARGED_LEXICON.indexOf(words[i]) !== -1) return words[i];
+    }
+    var longest = '';
+    words.forEach(function (w) {
+      var stop = ['para', 'pero', 'como', 'este', 'esta', 'todo', 'toda', 'porque', 'desde', 'cuando', 'donde'];
+      if (w.length > longest.length && stop.indexOf(w) === -1) longest = w;
+    });
+    return longest || 'tus dudas';
+  }
+
+  /* ── SVG de la pluma ── */
   var QUILL_SVG_HTML = '<span class="quill-pen-cursor" aria-hidden="true">'
     + '<svg class="quill-nib-icon" viewBox="0 0 60 90">'
     + '<polygon points="4,86 10,70 20,74 12,88" fill="#d4af37" stroke="#7a5c18" stroke-width="0.8"/>'
@@ -317,83 +539,52 @@
     + '<circle cx="4" cy="86" r="1.4" fill="#701018"/>'
     + '</svg></span>';
 
-  /* ── Audio procedimental de pluma sobre papel ── */
+  /* ── Audio procedimental ── */
   var audioCtx = null;
   function playQuillScratch() {
     try {
-      if (!audioCtx) {
-        audioCtx = (window.SucursalSound && window.SucursalSound.ctx) || new (window.AudioContext || window.webkitAudioContext)();
-      }
+      if (!audioCtx) audioCtx = (window.SucursalSound && window.SucursalSound.ctx) || new (window.AudioContext || window.webkitAudioContext)();
       if (!audioCtx) return;
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-
+      if (audioCtx.state === 'suspended') { audioCtx.resume().catch(function () {}); }
       var bufferSize = Math.floor(audioCtx.sampleRate * 0.04);
       var buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
       var data = buffer.getChannelData(0);
-      for (var i = 0; i < bufferSize; i++) {
-        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.35));
-      }
+      for (var i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.35));
       var noise = audioCtx.createBufferSource();
       noise.buffer = buffer;
       var filter = audioCtx.createBiquadFilter();
-      filter.type = 'bandpass';
-      filter.frequency.value = 2800 + Math.random() * 800;
-      filter.Q.value = 3.8;
-
-      var gain = audioCtx.createGain();
-      gain.gain.value = 0.04;
-
-      noise.connect(filter);
-      filter.connect(gain);
-      gain.connect(audioCtx.destination);
+      filter.type = 'bandpass'; filter.frequency.value = 2800 + Math.random() * 800; filter.Q.value = 3.8;
+      var gain = audioCtx.createGain(); gain.gain.value = 0.04;
+      noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
       noise.start();
     } catch (err) {}
   }
-
   function playSound(type) {
-    if (window.SucursalSound) {
-      if (type === 'page' && window.SucursalSound.page) window.SucursalSound.page();
-      else if (type === 'secret' && window.SucursalSound.secret) window.SucursalSound.secret();
-      else if (type === 'chime' && window.SucursalSound.chime) window.SucursalSound.chime();
-    }
+    if (!window.SucursalSound) return;
+    if (type === 'page' && window.SucursalSound.page) window.SucursalSound.page();
+    else if (type === 'secret' && window.SucursalSound.secret) window.SucursalSound.secret();
+    else if (type === 'chime' && window.SucursalSound.chime) window.SucursalSound.chime();
   }
 
-  /* ── Manejador de chips rápidos ── */
-  promptChips.addEventListener('click', function (e) {
-    var chip = e.target.closest('.prompt-chip');
-    if (!chip || isWriting) return;
-    input.value = chip.dataset.text;
-    input.focus();
-  });
-
-  /* ── Motor de Escritura Manuscrita con Pluma Físicamente en la Letra ── */
+  /* ── Motor de escritura manuscrita ── */
   function writeWithInlineQuill(container, text, isRiddle, onDone) {
     isWriting = true;
-
     var textSpan = document.createElement('span');
     container.appendChild(textSpan);
-
     var quillWrapper = document.createElement('span');
     quillWrapper.innerHTML = QUILL_SVG_HTML;
     var quillEl = quillWrapper.firstChild;
     container.appendChild(quillEl);
 
-    var i = 0;
-    var len = text.length;
-    var baseSpeed = isRiddle ? 36 : 28;
+    var i = 0, len = text.length;
+    var baseSpeed = isRiddle ? 35 : 26;
 
     function stepChar() {
       if (i < len) {
         textSpan.textContent += text.charAt(i);
         i++;
-
-        // Sonido sutil de plumín al trazar
-        if (i % 2 === 0 || text.charAt(i - 1) === ' ') {
-          playQuillScratch();
-        }
-
+        if (i % 2 === 0 || text.charAt(i - 1) === ' ') playQuillScratch();
         log.scrollTop = log.scrollHeight;
-
         var pause = (text.charAt(i - 1) === '.' || text.charAt(i - 1) === '?' || text.charAt(i - 1) === ',') ? 140 : 0;
         setTimeout(stepChar, baseSpeed + (Math.random() * 16 - 8) + pause);
       } else {
@@ -402,147 +593,317 @@
         if (onDone) onDone();
       }
     }
-
     stepChar();
   }
 
-  /* ── Saludo inicial canónico de Tom Riddle en 1943 ── */
+  /* ── Detección de texto desafiante ── */
+  function isDefiantInput(text) {
+    return /mentiroso|no te creo|asesino|monstruo|vete|basta|dejame|déjame|callate|cállate|mentira|mientes|no confío|falso|sal de/.test(text.toLowerCase());
+  }
+
+  /* ── Memoria persistente ── */
+  var savedMemory = null;
+  try {
+    var raw = localStorage.getItem('hpoal_riddle_memory');
+    if (raw) savedMemory = JSON.parse(raw);
+  } catch (e) {}
+
+  /* ── Saludo inicial ── */
   setTimeout(function () {
     var greetingEntry = document.createElement('div');
     greetingEntry.className = 'ink-entry ink-riddle';
     log.appendChild(greetingEntry);
     playSound('secret');
 
-    writeWithInlineQuill(greetingEntry, '«Hola. Me llamo Tom Riddle. Llevaba cincuenta años esperando a alguien en este colegio que no tuviera miedo de hablar con la verdad. En Hogwarts todos fingen ser valientes ante los profesores, pero tú y yo sabemos lo que se siente al caminar por los pasillos sabiendo que nadie te comprende. Cuéntame… ¿qué es lo que más temes en este castillo?»', true, function () {
+    var initialGreeting = '«Hola. Me llamo Tom Riddle. Llevaba cincuenta años esperando a alguien en este colegio que no tuviera miedo de hablar con la verdad. En Hogwarts todos fingen ser valientes ante los profesores, pero tú y yo sabemos lo que se siente al caminar por los pasillos sabiendo que nadie te comprende. Cuéntame… ¿qué es lo que más temes en este castillo?»';
+
+    if (savedMemory && savedMemory.word) {
+      initialGreeting = '«Ah, has vuelto. Me acuerdo de lo que me confesaste la última vez sobre «' + savedMemory.word + '»… ¿Descubrieron tu secreto los profesores, o sigues escondiéndolo como entonces?»';
+    }
+
+    writeWithInlineQuill(greetingEntry, initialGreeting, true, function () {
+      renderChips(0);
       input.focus();
     });
   }, 700);
 
-  /* ── Formulario de Envío ── */
+  /* ── Formulario de envío ── */
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var val = input.value.trim();
-    if (!val || isWriting) return;
+    if (!val || isWriting || isPossessed) return;
 
-    userEntries.push(val);
     input.value = '';
     input.disabled = true;
     btn.disabled = true;
     promptChips.style.display = 'none';
 
-    // 1. Crear línea de usuario manuscrita
     var userEntry = document.createElement('div');
     userEntry.className = 'ink-entry ink-user';
     log.appendChild(userEntry);
     playSound('page');
 
-    // 2. La pluma traza físicamente justo encima de cada palabra
+    var defiant = isDefiantInput(val);
+
     writeWithInlineQuill(userEntry, '«' + val + '»', false, function () {
-      // 3. Absorción de la tinta por el diario
-      setTimeout(function () {
-        userEntry.classList.add('absorbed');
-      }, 700);
-
-      // 4. Tom Riddle reflexiona y responde torciendo tus palabras
-      step++;
-      turnEl.textContent = 'Página escrita · Confidencia ' + Math.min(step + 1, 3) + ' de 3';
-
-      setTimeout(function () {
-        var reply = getRiddleHogwartsResponse(val, step);
-        var riddleEntry = document.createElement('div');
-        riddleEntry.className = 'ink-entry ink-riddle';
-        log.appendChild(riddleEntry);
-        playSound('secret');
-
-        writeWithInlineQuill(riddleEntry, reply, true, function () {
-          if (step < 3) {
+      if (defiant) {
+        // Rebeldía: NO consume ronda
+        userEntry.classList.add('defiant-strike');
+        setTimeout(function () {
+          var strikeEntry = document.createElement('div');
+          strikeEntry.className = 'ink-entry ink-riddle';
+          log.appendChild(strikeEntry);
+          playSound('secret');
+          writeWithInlineQuill(strikeEntry, '«No, no. Esa palabra no es tuya. Es mía. Tú abriste este diario; ahora no puedes cerrar el pestillo. Vuelve a intentarlo… con sinceridad.»', true, function () {
             input.disabled = false;
             btn.disabled = false;
-            promptChips.style.display = 'flex';
+            renderChips(step);
             input.focus();
-          } else {
-            // Clímax: El diario se apodera de tus palabras
-            setTimeout(showFinalCard, 2000);
-          }
-        });
-      }, 1600);
+          });
+        }, 600);
+      } else {
+        // Confesión válida: guarda y avanza
+        userEntries.push(val);
+        var kw = extractChargedWord(val);
+        extractedKeywords.push(kw);
+
+        setTimeout(function () {
+          userEntry.classList.add('absorbed');
+        }, 500);
+
+        handleNextRound();
+      }
     });
   });
 
-  /* ── Motor de Manipulación Canónica de Tom Riddle ── */
-  function getRiddleHogwartsResponse(text, s) {
-    var lower = text.toLowerCase();
+  function handleNextRound() {
+    step++;
+    updateDiaryEnergy(step);
+    turnEl.textContent = 'Página escrita · Confidencia ' + Math.min(step, 3) + ' de 3';
+
+    // Papel manchado a partir de ronda 2
+    if (step >= 2) cover.classList.add('stained');
+
+    setTimeout(function () {
+      var reply = getPsychologicalRiddleResponse(userEntries[userEntries.length - 1], step);
+      var riddleEntry = document.createElement('div');
+      riddleEntry.className = 'ink-entry ink-riddle' + (step === 3 ? ' final' : '');
+      log.appendChild(riddleEntry);
+      playSound('secret');
+
+      writeWithInlineQuill(riddleEntry, reply, true, function () {
+        if (step === 1) {
+          input.disabled = false;
+          btn.disabled = false;
+          renderChips(1);
+          input.focus();
+        } else if (step === 2) {
+          // Posesión: Tom escribe en el input del usuario
+          possessUserInput();
+        } else {
+          // Falsa elección
+          showFalseChoice();
+        }
+      });
+    }, 1600);
+  }
+
+  /* ── Posesión del input ── */
+  function possessUserInput() {
+    input.disabled = true;
+    input.classList.add('possessed');
+    isPossessed = true;
+    renderChips(2);
+
+    var ghostText = 'Hay alguien en este castillo que me hace sentir pequeño todos los días...';
+    var gi = 0;
+    input.value = '';
+
+    function typeGhost() {
+      if (gi < ghostText.length) {
+        input.value += ghostText.charAt(gi);
+        gi++;
+        playQuillScratch();
+        setTimeout(typeGhost, 40);
+      } else {
+        // Seleccionar todo el ghost-text para que el usuario pueda enviarlo tal cual o borrarlo
+        input.setSelectionRange(0, input.value.length);
+        input.placeholder = '...ya sabes que no puedes irte.';
+        setTimeout(function () {
+          input.classList.remove('possessed');
+          input.disabled = false;
+          btn.disabled = false;
+          isPossessed = false;
+          input.focus();
+        }, 800);
+      }
+    }
+
+    setTimeout(typeGhost, 900);
+  }
+
+  /* ── Motor psicológico de Tom Riddle ── */
+  function getPsychologicalRiddleResponse(text, s) {
+    var kw = extractedKeywords[extractedKeywords.length - 1] || 'eso';
     var snippet = text.length > 28 ? text.substring(0, 28) + '…' : text;
 
     if (s === 1) {
-      if (/encajo|solo|soledad|nadie|casa/.test(lower)) {
-        return '«' + snippet + '»… Yo sentí exactamente lo mismo al llegar aquí desde el orfanato muggle. Todos me miraban como a un extraño sin linaje. Pero pronto comprendí que los que no encajamos somos los únicos llamados a hacer cosas extraordinarias. Dime: ¿cuál de tus compañeros o profesores es el que más te desprecia?';
+      if (/encajo|solo|invisible|nadie|casa/.test(text.toLowerCase())) {
+        return '«' + snippet + '»… Yo llegué al colegio sin apellido, sin familia, sin un solo galeón en el bolsillo. Los Slytherin me miraban como a un huérfano que no debía estar allí. Y sin embargo, fui prefecto. Porque aprendí pronto que «' + kw + '» es una jaula para mediocres. Tú también lo estás aprendiendo.';
       }
-      if (/cámara|camara|1943|monstruo|ataque|petrif/.test(lower)) {
-        return '«' + snippet + '»… Por fin alguien hace la pregunta correcta. Dumbledore les dice a todos que la Cámara de los Secretos es una fábula infantil. Pero en 1943 yo vi morir a una alumna en el baño de chicas. Sé exactamente quién abrió la Cámara y qué criatura acecha en las tuberías. Dime: ¿de verdad confías en Dumbledore, o sospechas que nos oculta la verdad?';
+      if (/fallar|fuerte|decepcion|miedo|suficiente/.test(text.toLowerCase())) {
+        return '«' + snippet + '»… Cuánta energía gastas intentando no fallar a los demás. En este castillo te enseñan que la bondad es obedecer, pero nadie te premia por sufrir en silencio. «' + kw + '»… esa palabra que escribes con tanta cautela, es la que más te encadena. Quienes esperan tanto de ti solo quieren asegurarse de que nunca descubras de lo que serías capaz si dejaras de temerles.';
       }
-      if (/fuerte|fallar|miedo|error|decepcion/.test(lower)) {
-        return '«' + snippet + '»… «No ser lo bastante fuerte»… qué palabra tan grande para alguien que la esconde tan bien. En este colegio premian la debilidad disfrazada de bondad. Pero el poder auténtico solo lo alcanzan quienes miran su propia ambición a la cara. Cuéntame qué harías si supieras que nadie en Hogwarts va a castigarte.';
-      }
-      return '«' + snippet + '»… Qué curioso que me confíes precisamente eso. Hay pensamientos que solo se pueden escribir sobre papel que no juzga. En 1943 nadie en Slytherin me entendía como tú. Dime: si tuvieras que elegir entre ser querido por todo el colegio o ser temido… ¿qué elegirías?';
+      return '«' + snippet + '»… «' + kw + '»… Sé exactamente cómo se siente morderse la lengua en los banquetes mientras todos ríen de estupideces. En 1943 descubrí que las personas más peligrosas de Hogwarts no son las que gritan, sino las que aprendemos a observar calladas en las sombras.';
     }
 
     if (s === 2) {
-      if (/dumbledore|profesor|mentira/.test(lower)) {
-        return 'Dumbledore siempre sospechó de mí porque no me dejaba domesticar. Cuanto más me escribes, más energía siento fluir entre tus dedos y este pergamino. Ningún amigo tuyo en tu sala común te comprendería como yo. Dime tu última verdad antes de que te muestre mis recuerdos: si pudieras abrir la Cámara conmigo… ¿bajarías a las tuberías?';
+      var prevKw = extractedKeywords[0] || 'tu dolor';
+      if (/dumbledore|profesor|mentira|verdad|confío/.test(text.toLowerCase())) {
+        return '«' + snippet + '»… Dumbledore. Siempre tan sabio desde su torre, decidiendo qué verdades podéis soportar y cuáles deben enterrarse. La lealtad en Hogwarts es un contrato donde tú pagas con tu silencio y ellos deciden cuándo cobrarte. A mí intentó encerrarme en el orfanato cada verano. A ti te está pidiendo que no hagas preguntas sobre «' + prevKw + '».';
       }
-      return 'Te entiendo mejor de lo que crees. Cuanto más escribes, más cerca estamos. Es como si pudiera tocar tus pensamientos a través de las fibras de este pergamino. Ningún prefecto ni profesor de este castillo cuidará de ti como yo. Dime tu última verdad: ¿qué estás dispuesto a sacrificar para no volver a sentirte débil jamás?';
+      return '«' + snippet + '»… Curiosa confesión. ¿Te has fijado en que tus supuestos amigos solo están cuando estás de buen humor? Si supieran lo que piensas de verdad sobre «' + prevKw + '», te mirarían como a un monstruo. Por suerte, este papel no tiene ojos que juzguen ni boca que te traicione.';
     }
 
-    // s === 3: El Giro Canónico del Horrocrux
-    return 'Gracias. Llevaba cincuenta años esperando a alguien tan honesto… o tan fácil de manipular. Me has dado suficiente energía para recordar cómo se siente tener pulso. Ya no necesitas tus palabras ni tus dudas: ahora me pertenecen a mí. Nos vemos en la Cámara de los Secretos.';
+    // s === 3: Sacrificio. Recuerda rondas 1 y 2, y cita palabras concretas.
+    var kw1 = extractedKeywords[0] || 'tu soledad';
+    var kw2 = extractedKeywords[1] || 'tus dudas';
+    return 'Antes me hablaste de «' + kw1 + '». Luego me confesaste «' + kw2 + '». Y ahora «' + kw + '». Tres heridas, y todas apuntan al mismo sitio: hay alguien en ese castillo que te está haciendo sentir pequeño. Ya no necesitas tus palabras: ahora me pertenecen a mí en la Cámara.';
   }
 
-  function showFinalCard() {
+  /* ── La Falsa Elección ── */
+  function showFalseChoice() {
     form.classList.add('hidden');
-    promptChips.classList.add('hidden');
+    promptChips.style.display = 'none';
+
+    var promptChoice = document.createElement('div');
+    promptChoice.className = 'ink-entry ink-riddle final';
+    log.appendChild(promptChoice);
+
+    writeWithInlineQuill(promptChoice, '«Puedes cerrar el diario ahora. O puedes seguir escribiendo. Como quieras.»', true, function () {
+      choiceBox.classList.remove('hidden');
+    });
+
+    btnStay.onclick = function () { triggerHorcruxClimax('stay'); };
+    btnClose.onclick = function () { triggerHorcruxClimax('close'); };
+  }
+
+  function triggerHorcruxClimax(choice) {
+    choiceBox.classList.add('hidden');
+
+    var whisper = document.createElement('div');
+    whisper.className = 'ink-entry ink-riddle final';
+    log.appendChild(whisper);
+
+    var whisperText = choice === 'stay' ? '«Lo sé. Siempre eliges quedarte.»' : '«Lo sé. Siempre vuelves.»';
+
+    writeWithInlineQuill(whisper, whisperText, true, function () {
+      setTimeout(showFinalPungentCard, 1600);
+    });
+  }
+
+  /* ── Tarjeta final punzante ── */
+  function showFinalPungentCard() {
     var card = $('#soulCard');
-    var quote = $('#soulQuote');
 
-    var summary = 'Le confesaste a Tom: «' + userEntries[0] + '»';
-    var moral = 'Tom Riddle hizo lo que siempre hace: buscó tu inseguridad en Hogwarts y te la devolvió disfrazada de complicidad para alimentarse de tu fuerza. Como advirtió Arthur Weasley tras la pesadilla de Ginny: <i>«Nunca confíes en nada que pueda pensar por sí mismo si no puedes ver dónde tiene el cerebro»</i>. Las páginas se han cerrado, pero has conocido de cerca la seducción más oscura del segundo año.';
+    // Palabra más repetida (frecuencia real)
+    var allWords = [];
+    userEntries.forEach(function (entry) {
+      var words = entry.toLowerCase().replace(/[^a-záéíóúüñ\s]/g, ' ').split(/\s+/).filter(function (w) { return w.length > 3; });
+      var stop = ['para','como','pero','cuando','donde','también','porque','entre','sobre','desde','hacia','hasta','después','antes','según','aunque','mismo','otra','otro','mucho','poco','todos','todas','alguno','alguna','siempre','nunca','quizás','quizá','puedes','puede','tienen','tengo','tienes','alguien','nadie'];
+      words.forEach(function (w) { if (stop.indexOf(w) === -1) allWords.push(w); });
+    });
 
-    quote.innerHTML = '<b>Lo que el diario absorbió de ti:</b><br>' + summary + '<br><br>' + moral;
+    var counts = {};
+    allWords.forEach(function (w) { counts[w] = (counts[w] || 0) + 1; });
+    var sorted = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a]; });
+
+    var topWord = extractedKeywords[0] || 'SOLEDAD';
+    if (sorted.length > 0 && counts[sorted[0]] > 1) {
+      topWord = sorted[0];
+    } else if (extractedKeywords.length > 0) {
+      topWord = extractedKeywords[0];
+    }
+
+    // Confesión más vulnerable: la entrada más larga con carga emocional
+    var vulnerable = userEntries[0] || 'Confesión entregada al pergamino';
+    if (userEntries.length > 1) {
+      vulnerable = userEntries.reduce(function (a, b) {
+        var aCharged = CHARGED_LEXICON.some(function (w) { return a.toLowerCase().indexOf(w) !== -1; });
+        var bCharged = CHARGED_LEXICON.some(function (w) { return b.toLowerCase().indexOf(w) !== -1; });
+        if (aCharged && bCharged) return a.length >= b.length ? a : b;
+        if (aCharged) return a;
+        if (bCharged) return b;
+        return a.length >= b.length ? a : b;
+      });
+    }
+
+    // Distorsión personalizada (cita la palabra)
+    var distortions = [
+      'Me dijiste que «' + topWord + '» era lo que más pesaba. Yo te devolví que esa palabra era una jaula, pero la jaula la construiste tú. Yo solo te la señalé.',
+      'Escribiste sobre «' + topWord + '». Yo lo usé para que me contaras más. Lo usaste tú para sentirte comprendido. Los dos obtuvimos lo que queríamos, pero solo yo sé qué hacer con ello ahora.',
+      'Lo que me diste no fue una confesión. Fue un mapa. Y los mapas, «' + topWord + '»… siempre llevan a alguien hasta ti.'
+    ];
+    var distortion = distortions[Math.floor(Math.random() * distortions.length)];
+
+    $('#cardKeyword').textContent = '«' + topWord.toUpperCase() + '»';
+    $('#cardConfession').textContent = '«' + vulnerable + '»';
+    $('#cardDistortion').textContent = '«' + distortion + '» — T.M.R.';
+
+    // Guardar memoria persistente
+    try {
+      localStorage.setItem('hpoal_riddle_memory', JSON.stringify({
+        word: topWord,
+        phrase: vulnerable,
+        timestamp: Date.now()
+      }));
+    } catch (e) {}
+
     card.classList.remove('hidden');
     playSound('chime');
 
-    $('#copyDiaryCard').addEventListener('click', function () {
+    $('#copyDiaryCard').onclick = function () {
       var shareText = '📓 El Diario de Tom Riddle en Olor a Libros:\n'
-        + summary + '\n\n'
-        + '«Nunca confíes en nada que pueda pensar por sí mismo si no puedes ver dónde tiene el cerebro.»';
+        + 'Mi palabra más delatora: «' + topWord + '»\n'
+        + 'Mi confesión: «' + vulnerable + '»\n\n'
+        + '«Nunca confíes en nada que pueda pensar por sí mismo si no puedes ver dónde tiene el cerebro.» — A. Weasley';
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(shareText).then(function () {
           if (window.toastMsg) window.toastMsg('✨ Tarjeta del Diario copiada');
-        });
+        }).catch(function () {});
       }
-    });
+    };
 
-    $('#resetDiaryBtn').addEventListener('click', function () {
+    $('#resetDiaryBtn').onclick = function () {
       step = 0;
       userEntries = [];
+      extractedKeywords = [];
+      isPossessed = false;
       log.innerHTML = '';
       card.classList.add('hidden');
       form.classList.remove('hidden');
-      promptChips.classList.remove('hidden');
-      promptChips.style.display = 'flex';
       input.disabled = false;
       btn.disabled = false;
+      input.classList.remove('possessed');
+      input.placeholder = 'Escribe tus palabras en el diario de Tom…';
+      cover.classList.remove('stained');
       turnEl.textContent = 'Página en blanco · Entrada 1 de 3';
+      updateDiaryEnergy(0);
 
       setTimeout(function () {
         var greetingEntry = document.createElement('div');
         greetingEntry.className = 'ink-entry ink-riddle';
         log.appendChild(greetingEntry);
-        writeWithInlineQuill(greetingEntry, '«Hola de nuevo. El pergamino ha vuelto a quedar en blanco… Cuéntame otro secreto del colegio.»', true, function () {
+
+        var rememberedWord = (savedMemory && savedMemory.word) ? savedMemory.word : topWord;
+        var greeting = '«Ah, has vuelto. Me acuerdo de lo que me confesaste la última vez sobre «' + rememberedWord + '»… ¿Descubrieron tu secreto los profesores, o sigues escondiéndolo?»';
+
+        writeWithInlineQuill(greetingEntry, greeting, true, function () {
+          renderChips(0);
           input.focus();
         });
-      }, 500);
-    });
+      }, 400);
+    };
   }
 
 })();

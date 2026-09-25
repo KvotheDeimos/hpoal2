@@ -7,6 +7,21 @@
 (function () {
   'use strict';
 
+  var $ = (typeof window !== 'undefined' && window.$) ? window.$ : function (s) { return document.querySelector(s); };
+  var BOOKS_DATA = (typeof window !== 'undefined' && window.BOOKS) ? window.BOOKS : ((typeof BOOKS !== 'undefined') ? BOOKS : []);
+  var THEMES_DATA = (typeof window !== 'undefined' && window.THEMES) ? window.THEMES : ((typeof THEMES !== 'undefined') ? THEMES : {});
+  var EMBLEMS_DATA = (typeof window !== 'undefined' && window.EMBLEMS) ? window.EMBLEMS : ((typeof EMBLEMS !== 'undefined') ? EMBLEMS : {});
+
+  function safeGet(k) {
+    try { return localStorage.getItem(k); } catch (e) { return null; }
+  }
+  function safeSet(k, v) {
+    try { localStorage.setItem(k, v); } catch (e) {}
+  }
+  function safeRemove(k) {
+    try { localStorage.removeItem(k); } catch (e) {}
+  }
+
   /* ── SVG del arco gótico de sillería (dovelas + arquivoltas) ── */
   function archSVG(v) {
     return '<svg viewBox="0 0 300 175" preserveAspectRatio="none">'
@@ -23,7 +38,7 @@
 
   /* ── Constructor de puerta gótica (compartido) ── */
   function doorHTML(o) {
-    var v = (typeof THEMES !== 'undefined' && THEMES[o.theme]) ? THEMES[o.theme] : { gc:'#caa96a',gg:'rgba(235,185,75,.5)',gr:'#fcedba',oak1:'#29180c',oak2:'#140a04',gt:'#fcedba',gt2:'#fce4a6',gbg:'linear-gradient(90deg,#2e1d0b,#473014,#2e1d0b)',gb2:'rgba(212,175,55,.7)',gm:'rgba(235,185,75,.35)',gh:'#e5b83b',sb:'#8a6c38',rune:'ᚠ · SAPIENTIA · ᛟ' };
+    var v = (THEMES_DATA && THEMES_DATA[o.theme]) ? THEMES_DATA[o.theme] : { gc:'#caa96a',gg:'rgba(235,185,75,.5)',gr:'#fcedba',oak1:'#29180c',oak2:'#140a04',gt:'#fcedba',gt2:'#fce4a6',gbg:'linear-gradient(90deg,#2e1d0b,#473014,#2e1d0b)',gb2:'rgba(212,175,55,.7)',gm:'rgba(235,185,75,.35)',gh:'#e5b83b',sb:'#8a6c38',rune:'ᚠ · SAPIENTIA · ᛟ' };
     var tag = o.href ? 'a' : 'button';
     var hrefAttr = o.href ? ' href="' + o.href + '"' : '';
     var nAttr = (o.n != null) ? ' data-n="' + o.n + '"' : '';
@@ -34,7 +49,7 @@
       + '<div class="gd-leaves"><div class="gd-leaf l"></div><div class="gd-leaf r"></div><div class="gd-light"></div>'
       + '<span class="gd-hinge top" style="color:' + v.gh + '">' + HINGE + '</span><span class="gd-hinge bot" style="color:' + v.gh + '">' + HINGE + '</span>'
       + '<div class="gd-mid"><span class="gd-badge">✦ ' + o.badge + ' ✦</span>'
-      + '<span class="gd-medal">' + (o.emb ? (EMBLEMS[o.emb] || '') : '<span class="sym">' + (o.sym || '📖') + '</span>') + '</span>'
+      + '<span class="gd-medal">' + (o.emb ? (EMBLEMS_DATA[o.emb] || '') : '<span class="sym">' + (o.sym || '📖') + '</span>') + '</span>'
       + '<span class="gd-knob"><i></i></span><span class="gd-knocker"></span>'
       + '<span class="gd-title">' + o.title + '</span><span class="gd-sub">' + o.sub + '</span>'
       + '<span class="gd-cta">' + (o.cta || 'Entrar') + ' <span>➔</span></span></div>'
@@ -49,7 +64,7 @@
   function renderBooks() {
     var shelf = document.getElementById('bookShelf');
     if (!shelf) return;
-    var books = (typeof BOOKS !== 'undefined') ? BOOKS : [];
+    var books = BOOKS_DATA.length ? BOOKS_DATA : ((typeof window !== 'undefined' && window.BOOKS) ? window.BOOKS : []);
     shelf.innerHTML = books.map(function (b) {
       return doorHTML({
         n: b.n,
@@ -78,7 +93,7 @@
   function renderDyn() {
     var wrap = document.getElementById('dynWrap');
     if (!wrap) return;
-    var books = (typeof BOOKS !== 'undefined') ? BOOKS : [];
+    var books = BOOKS_DATA.length ? BOOKS_DATA : ((typeof window !== 'undefined' && window.BOOKS) ? window.BOOKS : []);
     var b = books.filter(function (x) { return x.n === selBook; })[0] || books[0];
     if (!b) { wrap.innerHTML = ''; return; }
 
@@ -96,21 +111,21 @@
       }).join('') + '</div>';
 
     Array.prototype.forEach.call(wrap.querySelectorAll('.gdoor.camara'), function (d) {
-      if (localStorage.getItem('camara_abierta') === '1') {
+      if (safeGet('camara_abierta') === '1') {
         d.classList.add('open');
-        if (localStorage.getItem('camara_sello') === '1') d.classList.add('sello');
+        if (safeGet('camara_sello') === '1') d.classList.add('sello');
         var cta = d.querySelector('.gd-cta');
         if (cta) cta.innerHTML = 'Entrar <span>➔</span>';
       }
     });
 
-    if (b.n === 2 && localStorage.getItem('camara_abierta') === '1') {
+    if (b.n === 2 && safeGet('camara_abierta') === '1') {
       wrap.insertAdjacentHTML('beforeend',
         '<div style="text-align:center;margin-top:14px"><button id="resetCamara" style="padding:8px 16px;font-size:.75rem;background:transparent;color:#caa96a;border:1px solid rgba(202,169,106,.4);border-radius:6px;cursor:pointer">🔒 Cerrar la puerta de nuevo (pruebas)</button></div>');
       var rb = document.getElementById('resetCamara');
       if (rb) rb.addEventListener('click', function () {
-        localStorage.removeItem('camara_abierta');
-        localStorage.removeItem('camara_sello');
+        safeRemove('camara_abierta');
+        safeRemove('camara_sello');
         renderDyn();
       });
     }

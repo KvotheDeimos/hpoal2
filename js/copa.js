@@ -6,9 +6,14 @@
 (function () {
   'use strict';
 
+  var $ = (typeof window !== 'undefined' && window.$) ? window.$ : function (s) { return document.querySelector(s); };
+  var GEMS_DATA = (typeof window !== 'undefined' && window.GEMS) ? window.GEMS : ((typeof GEMS !== 'undefined') ? GEMS : {});
+  var KEYS_DATA = (typeof window !== 'undefined' && window.KEYS) ? window.KEYS : (Object.keys(GEMS_DATA).length ? Object.keys(GEMS_DATA) : ['Gryffindor', 'Slytherin', 'Ravenclaw', 'Hufflepuff']);
+  var P_URL = (typeof window !== 'undefined' && window.PUNTOS_URL) ? window.PUNTOS_URL : ((typeof PUNTOS_URL !== 'undefined') ? PUNTOS_URL : '');
+
   /* ── SVG de un reloj de arena con gemas ── */
   function hourglassSVG(k, pts, fill) {
-    var g = GEMS[k], u = 'hg' + k;
+    var g = GEMS_DATA[k] || { pri: '#ffd700', bord: '#b8860b', gem: 'Gemas' }, u = 'hg' + k;
     var gemH = (fill / 100) * 148, gy = 380 - gemH;
 
     var up = '';
@@ -80,22 +85,23 @@
     var relojesEl = $('#relojes'), leaderEl = $('#copaLeader');
     if (!relojesEl || !leaderEl) return;
     function pts(k) { return Number(points[k]) || 0; }
-    var list = KEYS.map(pts);
+    var list = KEYS_DATA.map(pts);
     var total = list.reduce(function (a, b) { return a + b; }, 0);
     var max = Math.max.apply(null, [100].concat(list));
-    var sorted = KEYS.slice().sort(function (a, b) { return pts(b) - pts(a); });
+    var sorted = KEYS_DATA.slice().sort(function (a, b) { return pts(b) - pts(a); });
     var tied = total === 0 || pts(sorted[0]) === pts(sorted[1]);
 
     leaderEl.innerHTML = tied
       ? '⚔️ <b>Empate en la cumbre:</b> la disputa por la Copa está más reñida que nunca.'
       : '👑 Liderando la Copa: <b>' + sorted[0] + '</b> con <b>' + pts(sorted[0]).toLocaleString('es-ES') + '</b> puntos';
 
-    relojesEl.innerHTML = KEYS.map(function (k) {
-      var p = pts(k), g = GEMS[k];
+    relojesEl.innerHTML = KEYS_DATA.map(function (k) {
+      var p = pts(k), g = GEMS_DATA[k] || { pri: '#ffd700', bord: '#b8860b', gem: 'Gemas', gg: 'rgba(255,215,0,.3)', crest: '✨' };
       var fill = p > 0 ? Math.max(8, Math.min(100, Math.round(p / max * 92))) : 0;
       var rank = sorted.indexOf(k) + 1;
       var lead = p > 0 && rank === 1 && !tied;
-      var relicSvg = (typeof RELICS !== 'undefined' && RELICS[k[0]]) ? RELICS[k[0]] : g.crest;
+      var relics = (typeof window !== 'undefined' && window.RELICS) ? window.RELICS : ((typeof RELICS !== 'undefined') ? RELICS : null);
+      var relicSvg = (relics && relics[k[0]]) ? relics[k[0]] : g.crest;
       return '<article class="hgcard" style="--gg:' + g.gg + ';--gb:' + g.bord + ';--ha:' + g.pri + '" title="Toca el reloj: las gemas tintinean">'
         + '<div class="hg-head">'
         +   '<div class="hg-id">'
@@ -120,7 +126,8 @@
     renderCopa(cached || { Gryffindor: 0, Slytherin: 0, Ravenclaw: 0, Hufflepuff: 0 });
 
     function sync() {
-      fetch(PUNTOS_URL)
+      if (typeof fetch !== 'function' || !P_URL) return;
+      fetch(P_URL)
         .then(function (r) { if (!r.ok) throw 0; return r.json(); })
         .then(function (d) {
           var p = (d && d.houses) || null;

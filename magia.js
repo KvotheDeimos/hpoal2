@@ -9,11 +9,12 @@
   /* ── Helpers globales ── */
   window.$ = window.$ || function (s) { return document.querySelector(s); };
   window.$$ = window.$$ || function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
-  window.REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  window.REDUCED = (typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)') && window.matchMedia('(prefers-reduced-motion: reduce)').matches) || false;
 
   /* ── Estado de sonido global ── */
   var SOUND_KEY = 'hogwarts_magic_sound_v2';
-  var soundEnabled = localStorage.getItem(SOUND_KEY) === 'true';
+  var soundEnabled = false;
+  try { soundEnabled = localStorage.getItem(SOUND_KEY) === 'true'; } catch (e) {}
 
   /* ── Toast Mágico ── */
   window.toastMsg = function (t) {
@@ -77,7 +78,7 @@
     isEnabled: function () { return soundEnabled; },
     toggle: function () {
       soundEnabled = !soundEnabled;
-      localStorage.setItem(SOUND_KEY, soundEnabled ? 'true' : 'false');
+      try { localStorage.setItem(SOUND_KEY, soundEnabled ? 'true' : 'false'); } catch (e) {}
       updateSoundUI();
       if (soundEnabled) {
         getAudioContext();
@@ -202,34 +203,35 @@
   var lastTrailTime = 0;
   function initWandTrail() {
     if (window.REDUCED) return;
-    // Solo en desktop o dispositivos con puntero fino para cuidar rendimiento
-    if (window.matchMedia('(pointer: coarse)').matches) return;
+    if (typeof window.matchMedia === 'function' && window.matchMedia('(pointer: coarse)').matches) return;
 
     window.addEventListener('mousemove', function (e) {
+      var isLumos = document.body.classList.contains('lumos');
       var now = performance.now();
-      if (now - lastTrailTime < 35) return; // limitamos a ~30 partículas/segundo
+      var throttleMs = isLumos ? 24 : 35;
+      if (now - lastTrailTime < throttleMs) return;
       lastTrailTime = now;
 
       var spark = document.createElement('span');
       spark.className = 'wand-stardust';
-      var size = (2 + Math.random() * 3.5).toFixed(1);
+      var size = (isLumos ? 3.5 + Math.random() * 4 : 2 + Math.random() * 3).toFixed(1);
       spark.style.cssText =
-        'position:fixed;pointer-events:none;z-index:999;' +
-        'left:' + (e.clientX + (Math.random() * 8 - 4)) + 'px;' +
-        'top:' + (e.clientY + (Math.random() * 8 - 4)) + 'px;' +
+        'position:fixed;pointer-events:none;z-index:9998;' +
+        'left:' + (e.clientX + (Math.random() * 10 - 5)) + 'px;' +
+        'top:' + (e.clientY + (Math.random() * 10 - 5)) + 'px;' +
         'width:' + size + 'px;height:' + size + 'px;' +
         'border-radius:50%;' +
-        'background:radial-gradient(circle, #fff7d6 0%, #ffd88a 55%, rgba(217,169,78,0) 100%);' +
-        'box-shadow:0 0 ' + (size * 2) + 'px rgba(252,237,186,.7);' +
-        'opacity:0.85;';
+        'background:radial-gradient(circle, #ffffff 0%, #fff7d6 40%, #ffd88a 70%, rgba(217,169,78,0) 100%);' +
+        'box-shadow:0 0 ' + (size * 2.5) + 'px rgba(255,225,120,' + (isLumos ? '0.95' : '0.65') + ');' +
+        'opacity:' + (isLumos ? '1' : '0.85') + ';';
       document.body.appendChild(spark);
 
-      var driftX = (Math.random() - 0.5) * 16;
-      var driftY = 8 + Math.random() * 18;
-      var dur = 400 + Math.random() * 300;
+      var driftX = (Math.random() - 0.5) * (isLumos ? 22 : 16);
+      var driftY = (isLumos ? 10 : 8) + Math.random() * 18;
+      var dur = (isLumos ? 500 : 400) + Math.random() * 300;
 
       spark.animate([
-        { transform: 'translate(0,0) scale(1)', opacity: 0.85 },
+        { transform: 'translate(0,0) scale(1)', opacity: isLumos ? 1 : 0.85 },
         { transform: 'translate(' + driftX + 'px, ' + driftY + 'px) scale(0.2)', opacity: 0 }
       ], { duration: dur, easing: 'cubic-bezier(0.2, 0.7, 0.3, 1)' }).onfinish = function () {
         spark.remove();
@@ -276,6 +278,7 @@
   /* ═══ REVELACIÓN CON INTERSECTION OBSERVER ═══ */
   window.observeReveals = function (scope) {
     var els = (scope || document).querySelectorAll('.reveal:not(.in)');
+    if (!els.length) return;
     if (!('IntersectionObserver' in window)) {
       els.forEach(function (el) { el.classList.add('in'); });
       return;
@@ -286,8 +289,15 @@
         x.target.classList.add('in');
         io.unobserve(x.target);
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-    els.forEach(function (el) { io.observe(el); });
+    }, { threshold: 0.05 });
+    els.forEach(function (el) {
+      var rect = el.getBoundingClientRect ? el.getBoundingClientRect() : null;
+      if (rect && rect.top < (window.innerHeight || 800) + 120) {
+        el.classList.add('in');
+      } else {
+        io.observe(el);
+      }
+    });
   };
 
   /* ── CountUp para números y pergaminos ── */
@@ -308,24 +318,108 @@
     })(startTime);
   };
 
-  /* ═══ MODO LUMOS / NOX (Ambient Lighting) ═══ */
-  function toggleLumos(state) {
+  /* ═══ MODO LUMOS / NOX (Wand Spotlight & Cursor Lighting) ═══ */
+  var LUMOS_KEY = 'hogwarts_magic_lumos_v2';
+  var spotlightEl = null;
+  var wandTipEl = null;
+  var wandRaf = null;
+  var targetX = 0;
+  var targetY = 0;
+
+  function ensureLumosElements() {
+    if (!spotlightEl && typeof document !== 'undefined') {
+      spotlightEl = document.getElementById('lumosSpotlight');
+      if (!spotlightEl && document.body) {
+        spotlightEl = document.createElement('div');
+        spotlightEl.id = 'lumosSpotlight';
+        spotlightEl.setAttribute('aria-hidden', 'true');
+        document.body.appendChild(spotlightEl);
+      }
+    }
+    if (!wandTipEl && typeof document !== 'undefined') {
+      wandTipEl = document.getElementById('lumosWandTip');
+      if (!wandTipEl && document.body) {
+        wandTipEl = document.createElement('div');
+        wandTipEl.id = 'lumosWandTip';
+        wandTipEl.setAttribute('aria-hidden', 'true');
+        wandTipEl.innerHTML = '<div class="wand-tip-flare">'
+          + '<div class="wand-tip-cross"></div>'
+          + '<div class="wand-tip-core"></div>'
+          + '</div>';
+        document.body.appendChild(wandTipEl);
+      }
+    }
+  }
+
+  function updatePointerLight(x, y) {
+    targetX = x;
+    targetY = y;
+    if (!wandRaf) {
+      wandRaf = requestAnimationFrame(function () {
+        document.documentElement.style.setProperty('--lumos-x', targetX + 'px');
+        document.documentElement.style.setProperty('--lumos-y', targetY + 'px');
+        wandRaf = null;
+      });
+    }
+  }
+
+  function initLumosTracking() {
+    ensureLumosElements();
+    var initX = (typeof window !== 'undefined' ? window.innerWidth / 2 : 400);
+    var initY = (typeof window !== 'undefined' ? window.innerHeight / 3 : 300);
+    updatePointerLight(initX, initY);
+
+    window.addEventListener('mousemove', function (e) {
+      updatePointerLight(e.clientX, e.clientY);
+    }, { passive: true });
+
+    window.addEventListener('touchmove', function (e) {
+      if (e.touches && e.touches[0]) {
+        updatePointerLight(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: true });
+  }
+
+  function toggleLumos(state, silent) {
+    ensureLumosElements();
     var isLumos = state !== undefined ? state : !document.body.classList.contains('lumos');
     if (isLumos) {
       document.body.classList.add('lumos');
-      window.toastMsg('✨ Lumos: La cálida luz del castillo te ilumina');
-      window.SucursalSound.spark();
+      try { localStorage.setItem(LUMOS_KEY, 'true'); } catch (e) {}
+      if (!silent) {
+        window.toastMsg('✨ Lumos: La punta de tu varita ilumina el castillo');
+        if (window.SucursalSound && window.SucursalSound.wand) {
+          window.SucursalSound.wand();
+        } else if (window.SucursalSound && window.SucursalSound.spark) {
+          window.SucursalSound.spark();
+        }
+      }
+      if (wandTipEl) {
+        var core = wandTipEl.querySelector('.wand-tip-core');
+        if (core && core.animate) {
+          core.animate([
+            { transform: 'scale(0.1)', opacity: 0 },
+            { transform: 'scale(1.8)', opacity: 1 },
+            { transform: 'scale(1)', opacity: 1 }
+          ], { duration: 420, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)' });
+        }
+      }
     } else {
       document.body.classList.remove('lumos');
-      window.toastMsg('🌑 Nox: La penumbra de las mazmorras regresa');
-      window.SucursalSound.page();
+      try { localStorage.setItem(LUMOS_KEY, 'false'); } catch (e) {}
+      if (!silent) {
+        window.toastMsg('🌑 Nox: La varita se apaga… penumbra en Hogwarts');
+        if (window.SucursalSound && window.SucursalSound.page) {
+          window.SucursalSound.page();
+        }
+      }
     }
     var lumosBtns = document.querySelectorAll('.lumos-toggle');
     lumosBtns.forEach(function (btn) {
       btn.innerHTML = isLumos
         ? '<span class="icon-candle">🕯️</span><span class="lbl-lumos">Nox</span>'
         : '<span class="icon-candle">🕯️</span><span class="lbl-lumos">Lumos</span>';
-      btn.title = isLumos ? 'Apagar la luz (Nox)' : 'Encender la luz (Lumos)';
+      btn.title = isLumos ? 'Apagar la varita (Nox)' : 'Encender la varita (Lumos)';
       btn.classList.toggle('active', isLumos);
     });
   }
@@ -346,6 +440,9 @@
   /* Sonido en clics interactivos (puertas, botones, insignias) */
   function bindInteractiveAesthetics() {
     document.addEventListener('click', function (e) {
+      if (document.body.classList.contains('lumos') && !e.target.closest('input, textarea, select')) {
+        window.fireGoldenSparks(e.clientX, e.clientY);
+      }
       var btn = e.target.closest('button, .btn, .gdoor, .hgcard, .mus-card, .mus-mini, .opt, .banner, .seal-btn');
       if (btn) {
         // Reproducir sonido sutil si procede
@@ -387,8 +484,21 @@
 
     updateSoundUI();
     initWandTrail();
+    initLumosTracking();
     bindInteractiveAesthetics();
     window.observeReveals(document);
+
+    try {
+      if (localStorage.getItem(LUMOS_KEY) === 'true') {
+        toggleLumos(true, true);
+      }
+    } catch (e) {}
+
+    setTimeout(function () {
+      document.querySelectorAll('.reveal:not(.in)').forEach(function (el) {
+        el.classList.add('in');
+      });
+    }, 1000);
 
     // Conectar botones de sonido y lumos existentes
     document.querySelectorAll('.sound-toggle').forEach(function (btn) {

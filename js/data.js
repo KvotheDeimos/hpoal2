@@ -150,3 +150,20 @@ const PORTRAITS = [
     ['¿Quién era el dueño original?','«Se fue en 1742 a buscar galletas de jengibre a las cocinas y nunca regresó. El gato se quedó con la propiedad del lienzo por derecho de siesta.»']
   ]}
 ];
+
+/* ─── Exponer explícitamente a window para compatibilidad global ─── */
+if (typeof window !== 'undefined') {
+  window.PUNTOS_URL = PUNTOS_URL;
+  window.GEMS = GEMS;
+  window.KEYS = KEYS;
+  window.THEMES = THEMES;
+  window.EMBLEMS = EMBLEMS;
+  window.MAIN_DOORS = MAIN_DOORS;
+  window.BOOKS = BOOKS;
+  window.HOUSES = HOUSES;
+  window.RELICS = RELICS;
+  window.CAMARA_PUZZLE = CAMARA_PUZZLE;
+  window.BEANS = BEANS;
+  window.PAINT = PAINT;
+  window.PORTRAITS = PORTRAITS;
+}

@@ -61,16 +61,106 @@ body {
   transition: background 0.8s ease;
 }
 
-/* ── Modo Lumos (Iluminación cálida de velas) ── */
+/* ── Modo Lumos (Iluminación cálida de varita y velas) ── */
 body.lumos {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><defs><radialGradient id="g" cx="30%" cy="30%" r="70%"><stop offset="0%" stop-color="%23ffffff"/><stop offset="35%" stop-color="%23ffe380"/><stop offset="100%" stop-color="%23c28b26"/></radialGradient></defs><line x1="3" y1="3" x2="27" y2="27" stroke="%232b1706" stroke-width="4.5" stroke-linecap="round"/><line x1="3" y1="3" x2="27" y2="27" stroke="%238a5b28" stroke-width="2.2" stroke-linecap="round"/><circle cx="3" cy="3" r="4.2" fill="url(%23g)"/><circle cx="3" cy="3" r="1.8" fill="%23ffffff"/></svg>') 3 3, auto;
   background:
     radial-gradient(1200px 700px at 50% 10%, rgba(255, 218, 130, 0.16), transparent 70%),
     radial-gradient(900px 500px at 80% 90%, rgba(212, 169, 78, 0.12), transparent 70%),
     linear-gradient(180deg, #130d1e 0%, #1a1228 50%, #100a18 100%);
 }
+body.lumos a,
+body.lumos button,
+body.lumos .btn,
+body.lumos .gdoor,
+body.lumos [role="button"],
+body.lumos input,
+body.lumos textarea {
+  cursor: pointer;
+}
 body.lumos .portal-hero .lead { color: #f0e6d5; }
 body.lumos .win { filter: drop-shadow(0 0 12px #ffe699); opacity: 1; }
 body.lumos .candle-in { filter: drop-shadow(0 0 16px rgba(255, 200, 100, 0.9)); }
+
+/* Haz de luz de varita Lumos (Ambient Spotlight en pantalla) */
+#lumosSpotlight {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 996;
+  opacity: 0;
+  transition: opacity .5s ease;
+  background: radial-gradient(
+    circle 480px at var(--lumos-x, 50vw) var(--lumos-y, 50vh),
+    rgba(255, 246, 215, 0.22) 0%,
+    rgba(255, 222, 130, 0.12) 32%,
+    rgba(217, 169, 78, 0.04) 60%,
+    transparent 85%
+  );
+  mix-blend-mode: screen;
+}
+body.lumos #lumosSpotlight {
+  opacity: 1;
+}
+
+/* Punta de varita encendida en la coordenada del puntero */
+#lumosWandTip {
+  position: fixed; left: 0; top: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transform: translate3d(calc(var(--lumos-x, -200px) - 10px), calc(var(--lumos-y, -200px) - 10px), 0);
+  transition: opacity .35s ease;
+  will-change: transform;
+}
+body.lumos #lumosWandTip {
+  opacity: 1;
+}
+.wand-tip-flare {
+  position: relative;
+  width: 20px; height: 20px;
+  display: flex; align-items: center; justify-content: center;
+}
+.wand-tip-core {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffffff 25%, #fff7d6 55%, #ffd470 80%, rgba(255, 212, 112, 0) 100%);
+  box-shadow:
+    0 0 10px 4px #ffffff,
+    0 0 22px 9px #ffd768,
+    0 0 48px 20px rgba(255, 195, 60, 0.85),
+    0 0 95px 42px rgba(255, 170, 30, 0.45);
+  animation: wandFlicker 2.2s ease-in-out infinite alternate;
+}
+.wand-tip-cross {
+  position: absolute; inset: -14px;
+  pointer-events: none;
+  animation: wandRaySpin 20s linear infinite;
+  opacity: 0.9;
+}
+.wand-tip-cross::before,
+.wand-tip-cross::after {
+  content: ''; position: absolute;
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.95) 0%, rgba(255, 225, 120, 0.6) 35%, transparent 75%);
+  border-radius: 50%;
+}
+.wand-tip-cross::before {
+  top: 50%; left: -22px; right: -22px; height: 2.5px;
+  transform: translateY(-50%);
+}
+.wand-tip-cross::after {
+  left: 50%; top: -22px; bottom: -22px; width: 2.5px;
+  transform: translateX(-50%);
+}
+
+@keyframes wandFlicker {
+  0% { transform: scale(0.95); filter: brightness(0.96); }
+  50% { transform: scale(1.1); filter: brightness(1.18); }
+  100% { transform: scale(1.02); filter: brightness(1.05); }
+}
+@keyframes wandRaySpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 
 ::-webkit-scrollbar { width: 10px; }
 ::-webkit-scrollbar-track { background: var(--night); }
@@ -1128,83 +1218,151 @@ button:disabled { cursor: not-allowed; opacity: .55; }
   padding: clamp(52px, 7vw, 92px) var(--sp-5);
 }
 .houses-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(16px, 2vw, 28px);
-  max-width: 1280px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(14px, 1.8vw, 24px);
+  max-width: 1320px; margin: 0 auto; align-items: stretch;
 }
-.house-card {
-  position: relative; overflow: hidden;
-  border-radius: 14px;
-  border: 2px solid color-mix(in srgb, var(--hb, #caa96a) 55%, #382414);
-  background:
-    radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--ha, #7f0909) 45%, transparent), transparent 60%),
-    linear-gradient(180deg, #181124 0%, #100b1b 55%, #08050e 100%);
-  padding: 24px 20px 22px;
-  box-shadow: 0 16px 42px rgba(0,0,0,0.85), 0 0 24px color-mix(in srgb, var(--ha) 25%, transparent);
+.house-banner {
+  position: relative; border-radius: 4px; padding: 5px;
+  background: #0d0a14;
+  border: 1.5px solid color-mix(in srgb, var(--hb, #caa96a) 45%, #2a1b10);
+  box-shadow: 0 16px 44px rgba(0,0,0,0.85), inset 0 0 24px rgba(0,0,0,0.7);
   transition: transform .4s cubic-bezier(.2,.8,.2,1), border-color .4s, box-shadow .4s;
-  display: flex; flex-direction: column; gap: 14px;
+  display: flex; flex-direction: column;
 }
-.house-card:hover {
+.house-banner[data-house="Gryffindor"] {
+  background: radial-gradient(120% 85% at 50% 0%, #20080d 0%, #120407 50%, #090204 100%);
+  border-color: rgba(201, 24, 43, 0.45);
+  --hb: #ffd700;
+}
+.house-banner[data-house="Slytherin"] {
+  background: radial-gradient(120% 85% at 50% 0%, #06180f 0%, #040e08 50%, #020704 100%);
+  border-color: rgba(46, 204, 113, 0.35);
+  --hb: #b8cdc2;
+}
+.house-banner[data-house="Ravenclaw"] {
+  background: radial-gradient(120% 85% at 50% 0%, #091224 0%, #060b17 50%, #03060d 100%);
+  border-color: rgba(91, 118, 156, 0.45);
+  --hb: #c9a86a;
+}
+.house-banner[data-house="Hufflepuff"] {
+  background: radial-gradient(120% 85% at 50% 0%, #1c1507 0%, #110d04 50%, #070502 100%);
+  border-color: rgba(212, 169, 78, 0.45);
+  --hb: #ffd95e;
+}
+.house-banner:hover {
   transform: translateY(-8px);
   border-color: var(--hb, #fcedba);
-  box-shadow: 0 24px 56px rgba(0,0,0,0.95), 0 0 32px color-mix(in srgb, var(--hb) 40%, transparent);
+  box-shadow: 0 24px 58px rgba(0,0,0,0.95), 0 0 32px color-mix(in srgb, var(--hb) 35%, transparent);
 }
-.house-tag {
-  font: 700 .68rem 'Cinzel Decorative', serif; letter-spacing: .25em; text-transform: uppercase;
-  color: var(--hb, #fcedba); opacity: 0.9; text-align: center;
-}
-.house-emblem {
-  width: 64px; height: 64px; margin: 0 auto; border-radius: 50%;
-  display: grid; place-items: center;
-  background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--ha) 80%, #fff 15%), var(--ha));
-  border: 2px solid var(--hb, #caa96a); color: #fff9e6;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.85), 0 0 16px color-mix(in srgb, var(--hb) 45%, transparent);
-  padding: 10px; transition: transform .3s ease;
-}
-.house-card:hover .house-emblem { transform: scale(1.08) rotate(4deg); }
-.house-emblem svg { width: 100%; height: 100%; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.9)); }
 
-.house-title-wrap {
-  text-align: center; border-bottom: 1.5px solid color-mix(in srgb, var(--hb) 35%, transparent);
-  padding-bottom: 12px;
+.banner-frame {
+  border: 1px solid rgba(212, 169, 78, 0.22);
+  border-radius: 2px;
+  padding: 16px 18px 22px;
+  display: flex; flex-direction: column;
+  height: 100%; position: relative;
+  box-shadow: inset 0 0 22px rgba(0,0,0,0.45);
 }
-.house-title-wrap h3 {
-  font-family: 'Cinzel Decorative', serif; font-size: 1.45rem; font-weight: 900;
-  color: var(--hb, #fcedba); letter-spacing: .05em; line-height: 1.15;
-  text-shadow: 0 2px 6px rgba(0,0,0,0.9);
-  display: flex; align-items: center; justify-content: center; gap: 8px;
+
+.banner-eyelet {
+  width: 9px; height: 9px; margin: 0 auto 16px; border-radius: 50%;
+  border: 1.5px solid var(--hb, #caa96a);
+  background: rgba(0,0,0,0.65);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.9), 0 0 6px rgba(212,169,78,0.25);
+  flex-shrink: 0;
 }
-.house-totem {
-  font-size: 1.35rem; line-height: 1; vertical-align: middle;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+
+.banner-art {
+  height: 125px; display: flex; align-items: center; justify-content: center;
+  margin-bottom: 22px;
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,0.85));
+  color: #f2e9dc;
 }
-.house-card .motto {
-  font: italic .95rem 'IM Fell English', serif; color: #ecdcc3;
-  line-height: 1.4; margin-top: 6px; text-align: center;
+.banner-art svg {
+  height: 100%; max-height: 125px; width: auto; max-width: 100%;
+  color: inherit;
+  transition: transform .35s ease, filter .35s ease;
 }
-.house-desc {
-  font-size: .95rem; color: #d6ccba; line-height: 1.55; text-align: left;
+.house-banner:hover .banner-art svg {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 16px rgba(255,255,255,0.28));
 }
-.house-details {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
-  background: rgba(0,0,0,0.35); border: 1px dashed color-mix(in srgb, var(--hb) 30%, transparent);
-  border-radius: 8px; padding: 10px 12px; font-size: .84rem; line-height: 1.35;
-  color: #dfd6c8; text-align: left;
+
+.banner-kicker {
+  font: 700 .68rem 'Cinzel Decorative', serif;
+  letter-spacing: .28em; text-transform: uppercase;
+  color: #caa96a; opacity: 0.95;
+  margin-bottom: 12px; text-align: left;
 }
-.house-details div b {
-  display: block; font-family: 'Cinzel Decorative', serif; font-size: .72rem;
-  letter-spacing: .08em; text-transform: uppercase; color: var(--hb); margin-bottom: 2px;
+
+.banner-title-row {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 6px;
 }
-.house-note {
-  font: italic .88rem 'EB Garamond', serif; color: #fcedba;
-  background: rgba(46, 28, 14, 0.55); border: 1.5px solid rgba(212, 169, 78, 0.4);
-  border-radius: 6px; padding: 9px 12px; line-height: 1.45; text-align: left;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+.banner-badge {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 1.5px solid var(--hb, #caa96a);
+  background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.12), rgba(0,0,0,0.8));
+  display: grid; place-items: center; padding: 5px; flex-shrink: 0;
+  color: #f2e9dc; box-shadow: 0 2px 8px rgba(0,0,0,0.7);
 }
-.house-members {
-  font-size: .84rem; color: #b7ac9a; line-height: 1.5; margin-top: auto;
-  border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 10px; text-align: left;
+.banner-badge svg { width: 100%; height: 100%; }
+
+.banner-name {
+  font-family: 'Cinzel Decorative', serif; font-weight: 700;
+  font-size: clamp(1.15rem, 1.4vw, 1.45rem);
+  letter-spacing: .08em;
+  color: var(--hb, #fcedba);
+  margin: 0; line-height: 1.15;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.9);
 }
-.house-members b { color: var(--hb); font-family: 'Cinzel Decorative', serif; font-size: .76rem; letter-spacing: .08em; }
+
+.banner-motto {
+  font: italic 400 .88rem/1.45 'IM Fell English', serif;
+  color: #ecdcc3; margin: 0 0 16px; text-align: left;
+}
+
+.banner-specs {
+  display: flex; flex-direction: column; margin-bottom: 14px;
+}
+.spec-row {
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;
+  padding: 7px 0; border-bottom: 1px dotted rgba(212, 169, 78, 0.16);
+}
+.spec-row:last-child {
+  border-bottom: 1px dotted rgba(212, 169, 78, 0.28);
+}
+.spec-lbl {
+  font-family: 'Cinzel Decorative', serif; font-weight: 700; font-size: .64rem;
+  letter-spacing: .16em; text-transform: uppercase;
+  color: var(--hb, #caa96a);
+  flex-shrink: 0; padding-top: 1px;
+}
+.spec-val {
+  font-family: 'EB Garamond', serif; font-size: .88rem; line-height: 1.35;
+  color: #efe8dc; text-align: right;
+}
+
+.banner-desc {
+  font-family: 'EB Garamond', serif; font-size: .94rem; line-height: 1.55;
+  color: #d6ccba; margin: 12px 0 14px; text-align: left;
+}
+.banner-sep {
+  border-bottom: 1px dotted rgba(212, 169, 78, 0.25);
+  margin-bottom: 12px;
+}
+.banner-note {
+  font-family: 'EB Garamond', serif; font-style: italic; font-size: .86rem; line-height: 1.5;
+  color: #caa96a; margin: 0 0 14px; text-align: left;
+}
+.banner-members {
+  font-family: 'EB Garamond', serif; font-size: .84rem; line-height: 1.5;
+  color: #bfb4a2; margin-top: auto; text-align: left;
+}
+.banner-members b {
+  font-family: 'Cinzel Decorative', serif; font-weight: 700; font-size: .72rem;
+  letter-spacing: .08em; color: var(--hb, #ffd700); margin-right: 4px;
+}
 
 .margin-quote {
   max-width: 820px; margin: var(--sp-7) auto 0; text-align: center;
@@ -1710,6 +1868,37 @@ footer ul a:hover { color: var(--gold-2); }
   gap: var(--sp-4); flex-wrap: wrap; color: var(--muted-2); font-size: .88rem; font-style: italic;
 }
 @media (max-width: 860px) { .foot-grid { grid-template-columns: 1fr; } }
+
+/* Modal dedicatoria libro */
+.bmodal {
+  position: fixed; inset: 0; z-index: 250; display: none; align-items: center;
+  justify-content: center; padding: var(--sp-5);
+}
+.bmodal.on { display: flex; }
+.bmodal::before {
+  content: ''; position: absolute; inset: 0; background: rgba(5,4,10,.88);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.bmodal-box {
+  position: relative; max-width: 540px; width: 100%;
+  background: linear-gradient(165deg, #f7eed6, #dfcc9a);
+  color: #38240f; border-radius: var(--r-m); padding: var(--sp-6);
+  border: 2px solid #caa96a;
+  box-shadow: 0 32px 70px rgba(0,0,0,.85), 0 0 30px rgba(212, 169, 78, 0.25);
+  animation: fadeIn .4s ease;
+}
+.bmodal-box h3 { font-family: 'Cinzel Decorative', serif; color: #2e1704; font-size: 1.3rem; margin: 10px 0 16px; }
+.bmodal-box .ded {
+  font: italic 1.05rem/1.6 'EB Garamond', serif; color: #3d250d;
+  background: rgba(255,255,255,.45); padding: var(--sp-4); border-radius: 8px;
+  border-left: 3px solid #b8860b;
+}
+.bmodal-box sig { display: block; margin-top: 12px; font-weight: 600; text-align: right; color: #784814; font-style: normal; font-family: 'Cinzel Decorative', serif; font-size: .8rem; }
+.bmodal-x {
+  position: absolute; top: 14px; right: 16px; background: none; border: none;
+  font-size: 1.4rem; color: #6b4423; cursor: pointer; transition: transform .2s;
+}
+.bmodal-x:hover { transform: scale(1.15); color: #2e1704; }
 
 /* ═══ ACCESIBILIDAD Y RENDIMIENTO ═══ */
 @media (prefers-reduced-motion: reduce) {

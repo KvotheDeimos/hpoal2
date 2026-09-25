@@ -200,8 +200,8 @@ body{background:#06100a;color:var(--ivory);font-family:'EB Garamond',Georgia,ser
 
 <script>
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const FINE=matchMedia('(pointer: fine)').matches;
+const REDUCED=(typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)'))?matchMedia('(prefers-reduced-motion: reduce)').matches:false;
+const FINE=(typeof matchMedia==='function'&&matchMedia('(pointer: fine)'))?matchMedia('(pointer: fine)').matches:true;
 
 /* 🔒 PRODUCCIÓN: abre el jueves 10 sept 2026, 20:00 (hora local). */
 const UNLOCK=new Date('2026-09-10T20:00:00');

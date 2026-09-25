@@ -7,9 +7,13 @@
   'use strict';
 
   /* ── Helpers globales (no pisan nada si ya existen) ── */
-  window.$ = window.$ || function (s) { return document.querySelector(s); };
-  window.$$ = window.$$ || function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
-  window.REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $ = (typeof window !== 'undefined' && window.$) ? window.$ : function (s) { return document.querySelector(s); };
+  var $$ = (typeof window !== 'undefined' && window.$$) ? window.$$ : function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
+  if (typeof window !== 'undefined') {
+    window.$ = $;
+    window.$$ = $$;
+    window.REDUCED = (typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)') && window.matchMedia('(prefers-reduced-motion: reduce)').matches) || false;
+  }
 
   /* ── Sonido: delega en magia.js si está cargado ── */
   window.chime = function () { var s = window.SucursalSound; if (s && s.chime) s.chime(); };
@@ -23,8 +27,8 @@
   };
 
   /* ── Datos de data.js con guardas ── */
-  var HOUSES_D = (typeof HOUSES !== 'undefined') ? HOUSES : null;
-  var RELICS_D = (typeof RELICS !== 'undefined') ? RELICS : null;
+  var HOUSES_D = (typeof window !== 'undefined' && window.HOUSES) ? window.HOUSES : ((typeof HOUSES !== 'undefined') ? HOUSES : null);
+  var RELICS_D = (typeof window !== 'undefined' && window.RELICS) ? window.RELICS : ((typeof RELICS !== 'undefined') ? RELICS : null);
 
   /* ── Año del footer ── */
   var y = $('#year'); if (y) y.textContent = new Date().getFullYear();
@@ -90,6 +94,7 @@
   /* ── Reveals (IntersectionObserver) ── */
   function observeReveals(scope) {
     var els = (scope || document).querySelectorAll('.reveal:not(.in)');
+    if (!els.length) return;
     if (!('IntersectionObserver' in window)) {
       Array.prototype.forEach.call(els, function (el) { el.classList.add('in'); });
       return;
@@ -104,11 +109,26 @@
         }
         io.unobserve(x.target);
       });
-    }, { threshold: .15 });
-    Array.prototype.forEach.call(els, function (el) { io.observe(el); });
+    }, { threshold: 0.05 });
+    Array.prototype.forEach.call(els, function (el) {
+      var rect = el.getBoundingClientRect ? el.getBoundingClientRect() : null;
+      if (rect && rect.top < (window.innerHeight || 800) + 120) {
+        el.classList.add('in');
+        if (el.classList.contains('ledger-item')) {
+          var n = el.querySelector('.ledger-num');
+          if (n && !n.dataset.done) { n.dataset.done = 1; countUp(n); }
+        }
+      } else {
+        io.observe(el);
+      }
+    });
   }
   window.observeReveals = observeReveals;
   observeReveals(document);
+  setTimeout(function () {
+    var pending = document.querySelectorAll('.reveal:not(.in)');
+    Array.prototype.forEach.call(pending, function (el) { el.classList.add('in'); });
+  }, 1000);
 
   /* ── Estrellas y velas del portal ── */
   (function () {
@@ -149,32 +169,41 @@
   }
   fillRelics(document);
 
-  /* ── Sección Las Casas (#casas) ── */
+  /* ── Sección Las Casas (#casas) — Formato Estandarte / Marcapáginas Editorial ── */
   (function () {
-    var grid = $('#housesGrid'); if (!grid || !HOUSES_D) return;
-    var totems = { Gryffindor: '🦁', Slytherin: '🐍', Ravenclaw: '🦅', Hufflepuff: '🦡' };
-    grid.innerHTML = Object.keys(HOUSES_D).map(function (k, i) {
-      var h = HOUSES_D[k];
-      var totem = totems[k] || '✨';
-      return '<article class="house-card reveal" style="--ha:' + h.ha + ';--hb:' + h.hb + ';--rd:' + (i * .12) + 's">'
-        + '<div class="house-tag">' + h.tag + '</div>'
-        + '<div class="house-emblem" data-relic="' + k[0] + '" title="' + k + '"></div>'
-        + '<div class="house-title-wrap">'
-        +   '<h3>' + k + ' <span class="house-totem">' + totem + '</span></h3>'
-        +   '<p class="motto">«' + h.q + '»</p>'
-        + '</div>'
-        + '<p class="house-desc">' + h.desc + '</p>'
-        + '<div class="house-details">'
-        +   '<div><b>Fundador:</b> ' + h.founder + '</div>'
-        +   '<div><b>Reliquia:</b> ' + h.relic + '</div>'
-        +   '<div><b>Sala Común:</b> ' + h.common + '</div>'
-        +   '<div><b>Fantasma:</b> ' + h.ghost + '</div>'
-        + '</div>'
-        + '<div class="house-note">' + h.note + '</div>'
-        + '<div class="house-members"><b>Miembros célebres:</b> ' + h.members + '</div>'
-        + '</article>';
-    }).join('');
-    fillRelics(grid);
+    var grid = $('#housesGrid'); if (!grid) return;
+    // Si ya tiene los estandartes estáticos en index.html, no los reescribe
+    if (!grid.children || grid.children.length === 0) {
+      if (!HOUSES_D) return;
+      var relics = RELICS_D || ((typeof window !== 'undefined' && window.RELICS) ? window.RELICS : {});
+      grid.innerHTML = Object.keys(HOUSES_D).map(function (k, i) {
+        var h = HOUSES_D[k];
+        var relicSvg = (relics && relics[k[0]]) ? relics[k[0]] : '';
+        return '<article class="house-banner reveal" data-house="' + k + '" style="--ha:' + h.ha + ';--hb:' + h.hb + ';--rd:' + (i * .12) + 's">'
+          + '<div class="banner-frame">'
+          +   '<div class="banner-eyelet" aria-hidden="true"></div>'
+          +   '<div class="banner-art" aria-hidden="true">' + relicSvg + '</div>'
+          +   '<div class="banner-kicker">' + h.tag + '</div>'
+          +   '<div class="banner-title-row">'
+          +     '<span class="banner-badge" aria-hidden="true">' + relicSvg + '</span>'
+          +     '<h3 class="banner-name">' + k.toUpperCase() + '</h3>'
+          +   '</div>'
+          +   '<p class="banner-motto">«' + h.q + '»</p>'
+          +   '<div class="banner-specs">'
+          +     '<div class="spec-row"><span class="spec-lbl">FUNDADOR</span><span class="spec-val">' + h.founder + '</span></div>'
+          +     '<div class="spec-row"><span class="spec-lbl">CUALIDADES</span><span class="spec-val">' + h.q + '</span></div>'
+          +     '<div class="spec-row"><span class="spec-lbl">FANTASMA</span><span class="spec-val">' + h.ghost + '</span></div>'
+          +     '<div class="spec-row"><span class="spec-lbl">SALA COMÚN</span><span class="spec-val">' + h.common + '</span></div>'
+          +     '<div class="spec-row"><span class="spec-lbl">RELIQUIA</span><span class="spec-val">' + h.relic + '</span></div>'
+          +   '</div>'
+          +   '<p class="banner-desc">' + h.desc + '</p>'
+          +   '<div class="banner-sep" aria-hidden="true"></div>'
+          +   '<p class="banner-note">' + h.note + '</p>'
+          +   '<p class="banner-members"><b>Miembros célebres:</b> <i>' + h.members + '</i></p>'
+          + '</div>'
+          + '</article>';
+      }).join('');
+    }
     observeReveals(grid);
   })();
 

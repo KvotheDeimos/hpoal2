@@ -103,7 +103,7 @@
 
     document.getElementById('beanBtn').addEventListener('click', function () {
       snd('spark');
-      var beans = (typeof BEANS !== 'undefined') ? BEANS : [];
+      var beans = (typeof window !== 'undefined' && window.BEANS) ? window.BEANS : ((typeof BEANS !== 'undefined') ? BEANS : []);
       if (!beans.length) return;
       var b = beans[Math.floor(Math.random() * beans.length)];
       document.getElementById('beanOut').innerHTML = '<div class="mus-out">' + b[2] + ' <b style="color:#fcedba">Sabor: ' + b[0] + '</b><br>' + b[3] + '</div>';

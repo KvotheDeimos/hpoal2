@@ -59,7 +59,8 @@
   }
 
   /* ── Estantería de los 7 libros + panel de dinámicas ── */
-  var selBook = 2;
+  var currentBookObj = BOOKS_DATA.filter(function (x) { return x.st === 'current'; })[0];
+  var selBook = currentBookObj ? currentBookObj.n : 3;
 
   function renderBooks() {
     var shelf = document.getElementById('bookShelf');
@@ -106,7 +107,7 @@
 
     wrap.className = 'dynwrap' + (b.dyn.length <= 2 ? ' has-few' : '');
     wrap.innerHTML = '<h3>' + b.t + '</h3><p class="tagline">«' + b.tag + '»</p><p class="desc">' + b.d + '</p>'
-      + '<div class="dyngrid">' + b.dyn.map(function (d) {
+      + '<div class="dyngrid dyn-count-' + b.dyn.length + '">' + b.dyn.map(function (d) {
         return doorHTML(Object.assign({ size: 'sm', step: 'Libro ' + b.r }, d));
       }).join('') + '</div>';
 

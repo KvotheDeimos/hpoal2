@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Club de Duelo · Gilderoy Lockhart — Olor a Libros</title>
+<meta name="description" content="Cuatro actos, doce decisiones y una autobiografía que no pediste: la ascensión y la caída de aprender demasiado sobre Gilderoy Lockhart.">
+<meta name="theme-color" content="#0b0713">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<style>
+.lockhart-page {
+  position: relative; min-height: 100vh; min-height: 100svh;
+  display: flex; flex-direction: column;
+  background:
+    radial-gradient(1000px 520px at 50% 0%, rgba(120, 60, 160, 0.16) 0%, transparent 60%),
+    linear-gradient(180deg, #0b0713 0%, #120a1c 45%, #070410 100%);
+  color: var(--ivory); overflow-x: hidden;
+  transition: background 1.6s ease;
+}
+.lockhart-page.famous {
+  background:
+    radial-gradient(1100px 620px at 50% 10%, rgba(212, 169, 78, 0.22) 0%, rgba(160, 90, 200, 0.1) 50%, transparent 80%),
+    linear-gradient(180deg, #140b1e 0%, #1c1028 45%, #0d0716 100%);
+}
+
+.flash-overlay {
+  position: fixed; inset: 0; background: #fff; opacity: 0; pointer-events: none; z-index: 90;
+  transition: opacity .12s ease;
+}
+.flash-overlay.on { opacity: .85; transition: opacity 0s; }
+
+.topbar-lockhart {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px var(--sp-5); max-width: 1200px; margin: 0 auto; width: 100%;
+  position: relative; z-index: 10;
+}
+.crumbs-l { display: flex; align-items: center; gap: 8px; font-size: .88rem; color: #caa96a; }
+.crumbs-l a { color: #caa96a; text-decoration: none; }
+.crumbs-l a:hover { color: #fcedba; }
+.crumbs-l span { opacity: .5; }
+
+.lockhart-stage {
+  max-width: 880px; margin: 0 auto; padding: var(--sp-3) var(--sp-4) var(--sp-8);
+  display: flex; flex-direction: column; align-items: center; width: 100%; position: relative; z-index: 5;
+}
+
+.act-pill {
+  font: 700 .68rem 'Cinzel Decorative', serif; letter-spacing: .25em; text-transform: uppercase;
+  color: #caa96a; background: rgba(30, 16, 8, 0.6); border: 1px solid rgba(202, 169, 106, 0.3);
+  padding: 4px 14px; border-radius: 99px; transition: all .4s; margin-bottom: 8px;
+}
+.lockhart-page.famous .act-pill { border-color: #ffd700; color: #ffd700; box-shadow: 0 0 14px rgba(255, 215, 120, 0.4); }
+
+.lockhart-title {
+  font: 900 clamp(1.8rem, 4.5vw, 2.9rem) 'Cinzel Decorative', serif;
+  background: linear-gradient(135deg, #f7eed8 0%, #d8b3f0 55%, #8f602b 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  margin: 0 0 6px; text-align: center; line-height: 1.15;
+}
+.lockhart-subtitle {
+  font: italic 1.05rem 'IM Fell English', serif; color: #a39585; text-align: center;
+  max-width: 620px; margin-bottom: 20px; line-height: 1.45;
+}
+
+.duel-hall {
+  position: relative; width: 100%; max-width: 720px;
+  background: radial-gradient(ellipse at 50% 0%, #241232 0%, #150b1e 55%, #0a0512 100%);
+  border: 2px solid #3a2450; border-radius: 18px;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.95), inset 0 0 60px rgba(0,0,0,0.85);
+  padding: 30px 26px 26px; display: flex; flex-direction: column; align-items: center;
+  overflow: hidden; transition: border-color 1.4s, box-shadow 1.4s;
+}
+.lockhart-page.famous .duel-hall {
+  border-color: rgba(212, 169, 78, 0.5);
+  box-shadow: 0 28px 80px rgba(0,0,0,0.95), 0 0 50px rgba(255, 215, 120, 0.2), inset 0 0 70px rgba(255, 180, 50, 0.08);
+}
+
+.lockhart-figure-wrap {
+  position: relative; width: 170px; height: 190px; margin: 0 auto 14px;
+  display: flex; align-items: center; justify-content: center;
+  filter: drop-shadow(0 14px 26px rgba(0,0,0,0.9));
+  transition: transform 1s cubic-bezier(0.2,0.8,0.2,1), filter 1s;
+}
+.lockhart-page.famous .lockhart-figure-wrap {
+  filter: drop-shadow(0 0 26px rgba(255, 220, 130, 0.35)) drop-shadow(0 14px 28px rgba(0,0,0,0.9));
+}
+.pose-flourish { animation: flourish .9s cubic-bezier(.2,.8,.2,1); }
+@keyframes flourish {
+  0% { transform: rotate(0) scale(1); }
+  35% { transform: rotate(-6deg) scale(1.06); }
+  70% { transform: rotate(4deg) scale(1.02); }
+  100% { transform: rotate(0) scale(1); }
+}
+.pose-collapse { animation: collapse 1.1s ease-in-out; }
+@keyframes collapse {
+  0% { transform: translateY(0) rotate(0); }
+  40% { transform: translateY(10px) rotate(-8deg); }
+  70% { transform: translateY(16px) rotate(5deg); }
+  100% { transform: translateY(0) rotate(0); }
+}
+.hair-shine { opacity: 0; transition: opacity .8s; }
+.lockhart-page.famous .hair-shine { opacity: .9; }
+
+.dialogue-bubble {
+  position: relative; width: 100%; max-width: 620px;
+  background: rgba(20, 10, 26, 0.85); border: 1.5px solid rgba(202, 169, 106, 0.35);
+  border-radius: 12px; padding: 20px 24px; min-height: 92px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+  display: flex; flex-direction: column; gap: 8px; transition: all .6s ease;
+}
+.speaker-header { display: flex; justify-content: space-between; align-items: center; width: 100%; gap: 10px; }
+.speaker-label { font: 700 .72rem 'Cinzel Decorative', serif; letter-spacing: .24em; text-transform: uppercase; color: #caa96a; }
+.speaker-mood { font: italic .86rem 'IM Fell English', serif; color: #a8947c; text-align: right; }
+.speech-text { font: italic 1.12rem/1.65 'IM Fell English', serif; color: #f4ecdf; margin: 0; min-height: 48px; }
+
+.witness-box {
+  display: none; width: 100%; max-width: 620px; margin-top: 12px;
+  background: rgba(10, 12, 16, 0.92); border: 1.5px solid rgba(160, 170, 190, 0.4);
+  border-radius: 8px; padding: 12px 18px;
+  color: #cfd6e2; font: italic 1rem/1.55 'IM Fell English', serif;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.85);
+  animation: witnessSlide .5s ease;
+}
+.witness-box.on { display: block; }
+.witness-box b { font: 700 .7rem 'Cinzel Decorative', serif; letter-spacing: .2em; text-transform: uppercase; color: #9fb0c8; display: block; margin-bottom: 4px; font-style: normal; }
+@keyframes witnessSlide { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+.prompt-box { width: 100%; max-width: 640px; margin-top: 18px; display: flex; flex-direction: column; gap: 12px; }
+.prompt-instruction {
+  font: italic 1.02rem 'EB Garamond', serif; color: #caa96a; text-align: center;
+  background: rgba(36, 19, 8, 0.5); border: 1px dashed rgba(202, 169, 106, 0.35);
+  border-radius: 8px; padding: 10px 18px;
+}
+.choice-card {
+  display: flex; align-items: flex-start; gap: 14px; padding: 14px 18px;
+  background: linear-gradient(135deg, rgba(30, 17, 40, 0.9) 0%, rgba(16, 9, 20, 0.98) 100%);
+  border: 1.5px solid rgba(202, 169, 106, 0.35); border-radius: 10px;
+  color: #efe5d5; cursor: pointer; text-align: left;
+  transition: all .35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+}
+.choice-card:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.01); border-color: #ffd700;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.8), 0 0 20px rgba(212, 169, 78, 0.3);
+}
+.choice-card:disabled { opacity: .45; cursor: not-allowed; }
+.choice-card .act-ico { font-size: 1.5rem; line-height: 1; flex-shrink: 0; padding-top: 2px; }
+.choice-card .act-content { display: flex; flex-direction: column; gap: 3px; }
+.choice-card .act-tag { font: 700 .68rem 'Cinzel Decorative', serif; letter-spacing: .18em; text-transform: uppercase; color: #caa96a; }
+.choice-card .act-title { font: 600 1.02rem 'EB Garamond', serif; color: #fff; margin: 0; line-height: 1.4; }
+.choice-card .lived-tag { font: italic .78rem 'IM Fell English', serif; color: #a8947c; }
+
+.memoir-card {
+  width: min(560px, 94vw); margin-top: 26px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(216, 179, 240, 0.14), transparent 70%),
+    linear-gradient(180deg, #1a1024 0%, #120a18 50%, #0a0510 100%);
+  border: 2px solid #d4a94e; border-radius: 14px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 35px rgba(212, 169, 78, 0.3);
+  padding: 30px 26px; text-align: center; position: relative;
+  animation: cardSlideUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+.memoir-card::before { content: ''; position: absolute; inset: 7px; border: 1px dashed rgba(212, 169, 78, 0.4); border-radius: 9px; pointer-events: none; }
+@keyframes cardSlideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+.memoir-badge { font: 700 .7rem 'Cinzel Decorative', serif; letter-spacing: .25em; text-transform: uppercase; color: #ffd700; margin-bottom: 8px; }
+.memoir-index { font: 900 clamp(2.4rem, 8vw, 3.6rem) 'Cinzel Decorative', serif; color: #fcedba; text-shadow: 0 2px 14px rgba(255, 215, 120, 0.4); line-height: 1; }
+.memoir-tier { font: italic 1.05rem 'IM Fell English', serif; color: #d8b3f0; margin: 6px 0 14px; }
+.memoir-title { font: 700 1.15rem/1.4 'Cinzel Decorative', serif; color: #f0e2cc; margin-bottom: 14px; }
+.memoir-body { font: italic 1rem/1.7 'IM Fell English', serif; color: #e6dcc9; text-align: left; background: rgba(0,0,0,0.4); border-left: 3px solid #d8b3f0; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 14px; white-space: pre-line; }
+.memoir-quote { font: italic 1.05rem/1.6 'IM Fell English', serif; color: #f0e2cc; background: rgba(0,0,0,0.45); border-left: 3px solid #ffd700; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-bottom: 14px; text-align: left; }
+.memoir-name-row { margin: 10px 0 8px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.memoir-name-lbl { font: 700 .68rem 'Cinzel Decorative', serif; letter-spacing: .18em; text-transform: uppercase; color: #caa96a; }
+.memoir-name-input {
+  width: min(290px, 85%); padding: 9px 14px; border-radius: 6px;
+  background: rgba(10, 6, 3, 0.7); border: 1.2px solid rgba(212, 169, 78, 0.5);
+  color: #ffd700; font: 600 1rem 'EB Garamond', serif; text-align: center; outline: none;
+}
+.memoir-name-input:focus { border-color: #ffd700; box-shadow: 0 0 14px rgba(255, 215, 120, 0.4); }
+.memoir-sign { font: 600 .92rem 'EB Garamond', serif; color: #caa96a; text-align: right; margin: 4px 0 0; }
+
+.action-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 22px; }
+.act-btn {
+  padding: 12px 22px; border-radius: 8px; font: 700 .82rem 'Cinzel Decorative', serif;
+  letter-spacing: .12em; text-transform: uppercase; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
+  transition: all .3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.act-btn-gold { background: linear-gradient(180deg, #d4a94e 0%, #a07828 100%); color: #1a0e04; border: 1.5px solid #ffe380; box-shadow: 0 6px 18px rgba(0,0,0,0.7); }
+.act-btn-gold:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(0,0,0,0.8), 0 0 24px rgba(255, 215, 120, 0.5); }
+.act-btn-ghost { background: rgba(255,255,255,0.04); color: #caa96a; border: 1.5px solid rgba(202, 169, 106, 0.4); }
+.act-btn-ghost:hover { background: rgba(202, 169, 106, 0.15); color: #fcedba; border-color: #ffd700; transform: translateY(-2px); }
+
+.hidden { display: none !important; }
+@media (max-width: 600px) {
+  .duel-hall { padding: 22px 14px; }
+  .action-row { flex-direction: column; width: 100%; }
+  .act-btn { justify-content: center; width: 100%; }
+}
+</style>
+</head>
+<body class="lockhart-page" id="lockhartPage">
+<div class="grain" aria-hidden="true"></div>
+<div class="toast" id="toast" role="status"></div>
+<div class="flash-overlay" id="flashOverlay" aria-hidden="true"></div>
+
+<header class="topbar-lockhart">
+  <nav class="crumbs-l" aria-label="Ruta de navegación">
+    <a href="index.html">🏰 Gran Comedor</a><span>/</span>
+    <span>Libro II · Cap. 11</span><span>/</span>
+    <b style="color:#ffd700">🎭 El Club de Duelo</b>
+  </nav>
+  <a href="index.html" class="act-btn act-btn-ghost" style="padding:7px 14px;font-size:.74rem">Volver al castillo</a>
+</header>
+
+<main class="lockhart-stage">
+  <span class="act-pill" id="actBadge">Prólogo · El Gran Comedor</span>
+  <h1 class="lockhart-title">La Ascensión y Caída de tu Aprendizaje Lockhartiano</h1>
+  <p class="lockhart-subtitle" id="actSubtitle">Cuatro actos, doce decisiones y una verdad que pesa ochenta kilos. El pelo, como siempre, sobrevive.</p>
+
+  <section class="duel-hall" aria-label="Escenario del Club de Duelo">
+    <div class="lockhart-figure-wrap" id="lockhartFigure" role="img" aria-label="Gilderoy Lockhart">
+      <svg viewBox="0 0 170 190" width="100%" height="100%">
+        <defs>
+          <linearGradient id="robeLilac" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#8a5fb0"/><stop offset=".6" stop-color="#5e3a80"/><stop offset="1" stop-color="#3a2352"/>
+          </linearGradient>
+          <linearGradient id="hairGold" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#f7e08a"/><stop offset=".5" stop-color="#d9b34a"/><stop offset="1" stop-color="#a8802a"/>
+          </linearGradient>
+        </defs>
+        <ellipse cx="85" cy="182" rx="46" ry="7" fill="rgba(0,0,0,0.6)"/>
+        <path d="M50 96 L34 176 C40 180 130 180 136 176 L120 96 Z" fill="url(#robeLilac)" stroke="#2a1840" stroke-width="1.5"/>
+        <path d="M50 96 Q30 92 26 104 Q38 112 52 108 Z" fill="url(#robeLilac)" stroke="#2a1840" stroke-width="1.2"/>
+        <path d="M120 96 Q140 92 144 104 Q132 112 118 108 Z" fill="url(#robeLilac)" stroke="#2a1840" stroke-width="1.2"/>
+        <path d="M62 100 L108 160" stroke="#d4a94e" stroke-width="5" opacity=".85"/>
+        <path d="M76 82 L94 82 L96 96 L74 96 Z" fill="#e8c9a8"/>
+        <ellipse cx="85" cy="62" rx="24" ry="26" fill="#e8c9a8" stroke="#b08a62" stroke-width="1.2"/>
+        <path d="M61 56 Q58 30 85 26 Q112 30 109 56 Q112 44 104 38 Q110 34 100 30 Q92 24 85 26 Q78 24 70 30 Q60 34 66 38 Q58 44 61 56 Z" fill="url(#hairGold)" stroke="#8a6a20" stroke-width="1"/>
+        <path d="M63 50 Q70 36 85 34 Q100 36 107 50 Q100 42 85 40 Q70 42 63 50 Z" fill="#f7e8a8" opacity=".8"/>
+        <path class="hair-shine" d="M70 40 Q80 32 92 36" stroke="#fffbe0" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M74 72 Q85 80 96 72 Q85 76 74 72 Z" fill="#fffef5" stroke="#b08a62" stroke-width="1"/>
+        <ellipse cx="76" cy="60" rx="4" ry="4.6" fill="#fffef5"/><circle cx="76.6" cy="60" r="2.2" fill="#3a6ea8"/><circle cx="77.2" cy="59.4" r=".8" fill="#fff"/>
+        <ellipse cx="94" cy="60" rx="4" ry="4.6" fill="#fffef5"/><circle cx="94.6" cy="60" r="2.2" fill="#3a6ea8"/><circle cx="95.2" cy="59.4" r=".8" fill="#fff"/>
+        <path d="M70 52 Q76 49 81 52" stroke="#a8802a" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M89 52 Q94 49 100 52" stroke="#a8802a" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M120 120 L146 96" stroke="#8a6a40" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="148" cy="94" r="3" fill="#ffd700" opacity=".9"/>
+      </svg>
+    </div>
+
+    <div class="dialogue-bubble">
+      <div class="speaker-header">
+        <span class="speaker-label" id="speakerLabel">Gilderoy Lockhart</span>
+        <span class="speaker-mood" id="speakerMood">Radiante</span>
+      </div>
+      <p class="speech-text" id="speechText"></p>
+    </div>
+
+    <div class="witness-box" id="witnessBox" role="note"></div>
+
+    <div class="prompt-box" id="promptBox"></div>
+
+    <div class="hidden" id="finalWrap" style="width:100%;display:flex;flex-direction:column;align-items:center">
+      <article class="memoir-card" id="memoirCard">
+        <div class="memoir-badge">❖ Memorias no autorizadas (autorizadas por él, obviamente)</div>
+        <div class="memoir-index" id="memoirIndex">0%</div>
+        <div class="memoir-tier" id="memoirTier"></div>
+        <div class="memoir-title" id="memoirTitle"></div>
+        <div class="memoir-body" id="memoirBody"></div>
+        <div class="memoir-quote" id="memoirQuote"></div>
+        <div class="memoir-name-row">
+          <label for="memoirName" class="memoir-name-lbl">Firma del aprendiz (o cómplice):</label>
+          <input type="text" id="memoirName" class="memoir-name-input" maxlength="28" placeholder="Tu nombre" autocomplete="off" spellcheck="false">
+        </div>
+        <p class="memoir-sign" id="memoirSign">— Memoria de Olor a Libros</p>
+      </article>
+      <div class="action-row">
+        <button class="act-btn act-btn-gold" id="btnCopy" type="button">📋 Copiar mis memorias</button>
+        <button class="act-btn act-btn-ghost" id="btnReplay" type="button">🔄 Vivir otro final</button>
+        <a href="camara.html" class="act-btn act-btn-ghost">🐍 Bajar a la Cámara</a>
+        <a href="index.html" class="act-btn act-btn-ghost">🏰 Volver al castillo</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="/magia.js" defer></script>
+<script>
+(function () {
+  'use strict';
+
+  var ROUTE_KEY = 'hpoal_lockhart_route';
+  var page = document.getElementById('lockhartPage');
+  var figure = document.getElementById('lockhartFigure');
+  var speakerLabel = document.getElementById('speakerLabel');
+  var speakerMood = document.getElementById('speakerMood');
+  var speechText = document.getElementById('speechText');
+  var witnessBox = document.getElementById('witnessBox');
+  var promptBox = document.getElementById('promptBox');
+  var actBadge = document.getElementById('actBadge');
+  var actSubtitle = document.getElementById('actSubtitle');
+  var flashOverlay = document.getElementById('flashOverlay');
+  var finalWrap = document.getElementById('finalWrap');
+
+  var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var NAME = 'el aprendiz';
+  try {
+    NAME = localStorage.getItem('hpoal_user_name') || localStorage.getItem('ceremony_user_name') || 'el aprendiz';
+  } catch (e) {}
+
+  var prevRoute = null;
+  try { prevRoute = localStorage.getItem(ROUTE_KEY); } catch (e) {}
+
+  var FLAGS = {}, vanity = 0, rel = { skeptic: 0, accomplice: 0, loyal: 0, humane: 0 }, route = null;
+
+  function then(fn, ms) { setTimeout(fn, REDUCED ? Math.min(ms, 300) : ms); }
+
+  function say(speaker, mood, text, cb) {
+    witnessBox.classList.remove('on');
+    speakerLabel.textContent = speaker;
+    speakerMood.textContent = mood || '';
+    speechText.textContent = '';
+    var i = 0, sp = REDUCED ? 3 : 20;
+    var iv = setInterval(function () {
+      speechText.textContent = text.slice(0, ++i);
+      if (i >= text.length) { clearInterval(iv); if (cb) cb(); }
+    }, sp);
+  }
+
+  function witness(name, text) {
+    witnessBox.innerHTML = '<b>' + name + '</b>' + text;
+    witnessBox.classList.add('on');
+  }
+
+  function flash() {
+    if (REDUCED) return;
+    flashOverlay.classList.add('on');
+    setTimeout(function () { flashOverlay.classList.remove('on'); }, 140);
+  }
+
+  function pose(kind) {
+    if (REDUCED) return;
+    figure.classList.remove('pose-flourish', 'pose-collapse');
+    void figure.offsetWidth;
+    figure.classList.add(kind === 'collapse' ? 'pose-collapse' : 'pose-flourish');
+  }
+
+  function act(badge, subtitle) {
+    actBadge.textContent = badge;
+    if (subtitle) actSubtitle.textContent = subtitle;
+  }
+
+  function choices(instruction, list) {
+    promptBox.innerHTML = '';
+    if (instruction) {
+      var ins = document.createElement('div');
+      ins.className = 'prompt-instruction';
+      ins.textContent = instruction;
+      promptBox.appendChild(ins);
+    }
+    list.forEach(function (c) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'choice-card';
+      b.innerHTML = '<span class="act-ico">' + c.icon + '</span><div class="act-content"><span class="act-tag">' + c.tag + '</span><p class="act-title">' + c.title + '</p>' + (c.lived ? '<span class="lived-tag">' + c.lived + '</span>' : '') + '</div>';
+      if (c.disabled) b.disabled = true;
+      else b.addEventListener('click', function () { promptBox.innerHTML = ''; c.fn(); });
+      promptBox.appendChild(b);
+    });
+    if (typeof promptBox.scrollIntoView === 'function') {
+      promptBox.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'nearest' });
+    }
+  }
+
+  function prologue() {
+    page.classList.remove('famous');
+    finalWrap.classList.add('hidden');
+    FLAGS = {}; vanity = 0; rel = { skeptic: 0, accomplice: 0, loyal: 0, humane: 0 }; route = null;
+    act('Prólogo · El Gran Comedor', 'Cuatro actos, doce decisiones y una verdad que pesa ochenta kilos. El pelo, como siempre, sobrevive.');
+
+    var opening = '«Buenas noches, entusiastas del duelo. Soy Gilderoy Lockhart, Orden de Merlín, Tercera Clase, miembro honorario de la Liga de Defensa contra las Fuerzas del Mal y quíntuple ganador del premio Sonrisa Más Encantadora de "Brujas Semanario". Pueden llamarme "profesor". Aplaudid con moderación: el techo es antiguo.»';
+    if (prevRoute) {
+      opening = '«¡Otra vez tú, aprendiz! Perfecto: esta vez lo haré mejor. Siempre lo hago mejor. La última vez no ocurrió, pero siempre ocurre. Toma nota: capítulo uno de nuestras memorias, "El público que volvió".»';
+    }
+    flash();
+    say('Gilderoy Lockhart', 'Radiante, como es lógico', opening, function () {
+      witness('Snape, desde el rincón', 'Observa con una expresión que sugiere que está redactando mentalmente una esquela. La suya no.');
+      then(scene1, 1400);
+    });
+  }
+
+  function scene1() {
+    act('Acto I · El Club de Duelo', 'Capítulo 11. Protocolo, reverencias y un pelo que no se entera de nada.');
+    say('Gilderoy Lockhart', 'Didáctico', '«Primero, el protocolo. Todo duelo comienza con una reverencia. Yo inventé la reverencia búlgara: cuarenta y cinco grados, mentón alto y el pelo intacto al viento. Enséñame la tuya, aprendiz.»', function () {
+      choices('La reverencia es obligatoria. La dignidad, opcional.', [
+        { icon: '🎩', tag: 'Vía I', title: 'Reverencia de cuarenta y cinco grados, mentón alto.', fn: function () {
+          FLAGS.bow = 'A'; vanity += 1;
+          say('Gilderoy Lockhart', 'Aprobador', '«¡Excelente! Casi idéntica a la mía. Casi. Ese "casi" es lo que separa a un maestro de una leyenda, aprendiz: tú aún tienes casi.»', function () { then(scene2, 1300); });
+        }},
+        { icon: '🙇', tag: 'Vía II', title: 'Reverencia de noventa grados, frente casi al suelo.', fn: function () {
+          FLAGS.bow = 'B'; vanity += 2;
+          say('Gilderoy Lockhart', 'Condescendiente', '«Ah, el estilo japonés. Muy respetuoso. Totalmente incorrecto, pero respetuoso. La reverencia búlgara no mira al suelo, aprendiz: el suelo nunca ha comprado un libro.»', function () { then(scene2, 1300); });
+        }},
+        { icon: '👁️', tag: 'Vía III', title: 'No hacer reverencia: mirarlo fijo, en silencio.', fn: function () {
+          FLAGS.bow = 'C'; vanity += 2; rel.skeptic += 1;
+          say('Gilderoy Lockhart', 'Halagado', '«¡Intensidad! Me gusta. Con una mirada así vendí tres mil ejemplares en una sola firma de libros. Sosténla… sosténla… perfecto, ya puedes parpadear.»', function () { then(scene2, 1300); });
+        }},
+        { icon: '💥', tag: 'Vía IV', title: 'Reverencia tan profunda que pierdes el equilibrio.', fn: function () {
+          FLAGS.bow = 'D'; vanity += 3; FLAGS.fell = true;
+          pose('collapse');
+          say('Narrador', 'Sin piedad', 'Tu reverencia comienza búlgara y termina británica: de cara al suelo, con Snape rompiendo tu caída como quien recibe un paquete mal dirigido.', function () {
+            witness('Severus Snape', 'Te sostiene del cuello de la túnica. «El suelo no le estaba atacando. Todavía.»');
+            then(scene2, 1600);
+          });
+        }}
+      ]);
+    });
+  }
+
+  function scene2() {
+    say('Gilderoy Lockhart', 'Competitivo', '«Ahora, lo importante. A la cuenta de tres, nos desarmamos mutuamente. Uno… dos… ¡tres!»', function () {
+      choices('Tu varita ya está en alto. La suya también. La suya tiembla un poco.', [
+        { icon: '🛡️', tag: 'Vía I', title: 'Lanzar Protego y dejar que su hechizo rebote.', fn: function () {
+          FLAGS.duel = 'A';
+          pose('collapse');
+          say('Narrador', 'Documental', 'Tu Protego es impecable. El Expelliarmus de Lockhart rebota, describe una curva humillante y le arranca LA PROPIA varita de la mano, que le golpea en la frente.', function () {
+            say('Gilderoy Lockhart', 'Desde el suelo, con dignidad', '«¿Lo veis? Me he desarmado a mí mismo para enseñaros humildad. El público necesita humildad. Yo no, pero el público sí.»', function () {
+              witness('Harry Potter, primera fila', 'Susurra: «Se ha desarmado solo. He visto cosas muy raras en mi vida, pero esto es nuevo.»');
+              then(scene3, 1600);
+            });
+          });
+        }},
+        { icon: '💨', tag: 'Vía II', title: 'Apartarte un paso y dejar que falle solo.', fn: function () {
+          FLAGS.duel = 'B';
+          say('Narrador', 'Coreográfico', 'Te apartas medio paso. El hechizo pasa por donde estabas y alcanza el retrato de Sir Cadogan, que desenvaina tres espadas a la vez.', function () {
+            witness('Sir Cadogan, retrato ofendido', '«¡COBARDE! ¡VUELVE Y LUCHA COMO UN CABALLERO Y NO COMO UN FOLLETO!»');
+            say('Gilderoy Lockhart', 'Imperturbable', '«El retrato me tiene envidia desde mil novecientos ochenta y siete. Es un caballero de segunda fila: nunca ha vendido una memoria.»', function () { then(scene3, 1500); });
+          });
+        }},
+        { icon: '⚡', tag: 'Vía III', title: 'Desarmarlo antes de la cuenta de tres.', fn: function () {
+          FLAGS.duel = 'C'; vanity += 1;
+          say('Gilderoy Lockhart', 'Desarmado pero entero', '«¡Anticipar la cuenta! ¡Iniciativa! Justo lo que iba a enseñaros hoy. Capítulo cuatro de nuestro próximo libro: "La cuenta de tres es una sugerencia".»', function () { then(scene3, 1400); });
+        }},
+        { icon: '🎭', tag: 'Vía IV', title: 'Dejarte alcanzar y caer con dramatismo.', fn: function () {
+          FLAGS.duel = 'D'; vanity += 2;
+          flash();
+          say('Gilderoy Lockhart', 'Emocionado', '«¡SÍ! ¡Esa caída! ¡El ángulo, la muñeca, el sufrimiento! ¿Dónde lo aprendiste? No contestes: capítulo siete de nuestro próximo libro.»', function () { then(scene3, 1400); });
+        }}
+      ]);
+    });
+  }
+
+  function scene3() {
+    say('Gilderoy Lockhart', 'Teatral', '«Y ahora, el número estrella: ¡Serpensortia! Observad cómo domino a la bestia más peligrosa de la sala.»', function () {
+      witness('Narrador', 'Una serpiente negra aparece silbando. La serpiente parece más confundida que peligrosa.');
+      choices('La serpiente mira a Lockhart. Lockhart mira a la serpiente. Nadie parpadea.', [
+        { icon: '⏳', tag: 'Vía I', title: 'Esperar a que Lockhart la "domine".', fn: function () {
+          FLAGS.snake = 'A';
+          say('Narrador', 'Tenso', 'Lockhart se acerca sonriendo. La serpiente bosteza. Lockhart bosteza de vuelta. Tres segundos de bostezos cruzados. La serpiente se va por una grieta, aburrida.', function () {
+            say('Gilderoy Lockhart', 'Triunfal', '«Se ha rendido. Guerra psicológica, aprendiz: la bestia ha entendido con quién estaba tratando.»', function () {
+              witness('Hermione Granger, brazos cruzados', '«La serpiente se ha ido por aburrimiento. Eso no es una victoria: es un problema de agenda.»');
+              then(scene4, 1700);
+            });
+          });
+        }},
+        { icon: '✨', tag: 'Vía II', title: 'Lanzar Finite Incantatem tú.', fn: function () {
+          FLAGS.snake = 'B';
+          say('Gilderoy Lockhart', 'Generoso', '«¡Perfecto! Ese es exactamente el hechizo que iba a usar yo. Me has leído la mente. O te he leído la mía en voz alta. Una de las dos: capítulo nueve.»', function () { then(scene4, 1400); });
+        }},
+        { icon: '🐍', tag: 'Vía III', title: 'Intentar hablar pársel tú.', fn: function () {
+          FLAGS.snake = 'C'; vanity += 2;
+          say('Narrador', 'Estupefacto', 'Siseas algo que no sabías que sabías. La serpiente te hace una reverencia —una reverencia búlgara, curiosamente— y se retira.', function () {
+            witness('Ron Weasley', '«Mate… ¿desde cuándo hablas serpiente?» Harry no dice nada. Harry está haciendo un cálculo mental muy largo.');
+            say('Gilderoy Lockhart', 'Orgulloso', '«¿Lo veis? Mi aprendiz ya habla cuatro idiomas. Cinco, si contamos la sonrisa.»', function () { then(scene4, 1700); });
+          });
+        }},
+        { icon: '🧣', tag: 'Vía IV', title: 'Ofrecerle tu brazo como salida elegante.', fn: function () {
+          FLAGS.snake = 'D'; vanity += 2;
+          flash(); pose('flourish');
+          say('Narrador', 'Inexplicable', 'La serpiente se enrosca en tu brazo como una bufanda con opiniones. Lockhart ya está encuadrando con las manos.', function () {
+            say('Gilderoy Lockhart', 'Visionario', '«¡Magnífico! La bestia te ha elegido como estilista. Sostén esa pose: es la portada de nuestro próximo libro.»', function () { then(scene4, 1500); });
+          });
+        }}
+      ]);
+    });
+  }
+
+  function scene4() {
+    say('Gilderoy Lockhart', 'Solemne', '«Antes de cerrar, os enseñaré mi hechizo personal: Protego Lockhartus.»', function () {
+      say('Tú', 'Escéptico', '…¿Protego Lockhartus?', function () {
+        say('Gilderoy Lockhart', 'Ofendidísimo', '«Sí. Es un Protego normal, pero con mi nombre. Eso lo hace un cuarenta por ciento más efectivo, según mis estudios.»', function () {
+          choices('Los "estudios" no aparecen en ningún registro. El registro, según él, "aún no está a la altura".', [
+            { icon: '📊', tag: 'Vía I', title: '«¿Tienes datos de esos estudios?»', fn: function () {
+              FLAGS.spell = 'A'; rel.skeptic += 1;
+              say('Gilderoy Lockhart', 'Preparadísimo', '«Por supuesto. Están recogidos en mi obra "Estudios que realicé: una autobiografía académica". Superventas en la categoría "Libros que escribí sobre mí mismo". La categoría se creó para mí. No había otros candidatos.»', function () { then(act2, 1600); });
+            }},
+            { icon: '🪄', tag: 'Vía II', title: '«Enséñamelo.»', fn: function () {
+              FLAGS.spell = 'B';
+              flash();
+              say('Narrador', 'Científico', 'Lockhart lanza Protego Lockhartus. No ocurre nada… excepto que su pelo brilla ligeramente, como recién peinado por la providencia.', function () {
+                witness('Severus Snape, sin mover los labios', '«Fascinante. Un escudo que protege el peinado. Por fin algo útil en esta escuela.»');
+                then(act2, 1700);
+              });
+            }},
+            { icon: '🛡️', tag: 'Vía III', title: '«Yo prefiero el Protego normal.»', fn: function () {
+              FLAGS.spell = 'C'; vanity += 1;
+              say('Gilderoy Lockhart', 'Herido en el alma', '«¿Normal? ¿NORMAL? El Protego normal es para magos normales. Tú ya estás conmigo, aprendiz: eleva tus estándares. La mediocridad es contagiosa y yo nunca me he vacunado.»', function () { then(act2, 1500); });
+            }},
+            { icon: '🤝', tag: 'Vía IV', title: '«¿Y si lo combinamos? Protego Lockhartus Duo.»', fn: function () {
+              FLAGS.spell = 'D'; vanity += 2; rel.accomplice += 1;
+              say('Gilderoy Lockhart', 'Iluminado', '«¿Duo… DUO? Acabo de inventarlo contigo. Eso te convierte en coautor. No te preocupes: los coautores aparecen en la página cuatrocientos, en agradecimientos, con una falta de ortografía. Es tradición.»', function () { then(act2, 1600); });
+            }}
+          ]);
+        });
+      });
+    });
+  }
+
+  function act2() {
+    act('Acto II · La Amenaza de la Cámara', 'Capítulos 13-16. Alguien tiene que hacerse cargo. Por desgracia, se ha presentado voluntario.');
+    say('Narrador', 'Sombrío', 'Los ataques han comenzado. Alumnos petrificados, susurros en los pasillos, un gato rígido como una estatua de mal gusto. En la reunión de profesores, alguien debe "hacerse cargo" del asunto de la Cámara.', function () {
+      witness('Minerva McGonagall, seca como una rama de enero', '«El profesor Lockhart se ha ofrecido voluntario para ocuparse de la Cámara. Los demás pueden continuar con sus vidas.» Se oyó un suspiro de alivio en toda la sala. También en los cuadros.');
+      say('Gilderoy Lockhart', 'Eufórico', '«¡Aprendiz! Noticia excelente: estoy oficialmente a cargo de la Cámara. Lo cual significa que tú estás oficialmente a cargo de mí. Haz la maleta ligera: puede que no volvamos. O puede que volvamos a comer. Cincuenta por ciento.»', function () {
+        choices('Alguien tiene que preguntar lo obvio. Ese alguien, como siempre, eres tú.', [
+          { icon: '📋', tag: 'Vía I', title: '«¿Qué significa exactamente "hacerse cargo"?»', fn: function () {
+            FLAGS.charge = 'A'; vanity += 2;
+            say('Gilderoy Lockhart', 'Filosófico', '«Significa que, cuando ocurra algo, yo estaré cerca. Idealmente, cerca pero en otra habitación. El liderazgo es presencia, aprendiz: presencia a una distancia segura.»', function () { then(scene6, 1500); });
+          }},
+          { icon: '😮', tag: 'Vía II', title: '«McGonagall parecía aliviada.»', fn: function () {
+            FLAGS.charge = 'B';
+            say('Gilderoy Lockhart', 'Modesto (es decir, no)', '«¡Claro que lo estaba! Cuando yo me hago cargo, todo el mundo respira. Es mi don: la calma colectiva. He calmado tres guerras y una boda.»', function () { then(scene6, 1500); });
+          }},
+          { icon: '😨', tag: 'Vía III', title: '«¿Tienes miedo?»', fn: function () {
+            FLAGS.charge = 'C'; vanity += 2; rel.skeptic += 1;
+            say('Gilderoy Lockhart', 'Sin parpadear', '«¿Miedo? Aprendiz, el miedo es una emoción que estudié a fondo en mi libro "El miedo: cómo le enseñé modales". Yo no siento miedo. El miedo me siente a mí.»', function () { then(scene6, 1500); });
+          }},
+          { icon: '🤲', tag: 'Vía IV', title: '«Iré contigo hasta el final.»', fn: function () {
+            FLAGS.charge = 'D'; rel.accomplice += 1; rel.loyal += 1;
+            say('Gilderoy Lockhart', 'Conmovido medio segundo', '«…Lealtad. Mi cualidad favorita en los demás, justo después de "saber cargar maletas". Bienvenido al círculo interno, aprendiz: cabemos dos y yo ocupo la mayor parte.»', function () { then(scene6, 1500); });
+          }}
+        ]);
+      });
+    });
+  }
+
+  function scene6() {
+    say('Gilderoy Lockhart', 'Estratega', '«Antes de enfrentar a la Cámara, elige la herramienta esencial de la expedición. Piensa como un héroe. Es decir: piensa como yo.»', function () {
+      choices('Sobre la mesa: un espejo, un libro, una cámara y un documento notarial. Solo una es "esencial".', [
+        { icon: '🪞', tag: 'Vía I', title: 'Un espejo: para no mirar al basilisco a los ojos.', fn: function () {
+          FLAGS.tool = 'A';
+          say('Gilderoy Lockhart', 'Encantado', '«¡Brillante! Y tiene un segundo uso: la moral. Es imposible mirarme más de tres segundos seguidos sin sentirse más seguro. Lo he probado. Los tres segundos eran para parpadear.»', function () { then(scene7, 1500); });
+        }},
+        { icon: '📖', tag: 'Vía II', title: 'Tu libro "Basiliscos: cómo no morir".', fn: function () {
+          FLAGS.tool = 'B';
+          say('Gilderoy Lockhart', 'Emocionado', '«Gran elección. Lo tengo dedicado. Por mí. Para mí. La dedicatoria dice: "Para Gilderoy, sin el cual este libro no existiría. Literalmente". Es mi dedicatoria favorita. Lloro cada vez que la leo. La he leído cuarenta veces.»', function () { then(scene7, 1600); });
+        }},
+        { icon: '📷', tag: 'Vía III', title: 'Una cámara: para documentarlo todo.', fn: function () {
+          FLAGS.tool = 'C'; vanity += 2; flash();
+          say('Gilderoy Lockhart', 'Profesional', '«¡Sí! La historia debe verme por mi mejor ángulo. Todos mis ángulos son buenos, pero el izquierdo es histórico. Si caigo, filma la caída; si gano, filma la victoria; si no ocurre ninguna, filma el pelo y ya decidiremos.»', function () { then(scene7, 1600); });
+        }},
+        { icon: '⚖️', tag: 'Vía IV', title: 'Un contrato notarial por si el basilisco demanda.', fn: function () {
+          FLAGS.tool = 'D'; rel.skeptic += 1;
+          say('Gilderoy Lockhart', 'Genuinamente impresionado', '«…Aprendiz, eso es lo más bonito que me han dicho desde que mi madre dijo "al menos eres alto". Capítulo uno de nuestro próximo libro: "El basilisco y la letra pequeña".»', function () { then(scene7, 1600); });
+        }}
+      ]);
+    });
+  }
+
+  function scene7() {
+    act('Acto II · La Amenaza de la Cámara', 'Colin Creevey, petrificado, con la cámara apuntando al techo. Alguien debería decir algo sensato.');
+    say('Narrador', 'Grave', 'Encuentran a Colin Creevey petrificado en el pasillo, con la cámara aún apuntando al techo. Todo el colegio se congrega en silencio. Alguien debería decir algo sensato.', function () {
+      witness('Minerva McGonagall', '«Nadie toque nada. Esto es una escena del crimen, no una…» Se detiene. Acaba de ver a Lockhart acercarse con un peine.');
+      choices('Lockhart avanza con el peine. El peine no es para el duelo. El peine nunca es para el duelo.', [
+        { icon: '✋', tag: 'Vía I', title: 'Interponerte y detenerlo antes de que pose.', fn: function () {
+          FLAGS.colin = 'A'; rel.skeptic += 1; rel.humane += 1;
+          say('Gilderoy Lockhart', 'Susurrando, ofendido', '«Suéltame, aprendiz: la tragedia también es una oportunidad. …Está bien. Tienes razón. Posaré después, cuando haya mejor luz.»', function () {
+            witness('Minerva McGonagall', 'Te mira con algo que, en ella, casi equivale a gratitud.');
+            then(scene8, 1700);
+          });
+        }},
+        { icon: '📸', tag: 'Vía II', title: 'Dejar que pose "en señal de respeto".', fn: function () {
+          FLAGS.colin = 'B'; vanity += 3; flash(); pose('flourish');
+          say('Narrador', 'Incómodo', 'Lockhart posa junto a Colin petrificado: mano en la barbilla, mirada al horizonte, pie adelantado. El horizonte, por suerte, no estaba petrificado y pudo apartar la vista.', function () {
+            witness('Harry Potter, en un hilo de voz', '«Está posando junto a un niño petrificado.» Ron: «Shh. Está rindiendo homenaje. A su manera. Su manera es horrible, pero está rindiendo homenaje.»');
+            then(scene8, 1800);
+          });
+        }},
+        { icon: '🎞️', tag: 'Vía III', title: 'Coger tú la cámara y revelar el carrete.', fn: function () {
+          FLAGS.colin = 'C'; rel.skeptic += 2;
+          say('Narrador', 'Revelador', 'Revelas la foto: un borrón de luz verde y, en una esquina, un mechón de pelo rubio PERFECTO huyendo de la escena. Miras a Lockhart. Lockhart, sin volverse:', function () {
+            say('Gilderoy Lockhart', 'Sin volverse', '«Ese pelo no es mío. El mío no huye: el mío llega.»', function () { then(scene8, 1600); });
+          });
+        }},
+        { icon: '🧥', tag: 'Vía IV', title: 'Cubrir a Colin con tu capa, en silencio.', fn: function () {
+          FLAGS.colin = 'D'; rel.humane += 2;
+          say('Narrador', 'Sencillo', 'Un gesto pequeño, humano, sin público. Silencio. Hasta Lockhart, por un segundo, no sabe qué hacer con la cara. Hace lo único que sabe: sonreír. Pero más bajito.', function () {
+            say('Gilderoy Lockhart', 'Casi en serio', '«…Eso. Eso es exactamente lo que iba a hacer yo. …Casi.»', function () { then(scene8, 1600); });
+          });
+        }}
+      ]);
+    });
+  }
+
+  function scene8() {
+    say('Narrador', 'Nocturno', 'Esa noche, Lockhart te cita en su despacho. Las paredes están cubiertas de retratos suyos. Todos se mueven. Ninguno coincide en la hora.', function () {
+      say('Gilderoy Lockhart', 'Confidencial', '«Siéntate, aprendiz. He estado pensando en la Cámara, en Colin, en todo esto. Y he llegado a una conclusión: esta historia debe contarse. En nuestro próximo libro.»', function () {
+        choices('La palabra "nuestro" hace un ruido raro en una habitación tan llena de "yo".', [
+          { icon: '❓', tag: 'Vía I', title: '«¿Nuestro próximo libro?»', fn: function () {
+            FLAGS.book = 'A'; vanity += 1;
+            say('Gilderoy Lockhart', 'Generoso (según él)', '«Sí. "La Cámara Secreta: la historia de un héroe (dictada por el héroe)". Tú aparecerás, claro. En la dedicatoria: "Para mi aprendiz, que cargó la maleta". Es una dedicatoria preciosa. Ya he llorado.»', function () { then(act3, 1600); });
+          }},
+          { icon: '⚖️', tag: 'Vía II', title: '«La historia no es tuya: es de Colin. Es de las víctimas.»', fn: function () {
+            FLAGS.book = 'B'; rel.skeptic += 1;
+            say('Gilderoy Lockhart', 'Perplejo, como si hablaras en runas', '«Aprendiz… las historias son de quien sabe contarlas. Las víctimas están petrificadas: no pueden contar nada. Yo sí. Tengo voz, tengo cara y tengo tipografía. Es casi un deber moral.»', function () { then(act3, 1600); });
+          }},
+          { icon: '✍️', tag: 'Vía III', title: '«Te ayudo a escribirlo. Con una condición: la verdad.»', fn: function () {
+            FLAGS.book = 'C'; rel.accomplice += 1;
+            say('Gilderoy Lockhart', 'Negociador', '«¡La verdad! ¡Por supuesto! La verdad es una materia prima: se pule, se moldea, se le pone una buena cubierta… Te refieres a eso, ¿verdad? ¿A la verdad pulida? ¿Con brillo?»', function () { then(act3, 1600); });
+          }},
+          { icon: '📓', tag: 'Vía IV', title: '«Ya lo estoy escribiendo. En un diario.»', fn: function () {
+            FLAGS.book = 'D'; rel.skeptic += 1;
+            say('Gilderoy Lockhart', 'De pie, conmovido', '«¿Un diario…? Aprendiz, eso es precioso. Los diarios son donde nacen los héroes. O donde se les caza. En cualquier caso: literatura. Préstamelo cuando termines. Por investigación. Y por seguridad.»', function () { then(act3, 1600); });
+          }}
+        ]);
+      });
+    });
+  }
+
+  function act3() {
+    act('Acto III · El Intento de Huida', 'Capítulo 16. Tres de la mañana. Una maleta que debe dinero.');
+    say('Narrador', 'Madrugador', 'Tres de la mañana. Luz en el despacho de Lockhart. Entras y lo encuentras haciendo la maleta a una velocidad que sugiere que la maleta le debe dinero.', function () {
+      say('Gilderoy Lockhart', 'Acelerado', '«¡Aprendiz! Llegas justo a tiempo. Decisión estratégica: voy a investigar la Cámara… desde fuera. Muy lejos. A ser posible, en otro continente. Ayúdame a hacer la maleta: elige qué va primero.»', function () {
+        choices('La maleta es grande. La dignidad, no tanto.', [
+          { icon: '💇', tag: 'Vía I', title: 'Los productos para el pelo.', fn: function () {
+            FLAGS.pack = 'A'; vanity += 2;
+            say('Gilderoy Lockhart', 'Aliviado', '«Por fin alguien que entiende las prioridades. La maleta puede esperar: el pelo no. El pelo es la marca, aprendiz. Sin pelo soy un hombre. Con pelo soy una institución.»', function () { then(scene10, 1500); });
+          }},
+          { icon: '📚', tag: 'Vía II', title: 'Los cuarenta y siete libros.', fn: function () {
+            FLAGS.pack = 'B';
+            say('Gilderoy Lockhart', 'Lógico', '«¿Los cuarenta y siete? Pesan ochenta kilos. …Veo que ya has entendido quién los carga. El liderazgo es delegar, aprendiz: yo delego el peso y me quedo con la gloria. Es justo: la gloria pesa más.»', function () { then(scene10, 1600); });
+          }},
+          { icon: '🎒', tag: 'Vía III', title: 'Nada. Viajar ligero.', fn: function () {
+            FLAGS.pack = 'C'; rel.skeptic += 1;
+            say('Gilderoy Lockhart', 'Horrorizado', '«¿Viajar ligero…? ¿LIGERO? Aprendiz, yo viajé ligero una vez. Fue en 1979. Aún no me he recuperado. Hay fotos. No las enseño. Las quemo, pero vuelven.»', function () { then(scene10, 1600); });
+          }},
+          { icon: '📘', tag: 'Vía IV', title: 'El manual de la reverencia búlgara.', fn: function () {
+            FLAGS.pack = 'D'; vanity += 2; rel.loyal += 1;
+            say('Gilderoy Lockhart', 'Deteniéndose. Mirándote. Sonriendo despacio.', '«…Te acuerdas. De verdad eres mi aprendiz. El manual es falso, claro: la reverencia búlgara no se enseña. La reverencia búlgara se elige.»', function () { then(scene10, 1600); });
+          }}
+        ]);
+      });
+    });
+  }
+
+  function scene10() {
+    say('Narrador', 'Sigiloso', 'Bajáis por el corredor con la maleta (tú cargas la maleta). Al fondo: Filch, la señora Norris y Peeves jugando a las cartas sobre una armadura. Peeves os ve. Peeves siempre os ve.', function () {
+      witness('Peeves el poltergeist', '«¡UUUH! ¡Lockhart huye! ¡Lockhart huye con la maleta y el aprendiz-mozo!»');
+      choices('Filch ya está sacando un cuaderno muy pequeño y una satisfacción muy grande.', [
+        { icon: '🎩', tag: 'Vía I', title: 'Que Lockhart "dignifique el momento" con la reverencia búlgara.', fn: function () {
+          FLAGS.escape = 'A';
+          pose('collapse');
+          say('Narrador', 'Anatómico', 'Lockhart se inclina ante Filch a cuarenta y cinco grados, mentón alto. Algo en su espalda produce un sonido que no consta en ninguna lista de sonidos agradables. Se queda congelado a media reverencia.', function () {
+            say('Gilderoy Lockhart', 'Inmóvil, susurrando', '«…Aprendiz. No te muevas. Me he convertido en mobiliario. Si alguien pregunta: soy una estatua estratégica.»', function () {
+              witness('Peeves', 'Hace una foto con las manos. No tiene cámara. No la necesita.');
+              then(scene11, 1900);
+            });
+          });
+        }},
+        { icon: '👞', tag: 'Vía II', title: 'Sobornar a Peeves con los zapatos de Lockhart.', fn: function () {
+          FLAGS.escape = 'B';
+          say('Narrador', 'Comercial', 'Peeves acepta los zapatos y sale volando con ellos puestos, gritando la noticia por todo el castillo.', function () {
+            witness('Peeves, a pleno pulmón', '«¡LOCKHART ME DA SUS ZAPATOS! ¡LOCKHART HUYE DESCALZO! ¡DESCALZO Y CON PELO BONITO!»');
+            say('Gilderoy Lockhart', 'Descalzo y digno', '«El calzado es un detalle menor, aprendiz. La fuga es lo que queda en la historia. Y la historia, por suerte, no huele.»', function () { then(scene11, 1800); });
+          });
+        }},
+        { icon: '📢', tag: 'Vía III', title: 'Unirte a Peeves y gritarlo tú también.', fn: function () {
+          FLAGS.escape = 'C'; rel.skeptic += 2;
+          say('Tú', 'A pleno pulmón', '«¡EFECTIVAMENTE! ¡LOCKHART HUYE!»', function () {
+            witness('Peeves, con lágrimas de alegría', '«¡POR FIN! ¡Un profesor con honestidad! ¡Se lo cuento a todo el mundo! ¡CON DETALLES!»');
+            say('Gilderoy Lockhart', 'Susurrando desde la maleta', '«Aprendiz… ¿de qué lado estás?» Tú: «Del lado de la verdad.» Lockhart: «La verdad vende menos que yo, pero esta noche va ganando.»', function () { then(scene11, 1800); });
+          });
+        }},
+        { icon: '🧳', tag: 'Vía IV', title: 'Esconderos detrás de la maleta.', fn: function () {
+          FLAGS.escape = 'D';
+          say('Narrador', 'Sigiloso', 'La maleta (ochenta kilos de libros) os oculta a la perfección. La señora Norris husmea el lomo de «Mis vacaciones con las arpías» y pierde el interés. Peeves se aburre y se va.', function () {
+            say('Gilderoy Lockhart', 'Desde dentro de una armadura', '«…Genial. La maleta como escudo. Capítulo doce: "Cómo esconderse con dignidad (dignidad opcional)".»', function () { then(scene11, 1600); });
+          });
+        }}
+      ]);
+    });
+  }
+
+  function scene11() {
+    act('Acto III · El Intento de Huida', 'El despacho, otra vez. La maleta a medio hacer. Y, por primera vez en toda la noche, nadie posa.');
+    say('Narrador', 'Íntimo', 'Lockhart se sienta en el borde del escritorio. No hay cámaras. No hay público. Por primera vez en toda la noche, no posa.', function () {
+      say('Gilderoy Lockhart', 'Serio. Demasiado.', '«Aprendiz. Antes de irme… o antes de que nos vayamos… quiero preguntarte algo. ¿Y si te dijera que todo lo que he hecho… fue por una razón?»', function () {
+        choices('Los retratos de la pared han dejado de moverse. Hasta ellos quieren oír la respuesta.', [
+          { icon: '❓', tag: 'Vía I', title: '«¿Qué razón?»', fn: function () {
+            FLAGS.truth = 'A';
+            say('Gilderoy Lockhart', 'Sincero, a su manera', '«La fama, obviamente. …¿Qué cara es esa? ¡La fama es una razón! ¡Es la mejor razón! La gente olvida al héroe que la salvó: recuerda la cara que le sonreía desde la portada. Yo les di una cara. Es un servicio público. Con buena luz, pero un servicio.»', function () { then(act4, 1700); });
+          }},
+          { icon: '🎭', tag: 'Vía II', title: '«Sé que eres un fraude, Gilderoy.»', fn: function () {
+            FLAGS.truth = 'B'; rel.skeptic += 2;
+            say('Narrador', 'Silencioso', 'Silencio. Los retratos de la pared dejan de moverse del todo. Lockhart no se enfada. Pregunta, muy bajito:', function () {
+              say('Gilderoy Lockhart', 'Sin máscara, por una vez', '«…¿Desde cuándo lo sabes?» Tú: «Desde el duelo. Te desarmaste solo.» Lockhart: «…Fue un día muy malo. (Pausa.) Quédate igual. Los fraudes también necesitamos aprendices: sois los únicos que nos corregís.»', function () { then(act4, 1900); });
+            });
+          }},
+          { icon: '😰', tag: 'Vía III', title: '«La razón es que tienes miedo.»', fn: function () {
+            FLAGS.truth = 'C'; rel.humane += 1;
+            say('Gilderoy Lockhart', 'Sin negarlo', '«…El miedo es una emoción que conozco muy bien. Escribí un libro sobre ella. El libro vendió muchísimo. El miedo no vende libros, aprendiz: el miedo los compra. Hay una diferencia y es toda mi carrera.»', function () { then(act4, 1700); });
+          }},
+          { icon: '🎓', tag: 'Vía IV', title: '«Da igual. Sigues siendo mi profesor.»', fn: function () {
+            FLAGS.truth = 'D'; rel.loyal += 2;
+            say('Gilderoy Lockhart', 'Desarmado de la única forma que funciona', '«…Aprendiz, eso es o la lealtad más grande o el peor juicio de la historia de Hogwarts. En cualquier caso: gracias. Nadie me había devuelto nunca mi propia máscara diciéndome que me quedaba bien.»', function () { then(act4, 1700); });
+          }}
+        ]);
+      });
+    });
+  }
+
+  function act4() {
+    act('Acto IV · La Revelación', 'Capítulo 17. La entrada de la Cámara. Una varita prestada. Y tú, llegando justo a tiempo.');
+    say('Narrador', 'Definitivo', 'Al día siguiente, el heredero de Slytherin se lleva a Ginny Weasley a la Cámara. Harry y Ron bajan tras ella. Y Lockhart… Lockhart aparece en la entrada de la Cámara con la varita en alto y las manos temblando.', function () {
+      say('Gilderoy Lockhart', 'Al borde de todo', '«¡Atrás, niños! ¡Yo me… yo me ocuparé de esto! (Pausa.) Aprendiz, llegas justo a tiempo: díselo. Diles quién soy.»', function () {
+        var opts = [
+          { icon: '🛡️', tag: 'Ruta I', title: '«Es el héroe que dice ser.» (Cubrirlo una última vez)', route: 'A', fn: function () { epilogue('A'); } },
+          { icon: '📢', tag: 'Ruta II', title: '«Es un fraude. Y lo sabe.» (Decirlo delante de todos)', route: 'B', fn: function () { epilogue('B'); } },
+          { icon: '🕳️', tag: 'Ruta III', title: '«Viene con nosotros. Dentro de la Cámara.»', route: 'C', fn: function () { epilogue('C'); } },
+          { icon: '🪄', tag: 'Ruta IV', title: 'No decir nada. Alzar tu varita antes que él.', route: 'D', fn: function () { epilogue('D'); } }
+        ];
+        opts = opts.map(function (o) {
+          if (prevRoute && o.route === prevRoute) { o.lived = '(este final ya lo viviste)'; o.disabled = true; }
+          return o;
+        });
+        choices('Cuatro finales. El pelo sobrevive en todos.', opts);
+      });
+    });
+  }
+
+  function epilogue(r) {
+    route = r;
+    try { localStorage.setItem(ROUTE_KEY, r); prevRoute = r; } catch (e) {}
+    page.classList.add('famous');
+
+    if (r === 'A') {
+      say('Gilderoy Lockhart', 'Con lágrimas reales', '«…Sabía que podía contar contigo. Cuando todo esto termine, el libro es nuestro. Mitad y mitad. …60-40. …70-30, aprendiz, no abuses.»', function () {
+        witness('Harry Potter, desde la entrada de la Cámara', '«¿Entramos ya o hacemos el reparto de derechos?»');
+        then(buildMemoir, 1800);
+      });
+    } else if (r === 'B') {
+      say('Narrador', 'Teatral', 'Silencio. Lockhart se yergue. Y hace lo único que sabe hacer: sonreír a las cámaras que no están.', function () {
+        say('Gilderoy Lockhart', 'Sonriendo a nadie', '«¿Un fraude, dice? (Sonrisa.) Damas y caballeros: mi aprendiz está interpretando. Una imitación excelente de alguien envidioso. Aplausos.»', function () {
+          witness('Minerva McGonagall, sin alzar la voz (que es peor)', '«Profesor Lockhart. Mi despacho. Ahora.» La sonrisa no se rompe. Solo se hace más pequeña.');
+          then(buildMemoir, 1900);
+        });
+      });
+    } else if (r === 'C') {
+      say('Narrador', 'Canónico', 'Dentro de la Cámara, Lockhart intenta desmemorizar a Harry y Ron. Su varita —prestada, equivocada, rota— retrocede. El destello. Los escombros. El polvo.', function () {
+        say('Gilderoy Lockhart', 'Sereno, entre piedras', '«¡Hola! ¿Quién soy? ¿Dónde estoy? (Se toca el pelo.) …Ah. Esto sí lo recuerdo. Esto siempre fue mío.»', function () {
+          then(buildMemoir, 1800);
+        });
+      });
+    } else {
+      flash();
+      say('Narrador', 'Frío', 'Tu Obliviate lo alcanza antes que el suyo a ti. Lockhart parpadea. Te mira. Se mira.', function () {
+        say('Gilderoy Lockhart', 'Ligero, sin saberlo', '«Hola, joven. ¿Nos conocemos? Tienes cara de haber tomado una decisión muy difícil.» Tú: «…Algo así.» Lockhart: «Pues sea lo que sea: gracias. Me siento… ligero. Como si hubiera olvidado algo muy pesado.»', function () {
+          witness('Tú, por dentro', 'Sabes exactamente qué ha olvidado. Y sabes que ahora lo cargas tú.');
+          then(buildMemoir, 1900);
+        });
+      });
+    }
+  }
+
+  function tier(v) {
+    if (v <= 25) return 'Humildad funcional (sospechosa)';
+    if (v <= 50) return 'Coqueteo con la fama';
+    if (v <= 75) return 'Lockhart en formación: ya practicas la firma en el vaho de los espejos';
+    if (v <= 90) return 'Gilderoy certificado: tu pelo tiene opiniones';
+    return 'Escribiste tu propia biografía mientras hacías esto. En tercera persona. Con notas al pie.';
+  }
+
+  function callbackLine(key) {
+    var m = {
+      bow: {
+        A: 'Mi reverencia fue perfecta. Lockhart dijo «casi». Llevo años intentando olvidar ese «casi».',
+        B: 'Hice la reverencia japonesa delante del inventor de la búlgara. El suelo, según él, «nunca ha comprado un libro». El suelo aún no ha respondido.',
+        C: 'No me incliné: miré fijo. Lockhart vendió tres mil ejemplares de esa mirada. Nunca me pagó derechos.',
+        D: 'Aprendí la reverencia búlgara desde el suelo, desde los pies de Snape y desde una disculpa pública que Lockhart me dictó «para el cierre emocional».'
+      },
+      duel: {
+        A: 'Le vi desarmarse a sí mismo con su propio rebote. Harry también lo vio. Acordamos no hablar nunca del asunto. Hablamos del asunto constantemente.',
+        B: 'Su hechizo me falló y le dio al retrato de Sir Cadogan, que desde entonces le grita «cobarde» cada vez que pasa. El retrato no se ha equivocado nunca más en nada.',
+        C: 'Le desarmé antes de la cuenta de tres. Escribió un capítulo entero: «La cuenta de tres es una sugerencia». Mi nombre aparece en los agradecimientos. Con una falta de ortografía. Es tradición.',
+        D: 'Caí con dramatismo olímpico y Lockhart aún usa mi caída en sus conferencias. Cobra por caída. Yo cobro un porcentaje. En visibilidad.'
+      },
+      snake: {
+        A: 'Vi a Lockhart ganar un duelo de bostezos contra una serpiente. La serpiente se fue aburrida. Él lo llamó «guerra psicológica».',
+        B: 'Hice desaparecer a la serpiente antes de que Lockhart pudiera «dominarla». Me dio las gracias por hacer exactamente lo que él iba a hacer. Aún lo cree.',
+        C: 'Hablé pársel delante de todo el club y la serpiente me hizo una reverencia. Harry aún no me ha perdonado que le robara lo suyo.',
+        D: 'Una serpiente me usó de bufanda. Lockhart lo llamó «la portada del libro». Nunca estuve tan abrigado ni tan fotografiado.'
+      },
+      spell: {
+        A: 'Pedí datos de sus estudios. Me remitió a «Estudios que realicé: una autobiografía académica». La categoría «Libros que escribí sobre mí mismo» se creó para él. No había otros candidatos. Sigue sin haberlos.',
+        B: 'Vi Protego Lockhartus en acción: un escudo que protege el peinado. Snape lo llamó «lo único útil que ha hecho en su vida». Fue lo más parecido a un cumplido que ha emitido nunca.',
+        C: 'Defendí el Protego normal. Lockhart me miró como si hubiera defendido la lluvia normal. Supongo que, para él, era lo mismo.',
+        D: 'Coinventé Protego Lockhartus Duo. Mi crédito de coautor está en la página cuatrocientos, en agradecimientos, con una falta de ortografía. Es tradición.'
+      },
+      tool: {
+        A: 'Elegí el espejo para que no mirara al basilisco a los ojos. Lo usó para consultarse la moral. La moral, dijo, «no se mira más de tres segundos sin sentirse más seguro».',
+        B: 'Elegí su libro «Basiliscos: cómo no morir» como herramienta. La dedicatoria le hizo llorar: «Para Gilderoy, sin el cual este libro no existiría. Literalmente». La ha leído cuarenta veces. Las conté.',
+        C: 'Cargué la cámara para documentarlo todo. Lo documenté todo. Sobre todo el pelo. El pelo siempre ganaba.',
+        D: 'Propuse un contrato notarial por si el basilisco demandaba. Lockhart lo llamó «lo más bonito que me han dicho desde que mi madre dijo que al menos era alto». El basilisco nunca firmó. El basilisco nunca lee la letra pequeña.'
+      },
+      colin: {
+        A: 'Detuve a Lockhart antes de que posara junto a un niño petrificado. «La tragedia también es una oportunidad», susurró. «Pero bien: luego, con mejor luz». McGonagall me miró con algo que, en ella, casi era gratitud.',
+        B: 'Dejé que posara junto a Colin «en señal de respeto». Harry dijo: «Está rindiendo homenaje. A su manera. Su manera es horrible, pero está rindiendo homenaje». Nunca estuve tan de acuerdo y tan en contra a la vez.',
+        C: 'En la foto de Colin aparecía un mechón de pelo rubio perfecto huyendo de la escena. «Ese pelo no es mío», dijo Lockhart. «El mío no huye: el mío llega». Aún tengo la foto. Aún tengo la duda.',
+        D: 'Cubrí a Colin con mi capa. Lockhart no supo qué hacer con la cara e hizo lo único que sabe: sonreír. Pero más bajito. Fue la primera vez que le vi usar la sonrisa para algo.'
+      },
+      pack: {
+        A: 'Metí primero los productos para el pelo. «La maleta puede esperar: el pelo no», dijo. Y tenía razón: la maleta sigue esperando.',
+        B: 'Cargué ochenta kilos de sus libros. «Delego el peso y me quedo con la gloria», explicó. «Es justo: la gloria pesa más». Mi espalda no está de acuerdo. Y mi espalda, a diferencia de Lockhart, nunca miente.',
+        C: 'Propuse viajar ligero. Me contó lo de 1979. Hay fotos. Las quema y vuelven. He dejado de preguntar.',
+        D: 'Metí el manual de la reverencia búlgara. El manual es falso: la reverencia no se enseña, se elige. Yo elegí mal, pero elegí con estilo.'
+      },
+      escape: {
+        A: 'Lockhart dignificó la huida con una reverencia búlgara a Filch. Algo en su espalda sonó a mobiliario. Se convirtió en estatua estratégica. Peeves aún le lleva flores.',
+        B: 'Sobornamos a Peeves con sus zapatos. Huyó descalzo y digno. Filch lo apuntó todo en un cuaderno muy pequeño, con una satisfacción muy grande.',
+        C: 'Grité yo mismo que Lockhart huía. Peeves lloró de emoción: «¡Por fin un profesor con honestidad!». Esa noche la verdad vendió más que él. Fue la única noche.',
+        D: 'Me escondí detrás de una maleta de ochenta kilos. La señora Norris husmeó «Mis vacaciones con las arpías» y perdió el interés. Lockhart escribió el capítulo doce desde dentro de una armadura.'
+      },
+      truth: {
+        A: 'Le pedí su razón. «La fama, obviamente», dijo. Y lo explicó tan bien que, durante tres segundos, casi lo entendí. Tres segundos. Los conté.',
+        B: 'Le dije a la cara que era un fraude. Preguntó desde cuándo lo sabía. «Desde el duelo», dije. «Te desarmaste solo». Se quedó callado. Y me pidió que me quedara: «Los fraudes también necesitamos aprendices: sois los únicos que nos corregís».',
+        C: 'Le dije que su razón era el miedo. No lo negó: «El miedo no vende libros, aprendiz: el miedo los compra. Hay una diferencia y es toda mi carrera». Fue la frase más honesta que dijo nunca. La dijo sin darse cuenta.',
+        D: 'Le dije que seguía siendo mi profesor. Me miró como si le hubiera devuelto su propia máscara y le hubiera dicho que le quedaba bien. Supongo que fue exactamente eso.'
+      }
+    };
+    return (m[key] && m[key][FLAGS[key]]) || '';
+  }
+
+  function buildMemoir() {
+    act('Epílogo · Las Memorias', 'Lo que quedó escrito. Lo que quedó callado. Lo que quedó peinado.');
+    var idx = Math.max(4, Math.min(100, Math.round(vanity * 4 + (rel.accomplice * 3) + (rel.loyal * 2))));
+    if (route === 'D') idx = Math.max(idx, 66);
+
+    var titles = {
+      A: 'MEMORIAS DE ' + NAME.toUpperCase() + ': 70-30 (EN EL MEJOR DE LOS CASOS)',
+      B: 'LA CAÍDA DE GILDEROY: TESTIMONIO DE ' + NAME.toUpperCase() + ' (CON RECIBOS)',
+      C: 'LA CÁMARA, EL FRAUDE Y YO: HISTORIA VERDADERA DE ' + NAME.toUpperCase() + ' (CASI)',
+      D: 'LO QUE OLVIDÉ POR ÉL: CONFESIONES DE ' + NAME.toUpperCase()
+    };
+
+    var openings = {
+      A: 'Fui el aprendiz que cargó la maleta, el tronco y la reputación de Gilderoy Lockhart. A cambio recibí un setenta por ciento de nada, una dedicatoria con falta de ortografía y la certeza de que la gloria, efectivamente, pesa más.',
+      B: 'Lo supe desde el principio: desde la reverencia, desde el duelo, desde el pelo que nunca se despeinaba ni con la verdad delante. En vez de callarme, lo dije en voz alta. Delante de todos. Delante de él.',
+      C: 'Arrastré a un fraude hasta la Cámara de los Secretos porque alguien tenía que asegurarse de que la historia tuviera testigos. La historia los tuvo. El fraude también, aunque ya no recuerde ninguno.',
+      D: 'Hay una varita en mi bolsillo que ha borrado una memoria entera. No fue por crueldad: fue por supervivencia. Pero desde entonces duermo con la luz encendida y el pelo de otro en la cabeza.'
+    };
+
+    var closings = {
+      A: 'Cuando todo terminó, el libro fue nuestro. 70-30. Hoy es 90-10 y él lo llama «sociedad justa». Firmo donde me dice. Sonrío donde me dice. El pelo, como siempre, en la portada.',
+      B: 'Le expuse delante de todos. Sonrió a las cámaras que no estaban y me llamó «una imitación excelente de alguien envidioso». McGonagall dijo «mi despacho, ahora». La sonrisa no se rompió: solo se hizo más pequeña. Fue la última vez que la vi a tamaño completo.',
+      C: 'Dentro de la Cámara, su varita prestada retrocedió. Cuando el polvo se asentó, estaba sentado entre los escombros, sereno. «¿Quién soy? ¿Dónde estoy? …Ah. Esto sí lo recuerdo. Esto siempre fue mío». Se tocaba el pelo. Fue lo único que sobrevivió a la explosión. Fue lo único que siempre fue suyo.',
+      D: 'Mi Obliviate llegó antes que el suyo. Me dio las gracias: «Me siento ligero. Como si hubiera olvidado algo muy pesado». No sabe qué. Yo sí. Ahora soy yo quien lo carga, y entiendo, demasiado tarde, por qué él nunca lo soltó: la verdad pesa ochenta kilos. Como los libros. Como la maleta. Como todo lo que cargué por él.'
+    };
+
+    var quotes = {
+      A: '«La gloria pesa más que la maleta. Las dos las cargué yo.»',
+      B: '«La sonrisa no se rompió: solo se hizo más pequeña. Aún la oigo.»',
+      C: '«El pelo siempre fue suyo. Fue lo único que lo fue.»',
+      D: '«La verdad pesa ochenta kilos. Ahora sé por qué nunca la soltó.»'
+    };
+
+    var order = ['escape', 'colin', 'pack', 'truth', 'bow', 'snake', 'spell', 'duel', 'tool'];
+    var picked = [];
+    for (var i = 0; i < order.length && picked.length < 3; i++) {
+      var line = callbackLine(order[i]);
+      if (line) picked.push(line);
+    }
+
+    var bookTitle = idx <= 40
+      ? '«La Cámara Secreta: la historia de un héroe»'
+      : (idx <= 70
+        ? '«La Cámara Secreta: la historia de un héroe (dictada por el héroe)»'
+        : '«La Cámara Secreta: la historia de un héroe (dictada por el héroe, cargada por el aprendiz y corregida por nadie, porque no hay nadie más valiente)»');
+
+    var body = openings[route] + '\n\n' + picked.join('\n\n') + '\n\nTodo ello quedó recogido en ' + bookTitle + '. Lockhart insiste en que el libro es «rigurosamente cierto». Yo insisto en que el libro existe. Ambos tenemos razón.';
+
+    document.getElementById('memoirIndex').textContent = idx + '% Lockhart';
+    document.getElementById('memoirTier').textContent = tier(idx);
+    document.getElementById('memoirTitle').textContent = titles[route];
+    document.getElementById('memoirBody').textContent = body;
+    document.getElementById('memoirQuote').textContent = quotes[route];
+
+    var nameInput = document.getElementById('memoirName');
+    var sign = document.getElementById('memoirSign');
+    try { nameInput.value = localStorage.getItem('hpoal_user_name') || ''; } catch (e) {}
+    function syncSign() {
+      var v = (nameInput.value || '').trim() || NAME;
+      sign.textContent = '— ' + v + ', aprendiz de nada y testigo de todo · Olor a Libros';
+      try { localStorage.setItem('hpoal_user_name', v); } catch (e) {}
+    }
+    nameInput.oninput = syncSign;
+    syncSign();
+
+    finalWrap.classList.remove('hidden');
+    if (typeof finalWrap.scrollIntoView === 'function') {
+      finalWrap.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'nearest' });
+    }
+    if (window.SucursalSound && window.SucursalSound.chime) window.SucursalSound.chime();
+  }
+
+  document.getElementById('btnCopy').addEventListener('click', function () {
+    var idx = document.getElementById('memoirIndex').textContent;
+    var tierTxt = document.getElementById('memoirTier').textContent;
+    var quote = document.getElementById('memoirQuote').textContent;
+    var name = (document.getElementById('memoirName').value || '').trim() || NAME;
+    var txt = '🎭 ' + idx + ' · ' + tierTxt + '\n' + quote + '\n— ' + name + ', Olor a Libros · Sucursal de Hogwarts';
+    function fallback(t) {
+      var ta = document.createElement('textarea');
+      ta.value = t; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); if (window.toastMsg) window.toastMsg('✨ Memorias copiadas'); } catch (e) { if (window.toastMsg) window.toastMsg('Pulsa Ctrl+C para copiar'); }
+      document.body.removeChild(ta);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(function () { if (window.toastMsg) window.toastMsg('✨ Memorias copiadas'); }).catch(function () { fallback(txt); });
+    } else fallback(txt);
+  });
+
+  document.getElementById('btnReplay').addEventListener('click', function () {
+    if (window.SucursalSound && window.SucursalSound.page) window.SucursalSound.page();
+    prologue();
+  });
+
+  setTimeout(prologue, 400);
+})();
+</script>
+</body>
+</html>

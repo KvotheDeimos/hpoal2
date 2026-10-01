@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Liberación de Dobby · Olor a Libros</title>
+<meta name="description" content="Una experiencia narrativa, psicológica e inmersiva sobre el momento en que un calcetín desparejado cambió el destino de un elfo doméstico.">
+<meta name="theme-color" content="#07050a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<style>
+.dobby-page {
+  position: relative; min-height: 100vh; min-height: 100svh;
+  display: flex; flex-direction: column; justify-content: space-between;
+  background:
+    radial-gradient(1100px 550px at 50% 100%, #150903 0%, transparent 65%),
+    linear-gradient(180deg, #07040a 0%, #0c0813 45%, #050207 100%);
+  color: var(--ivory); overflow-x: hidden;
+  transition: background 1.8s ease;
+}
+
+.dobby-page.liberated {
+  background:
+    radial-gradient(1200px 700px at 50% 85%, rgba(255, 218, 125, 0.28) 0%, rgba(212, 169, 78, 0.1) 50%, transparent 80%),
+    linear-gradient(180deg, #160c20 0%, #22132b 45%, #140a18 100%);
+}
+
+.topbar-dobby {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px var(--sp-5); max-width: 1200px; margin: 0 auto; width: 100%;
+  position: relative; z-index: 10;
+}
+.crumbs-dobby {
+  display: flex; align-items: center; gap: 8px; font-size: .88rem; color: #caa96a;
+}
+.crumbs-dobby a { color: #caa96a; text-decoration: none; transition: color .2s; }
+.crumbs-dobby a:hover { color: #fcedba; }
+.crumbs-dobby span { opacity: .5; }
+
+.dobby-stage {
+  max-width: 880px; margin: 0 auto; padding: var(--sp-3) var(--sp-4) var(--sp-8);
+  display: flex; flex-direction: column; align-items: center; width: 100%;
+  position: relative; z-index: 5;
+}
+
+.dobby-act-tracker {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+}
+.act-pill {
+  font: 700 .68rem 'Cinzel Decorative', serif; letter-spacing: .25em; text-transform: uppercase;
+  color: #caa96a; background: rgba(30, 16, 8, 0.6); border: 1px solid rgba(202, 169, 106, 0.3);
+  padding: 4px 14px; border-radius: 99px; transition: all .4s;
+}
+.dobby-page.liberated .act-pill {
+  border-color: #ffd700; color: #ffd700; box-shadow: 0 0 14px rgba(255, 215, 120, 0.4);
+}
+
+.dobby-title {
+  font: 900 clamp(1.8rem, 4.5vw, 2.9rem) 'Cinzel Decorative', serif;
+  background: linear-gradient(135deg, #f7eed8 0%, #caa96a 55%, #8f602b 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  margin: 0 0 6px; text-align: center; line-height: 1.15;
+}
+.dobby-subtitle {
+  font: italic 1.05rem 'IM Fell English', serif; color: #a39585; text-align: center;
+  max-width: 600px; margin-bottom: 20px; line-height: 1.45;
+}
+
+.hearth-chamber {
+  position: relative; width: 100%; max-width: 720px;
+  background: radial-gradient(ellipse at 50% 90%, #1a0c04 0%, #0d0603 55%, #050201 100%);
+  border: 2px solid #2b180a; border-radius: 18px;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.95), inset 0 0 60px rgba(0,0,0,0.9);
+  padding: 32px 26px 28px; display: flex; flex-direction: column; align-items: center;
+  overflow: hidden; transition: border-color 1.4s, box-shadow 1.4s;
+}
+.dobby-page.liberated .hearth-chamber {
+  border-color: rgba(212, 169, 78, 0.55);
+  box-shadow: 0 28px 80px rgba(0,0,0,0.95), 0 0 50px rgba(255, 215, 120, 0.25), inset 0 0 70px rgba(255, 180, 50, 0.12);
+}
+
+.embers-glow {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 130px;
+  background: radial-gradient(circle at 50% 100%, rgba(220, 70, 15, 0.4) 0%, rgba(140, 30, 5, 0.15) 50%, transparent 80%);
+  pointer-events: none; opacity: 0.65;
+  animation: emberPulse 4.5s ease-in-out infinite alternate;
+  transition: opacity 1.2s;
+}
+.dobby-page.liberated .embers-glow {
+  background: radial-gradient(circle at 50% 100%, rgba(255, 195, 60, 0.65) 0%, rgba(220, 120, 20, 0.28) 50%, transparent 80%);
+  opacity: 1;
+}
+@keyframes emberPulse {
+  0% { opacity: 0.5; transform: scaleY(0.96); }
+  100% { opacity: 0.85; transform: scaleY(1.06); }
+}
+
+.dobby-figure-wrap {
+  position: relative; width: 180px; height: 180px; margin: 0 auto 16px;
+  display: flex; align-items: center; justify-content: center;
+  filter: drop-shadow(0 14px 26px rgba(0,0,0,0.92));
+  transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), filter 1.2s;
+  cursor: pointer;
+}
+.dobby-figure-wrap:hover { transform: scale(1.05); }
+.dobby-page.liberated .dobby-figure-wrap {
+  filter: drop-shadow(0 0 32px rgba(255, 220, 130, 0.5)) drop-shadow(0 14px 28px rgba(0,0,0,0.9));
+}
+
+.head-bash { animation: headBashAnim .45s ease-in-out 3; }
+@keyframes headBashAnim {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(12px) rotate(-6deg); }
+}
+
+.dobby-ear-l, .dobby-ear-r {
+  transform-origin: 50% 45%;
+  transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.ears-droop .dobby-ear-l { transform: rotate(-20deg) translateY(7px); animation: earTrembleL 2.8s ease-in-out infinite; }
+.ears-droop .dobby-ear-r { transform: rotate(20deg) translateY(7px); animation: earTrembleR 2.8s ease-in-out infinite; }
+@keyframes earTrembleL {
+  0%, 100% { transform: rotate(-20deg) translateY(7px); }
+  50% { transform: rotate(-24deg) translateY(9px); }
+}
+@keyframes earTrembleR {
+  0%, 100% { transform: rotate(20deg) translateY(7px); }
+  50% { transform: rotate(24deg) translateY(9px); }
+}
+
+.ears-wings .dobby-ear-l { transform: rotate(28deg) translateY(-8px) scale(1.08); animation: earFlapL 1.2s ease-in-out infinite alternate; }
+.ears-wings .dobby-ear-r { transform: rotate(-28deg) translateY(-8px) scale(1.08); animation: earFlapR 1.2s ease-in-out infinite alternate; }
+@keyframes earFlapL { 0% { transform: rotate(24deg) translateY(-8px); } 100% { transform: rotate(34deg) translateY(-12px); } }
+@keyframes earFlapR { 0% { transform: rotate(-24deg) translateY(-8px); } 100% { transform: rotate(-34deg) translateY(-12px); } }
+
+.ears-dignity .dobby-ear-l { transform: rotate(12deg) translateY(-3px); }
+.ears-dignity .dobby-ear-r { transform: rotate(-12deg) translateY(-3px); }
+
+.ears-flutter .dobby-ear-l { animation: earDanceL .35s ease-in-out infinite alternate; }
+.ears-flutter .dobby-ear-r { animation: earDanceR .35s ease-in-out infinite alternate; }
+@keyframes earDanceL { 0% { transform: rotate(-5deg); } 100% { transform: rotate(28deg) translateY(-8px); } }
+@keyframes earDanceR { 0% { transform: rotate(5deg); } 100% { transform: rotate(-28deg) translateY(-8px); } }
+
+.dobby-eye-tear { opacity: 0; transition: opacity .8s; }
+.dobby-page.liberated .dobby-eye-tear { opacity: 0.95; }
+
+.dialogue-bubble {
+  position: relative; width: 100%; max-width: 620px;
+  background: rgba(18, 10, 6, 0.85); border: 1.5px solid rgba(202, 169, 106, 0.35);
+  border-radius: 12px; padding: 22px 24px; min-height: 96px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+  display: flex; flex-direction: column; gap: 8px;
+  transition: all .6s ease;
+}
+.dobby-page.liberated .dialogue-bubble {
+  background: rgba(28, 15, 8, 0.9);
+  border-color: rgba(255, 215, 120, 0.55);
+  box-shadow: 0 12px 36px rgba(0,0,0,0.8), 0 0 24px rgba(255, 215, 120, 0.15);
+}
+
+.speaker-header {
+  display: flex; justify-content: space-between; align-items: center; width: 100%;
+}
+.speaker-label {
+  font: 700 .72rem 'Cinzel Decorative', serif; letter-spacing: .24em; text-transform: uppercase;
+  color: #caa96a;
+}
+.speaker-mood {
+  font: italic .86rem 'IM Fell English', serif; color: #a8947c;
+}
+
+.speech-text {
+  font: italic 1.15rem/1.65 'IM Fell English', serif; color: #f4ecdf;
+  margin: 0; min-height: 52px;
+}
+
+.lucius-box {
+  display: none; background: rgba(10, 18, 12, 0.94);
+  border: 1.5px solid #2e8540; border-radius: 8px; padding: 14px 20px;
+  color: #c6f8d0; font: italic 1.08rem 'IM Fell English', serif;
+  box-shadow: 0 8px 26px rgba(0,0,0,0.88), 0 0 16px rgba(46,133,64,0.2);
+  margin-bottom: 14px; width: 100%; max-width: 620px;
+  animation: calloutSlide .5s ease;
+}
+.lucius-box.on { display: block; }
+@keyframes calloutSlide { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+.silence-pause {
+  display: none; align-items: center; justify-content: center; gap: 10px;
+  font: italic 1.1rem 'IM Fell English', serif; color: #c4b097;
+  padding: 20px 0 10px; letter-spacing: .08em;
+}
+.silence-pause.on { display: flex; }
+.silence-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: #ffd700;
+  box-shadow: 0 0 8px #ffd700; animation: dotPulse 1.4s ease-in-out infinite;
+}
+.silence-dot:nth-child(2) { animation-delay: .25s; }
+.silence-dot:nth-child(3) { animation-delay: .5s; }
+@keyframes dotPulse {
+  0%, 100% { opacity: .2; transform: scale(.7); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+
+.interactive-prompt-box {
+  width: 100%; max-width: 640px; margin-top: 20px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.prompt-instruction {
+  font: italic 1.02rem 'EB Garamond', serif; color: #caa96a; text-align: center;
+  background: rgba(36, 19, 8, 0.5); border: 1px dashed rgba(202, 169, 106, 0.35);
+  border-radius: 8px; padding: 10px 18px; margin-bottom: 4px;
+}
+
+.action-card-btn {
+  display: flex; align-items: flex-start; gap: 14px; padding: 14px 18px;
+  background: linear-gradient(135deg, rgba(28, 17, 10, 0.9) 0%, rgba(16, 9, 5, 0.98) 100%);
+  border: 1.5px solid rgba(202, 169, 106, 0.35); border-radius: 10px;
+  color: #efe5d5; cursor: pointer; text-align: left;
+  transition: all .35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+}
+.action-card-btn:hover {
+  transform: translateY(-2px) scale(1.01);
+  border-color: #ffd700;
+  background: linear-gradient(135deg, rgba(46, 28, 14, 0.95) 0%, rgba(26, 15, 8, 0.98) 100%);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.8), 0 0 20px rgba(212, 169, 78, 0.3);
+}
+.action-card-btn .act-ico {
+  font-size: 1.5rem; line-height: 1; flex-shrink: 0; padding-top: 2px;
+}
+.action-card-btn .act-content { display: flex; flex-direction: column; gap: 3px; }
+.action-card-btn .act-tag {
+  font: 700 .68rem 'Cinzel Decorative', serif; letter-spacing: .18em; text-transform: uppercase;
+  color: #caa96a;
+}
+.action-card-btn .act-title {
+  font: 600 1.05rem 'EB Garamond', serif; color: #fff; margin: 0; line-height: 1.35;
+}
+.action-card-btn:hover .act-title { color: #fcedba; }
+
+.gift-phase {
+  display: none; flex-direction: column; align-items: center; text-align: center;
+  width: 100%; margin-top: 20px; animation: giftFadeIn 1.2s ease forwards;
+}
+.gift-phase.on { display: flex; }
+@keyframes giftFadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+.sock-relic-box {
+  width: 140px; height: 140px; margin: 16px 0;
+  display: grid; place-items: center; border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, rgba(255, 235, 170, 0.25), rgba(30, 16, 8, 0.9) 70%);
+  border: 2px solid #ffd700;
+  box-shadow: 0 0 45px rgba(255, 215, 120, 0.65), inset 0 0 25px rgba(255, 215, 120, 0.35);
+  animation: sockFloat 4s ease-in-out infinite; cursor: pointer;
+  transition: transform .3s;
+}
+.sock-relic-box:hover { transform: scale(1.08) rotate(3deg); }
+.sock-relic-box svg {
+  width: 90px; height: 90px; filter: drop-shadow(0 6px 14px rgba(0,0,0,0.85));
+}
+@keyframes sockFloat {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-8px) rotate(3deg); }
+}
+
+.sock-motto {
+  font: italic 1.2rem 'IM Fell English', serif; color: #ffd700;
+  margin: 6px 0 16px; max-width: 500px; text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+}
+
+.share-card-container {
+  display: none; flex-direction: column; align-items: center; width: 100%;
+  margin-top: 28px; animation: cardSlideUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+.share-card-container.on { display: flex; }
+@keyframes cardSlideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+.dobby-trophy-card {
+  width: min(540px, 94vw);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(255, 215, 120, 0.18), transparent 70%),
+    linear-gradient(180deg, #180e08 0%, #100804 50%, #080402 100%);
+  border: 2px solid #d4a94e; border-radius: 14px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 35px rgba(212, 169, 78, 0.35);
+  padding: 32px 26px; text-align: center; position: relative;
+}
+.dobby-trophy-card::before {
+  content: ''; position: absolute; inset: 7px; border: 1px dashed rgba(212, 169, 78, 0.4);
+  border-radius: 9px; pointer-events: none;
+}
+
+.trophy-badge {
+  font: 700 .7rem 'Cinzel Decorative', serif; letter-spacing: .25em; text-transform: uppercase;
+  color: #ffd700; margin-bottom: 8px;
+}
+.trophy-headline {
+  font: 900 1.9rem 'Cinzel Decorative', serif; color: #fcedba;
+  margin: 0 0 6px; text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+}
+.trophy-subhead {
+  font: italic 1.15rem 'IM Fell English', serif; color: #dfd2be; margin: 0 0 16px;
+}
+.trophy-quote {
+  font: italic 1.1rem/1.65 'IM Fell English', serif; color: #f0e2cc;
+  background: rgba(0,0,0,0.45); border-left: 3px solid #ffd700;
+  border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 0 0 16px; text-align: left;
+}
+
+.trophy-name-row {
+  margin: 14px 0 10px; display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.trophy-name-lbl {
+  font: 700 .68rem 'Cinzel Decorative', serif; letter-spacing: .18em; text-transform: uppercase;
+  color: #caa96a;
+}
+.trophy-name-input {
+  width: min(290px, 85%); padding: 9px 14px; border-radius: 6px;
+  background: rgba(10, 6, 3, 0.7); border: 1.2px solid rgba(212, 169, 78, 0.5);
+  color: #ffd700; font: 600 1rem 'EB Garamond', serif; text-align: center;
+  outline: none; transition: border-color .3s, box-shadow .3s;
+}
+.trophy-name-input:focus {
+  border-color: #ffd700; box-shadow: 0 0 14px rgba(255, 215, 120, 0.4);
+}
+.trophy-sign {
+  font: 600 .92rem 'EB Garamond', serif; color: #caa96a; text-align: right; margin: 4px 0 0;
+}
+
+.action-row {
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 24px;
+}
+.act-btn {
+  padding: 12px 22px; border-radius: 8px; font: 700 .82rem 'Cinzel Decorative', serif;
+  letter-spacing: .12em; text-transform: uppercase; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
+  transition: all .3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.act-btn-gold {
+  background: linear-gradient(180deg, #d4a94e 0%, #a07828 100%);
+  color: #1a0e04; border: 1.5px solid #ffe380;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.7), 0 0 16px rgba(212, 169, 78, 0.3);
+}
+.act-btn-gold:hover {
+  transform: translateY(-2px); background: linear-gradient(180deg, #f0c568 0%, #b88a32 100%);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.8), 0 0 24px rgba(255, 215, 120, 0.5);
+}
+.act-btn-ghost {
+  background: rgba(255,255,255,0.04); color: #caa96a;
+  border: 1.5px solid rgba(202, 169, 106, 0.4);
+}
+.act-btn-ghost:hover {
+  background: rgba(202, 169, 106, 0.15); color: #fcedba; border-color: #ffd700;
+  transform: translateY(-2px);
+}
+
+.interaction-hint {
+  text-align: center; font: italic .9rem 'IM Fell English', serif; color: #a8947c;
+  margin-top: 12px; opacity: 0; transition: opacity .6s;
+}
+.interaction-hint.on { opacity: 1; }
+
+@media (max-width: 600px) {
+  .hearth-chamber { padding: 22px 16px; }
+  .action-row { flex-direction: column; width: 100%; }
+  .act-btn { justify-content: center; width: 100%; }
+}
+</style>
+</head>
+<body class="dobby-page" id="dobbyPage">
+<div class="grain" aria-hidden="true"></div>
+<div class="toast" id="toast" role="status"></div>
+
+<header class="topbar-dobby">
+  <nav class="crumbs-dobby" aria-label="Ruta de navegación">
+    <a href="index.html">🏰 Gran Comedor</a>
+    <span>/</span>
+    <span>Libro II · Cap. 18</span>
+    <span>/</span>
+    <b style="color:#ffd700">🧦 La Liberación de Dobby</b>
+  </nav>
+  <div style="display:flex;gap:10px;align-items:center;">
+    <a href="index.html" class="act-btn act-btn-ghost" style="padding:7px 14px;font-size:.74rem">Volver al castillo</a>
+  </div>
+</header>
+
+<main class="dobby-stage">
+  <div class="dobby-act-tracker">
+    <span class="act-pill" id="actBadge">Prólogo · La Llegada</span>
+  </div>
+  <h1 class="dobby-title">El Don de la Libertad</h1>
+  <p class="dobby-subtitle" id="actSubtitle">En las sombras de una chimenea apagada, un elfo aguarda. Las decisiones que cambian una vida no se toman con varitas, sino con dignidad.</p>
+
+  <section class="hearth-chamber" aria-label="Cámara de la chimenea">
+    <div class="embers-glow" aria-hidden="true"></div>
+
+    <div class="dobby-figure-wrap ears-droop" id="dobbyFigure" role="img" aria-label="Dobby el elfo doméstico">
+      <svg viewBox="0 0 160 160" width="100%" height="100%" id="dobbySvg">
+        <defs>
+          <radialGradient id="dSkin" cx="40%" cy="35%" r="65%">
+            <stop offset="0%" stop-color="#dfcfb8"/>
+            <stop offset="65%" stop-color="#b8a184"/>
+            <stop offset="100%" stop-color="#8c755c"/>
+          </radialGradient>
+          <radialGradient id="dEye" cx="35%" cy="30%" r="70%">
+            <stop offset="0%" stop-color="#a3e635"/>
+            <stop offset="55%" stop-color="#4d7c0f"/>
+            <stop offset="100%" stop-color="#1a2e05"/>
+          </radialGradient>
+        </defs>
+
+        <ellipse cx="80" cy="148" rx="42" ry="7" fill="rgba(0,0,0,0.6)"/>
+
+        <g class="dobby-ear-l" id="earL">
+          <path d="M52,65 C32,58 6,48 2,36 C1,33 4,32 10,34 C26,40 45,54 56,66 Z" fill="url(#dSkin)" stroke="#6d5843" stroke-width="1.2"/>
+          <path d="M46,62 C30,55 14,46 10,39 C14,40 28,48 48,60 Z" fill="#c49a88" opacity=".7"/>
+        </g>
+
+        <g class="dobby-ear-r" id="earR">
+          <path d="M108,65 C128,58 154,48 158,36 C159,33 156,32 150,34 C134,40 115,54 104,66 Z" fill="url(#dSkin)" stroke="#6d5843" stroke-width="1.2"/>
+          <path d="M114,62 C130,55 146,46 150,39 C146,40 132,48 112,60 Z" fill="#c49a88" opacity=".7"/>
+        </g>
+
+        <path d="M55,95 L40,144 C42,146 118,146 120,144 L105,95 Z" fill="#6e6255" stroke="#3d352c" stroke-width="1.5"/>
+        <path d="M52,94 C65,102 95,102 108,94 L100,142 C85,145 75,145 60,142 Z" fill="#544a3f" opacity=".6"/>
+        <circle cx="68" cy="115" r="4.5" fill="#382e25" opacity=".7"/>
+        <circle cx="92" cy="128" r="6" fill="#382e25" opacity=".7"/>
+        <path d="M85,140 L88,145 L82,145 Z" fill="#201a14"/>
+
+        <g id="dobbyHeadGroup">
+          <path d="M72,82 L88,82 L90,95 L70,95 Z" fill="url(#dSkin)"/>
+          <ellipse cx="80" cy="68" rx="27" ry="24" fill="url(#dSkin)" stroke="#6d5843" stroke-width="1.2"/>
+          <path d="M80,64 L77,77 C77,80 83,80 83,77 Z" fill="#a89278" stroke="#5a4532" stroke-width="1"/>
+
+          <ellipse cx="68" cy="62" rx="9" ry="11" fill="#fffef5" stroke="#4a3725" stroke-width="1.4"/>
+          <circle cx="68" cy="62" r="7.2" fill="url(#dEye)"/>
+          <circle cx="68" cy="62" r="3.2" fill="#0c1602"/>
+          <circle cx="66" cy="59" r="1.8" fill="#ffffff"/>
+          <path class="dobby-eye-tear" d="M68,73 C66,77 65,81 68,83 C71,81 70,77 68,73 Z" fill="#88e0ff"/>
+
+          <ellipse cx="92" cy="62" rx="9" ry="11" fill="#fffef5" stroke="#4a3725" stroke-width="1.4"/>
+          <circle cx="92" cy="62" r="7.2" fill="url(#dEye)"/>
+          <circle cx="92" cy="62" r="3.2" fill="#0c1602"/>
+          <circle cx="90" cy="59" r="1.8" fill="#ffffff"/>
+          <path class="dobby-eye-tear" d="M92,73 C90,77 89,81 92,83 C95,81 94,77 92,73 Z" fill="#88e0ff"/>
+
+          <path id="dobbyMouth" d="M72,83 Q80,85 88,83" fill="none" stroke="#543c29" stroke-width="2" stroke-linecap="round"/>
+        </g>
+
+        <g id="dobbyHands">
+          <ellipse cx="73" cy="108" rx="6" ry="4" fill="url(#dSkin)"/>
+          <ellipse cx="87" cy="108" rx="6" ry="4" fill="url(#dSkin)"/>
+          <path d="M70,108 Q80,114 90,108" fill="none" stroke="#6d5843" stroke-width="1.5"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="lucius-box" id="luciusBox" role="alert"></div>
+
+    <div class="dialogue-bubble" id="dialogueBubble">
+      <div class="speaker-header">
+        <span class="speaker-label" id="speakerLabel">Dobby</span>
+        <span class="speaker-mood" id="speakerMood">Encogido y tembloroso</span>
+      </div>
+      <p class="speech-text" id="speechText"></p>
+    </div>
+
+    <div class="interaction-hint" id="interactionHint">Haz clic en Dobby para hablar con él</div>
+
+    <div class="silence-pause" id="silencePause">
+      <span id="silenceLabel">El tiempo se detiene…</span>
+      <span class="silence-dot"></span>
+      <span class="silence-dot"></span>
+      <span class="silence-dot"></span>
+    </div>
+
+    <div class="interactive-prompt-box" id="promptBox"></div>
+
+    <div class="gift-phase" id="giftPhase">
+      <div class="sock-relic-box" id="sockRelic" title="Haz clic para examinar el calcetín">
+        <svg viewBox="0 0 100 100">
+          <defs>
+            <radialGradient id="sockGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#fff6cc"/>
+              <stop offset="50%" stop-color="#ffd566"/>
+              <stop offset="100%" stop-color="#c4902a"/>
+            </radialGradient>
+          </defs>
+          <path d="M36,16 L66,19 L61,56 C61,64 70,72 82,75 C88,77 88,86 80,88 C66,91 46,88 35,75 C27,65 29,52 33,44 Z" fill="#756b5f" stroke="#caa96a" stroke-width="2.5"/>
+          <path d="M36,16 L66,19 L64,26 L34,23 Z" fill="#998d7f"/>
+          <circle cx="46" cy="72" r="5.5" fill="#241c14" stroke="#e0caa0" stroke-width="1.2" stroke-dasharray="2 2"/>
+          <path d="M46,78 Q42,88 47,94" stroke="#ffd700" stroke-width="1.6" fill="none"/>
+          <path d="M72,70 Q76,66 82,70" stroke="#ffd700" stroke-width="1.6" fill="none"/>
+          <circle cx="48" cy="50" r="1.5" fill="#ffd700"/>
+        </svg>
+      </div>
+      <p class="sock-motto">«No es un objeto mágico. No tiene poder. Pero es tuyo.»</p>
+    </div>
+
+    <div class="share-card-container" id="shareCardContainer">
+      <article class="dobby-trophy-card" id="trophyCard">
+        <div class="trophy-badge">❖ Recuerdos de Hogwarts · Libro II</div>
+        <h2 class="trophy-headline">Dobby es libre.</h2>
+        <p class="trophy-subhead">Y te dejó un calcetín descosido.</p>
+        <blockquote class="trophy-quote" id="trophyQuote">
+          «Dobby nunca olvidará al señor. Dobby tiene un amigo.»
+        </blockquote>
+        <div class="trophy-name-row">
+          <label for="userNameInput" class="trophy-name-lbl">Tu firma en la historia:</label>
+          <input type="text" id="userNameInput" class="trophy-name-input" maxlength="28" placeholder="Tu nombre mágico" autocomplete="off" spellcheck="false">
+        </div>
+        <p class="trophy-sign" id="trophySignature">— Memoria de Olor a Libros</p>
+      </article>
+
+      <div class="action-row">
+        <button class="act-btn act-btn-gold" id="btnCopyCard" type="button">
+          📋 Copiar mi tarjeta
+        </button>
+        <button class="act-btn act-btn-ghost" id="btnReplay" type="button">
+          🔄 Volver a vivirlo
+        </button>
+        <a href="index.html" class="act-btn act-btn-ghost">
+          🏰 Volver al castillo
+        </a>
+      </div>
+    </div>
+
+  </section>
+</main>
+
+<script src="/magia.js" defer></script>
+<script>
+(function() {
+  'use strict';
+
+  var DOBBY_STORAGE_KEY = 'hpoal_dobby_freed_v4';
+  var DOBBY_CHOICE_KEY = 'hpoal_dobby_choice_v4';
+  var dobbyPage = document.getElementById('dobbyPage');
+  var dobbyFig = document.getElementById('dobbyFigure');
+  var dobbyHeadGroup = document.getElementById('dobbyHeadGroup');
+  var dobbyMouth = document.getElementById('dobbyMouth');
+  var dialogueBubble = document.getElementById('dialogueBubble');
+  var speakerLabel = document.getElementById('speakerLabel');
+  var speakerMood = document.getElementById('speakerMood');
+  var speechText = document.getElementById('speechText');
+  var luciusBox = document.getElementById('luciusBox');
+  var silencePause = document.getElementById('silencePause');
+  var silenceLabel = document.getElementById('silenceLabel');
+  var promptBox = document.getElementById('promptBox');
+  var giftPhase = document.getElementById('giftPhase');
+  var shareCardContainer = document.getElementById('shareCardContainer');
+  var trophyQuote = document.getElementById('trophyQuote');
+  var trophySignature = document.getElementById('trophySignature');
+  var userNameInput = document.getElementById('userNameInput');
+  var actBadge = document.getElementById('actBadge');
+  var actSubtitle = document.getElementById('actSubtitle');
+  var interactionHint = document.getElementById('interactionHint');
+
+  var REDUCED = false;
+  if (typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    REDUCED = true;
+  }
+
+  var savedUserName = 'Lector de Hogwarts';
+  try {
+    savedUserName = localStorage.getItem('ceremony_user_name') || localStorage.getItem('user_name') || localStorage.getItem('hpoal_user_name') || 'Lector de Hogwarts';
+  } catch (e) {}
+
+  if (userNameInput) {
+    userNameInput.value = savedUserName;
+    function syncName() {
+      var val = (userNameInput.value || '').trim() || 'Lector de Hogwarts';
+      if (trophySignature) trophySignature.textContent = '— ' + val + ', Olor a Libros';
+      try { localStorage.setItem('hpoal_user_name', val); } catch (e) {}
+    }
+    userNameInput.addEventListener('input', syncName);
+    syncName();
+  }
+
+  var hasFreedBefore = false;
+  var previousChoice = null;
+  var interactionCount = 0;
+  try {
+    hasFreedBefore = localStorage.getItem(DOBBY_STORAGE_KEY) === 'true';
+    previousChoice = localStorage.getItem(DOBBY_CHOICE_KEY);
+  } catch (e) {}
+
+  function typeText(text, speaker, mood, speed, cb) {
+    speakerLabel.textContent = speaker || 'Dobby';
+    speakerMood.textContent = mood || '';
+    speechText.textContent = '';
+    var i = 0;
+    var sp = speed || (REDUCED ? 4 : 22);
+    var timer = setInterval(function() {
+      speechText.textContent = text.slice(0, ++i);
+      if (i >= text.length) {
+        clearInterval(timer);
+        if (cb) cb();
+      }
+    }, sp);
+  }
+
+  function setEarState(stateClass) {
+    dobbyFig.classList.remove('ears-droop', 'ears-wings', 'ears-dignity', 'ears-flutter');
+    dobbyFig.classList.add(stateClass);
+  }
+
+  function setMouthSmile(smiling) {
+    if (dobbyMouth) {
+      dobbyMouth.setAttribute('d', smiling ? 'M70,82 Q80,94 90,82' : 'M72,83 Q80,85 88,83');
+    }
+  }
+
+  function triggerHeadBash() {
+    if (dobbyHeadGroup && !REDUCED) {
+      dobbyHeadGroup.classList.remove('head-bash');
+      void dobbyHeadGroup.offsetWidth;
+      dobbyHeadGroup.classList.add('head-bash');
+    }
+    if (window.SucursalSound && window.SucursalSound.thud) {
+      window.SucursalSound.thud();
+      setTimeout(function() { window.SucursalSound.thud(); }, 350);
+      setTimeout(function() { window.SucursalSound.thud(); }, 700);
+    }
+  }
+
+  function clearPrompts() {
+    promptBox.innerHTML = '';
+  }
+
+  function renderButtons(instruction, buttons) {
+    clearPrompts();
+    if (instruction) {
+      var ins = document.createElement('div');
+      ins.className = 'prompt-instruction';
+      ins.textContent = instruction;
+      promptBox.appendChild(ins);
+    }
+    buttons.forEach(function(b) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'action-card-btn';
+      btn.innerHTML = '<span class="act-ico">' + b.icon + '</span>'
+        + '<div class="act-content">'
+        + '<span class="act-tag">' + b.tag + '</span>'
+        + '<p class="act-title">' + b.title + '</p>'
+        + '</div>';
+      btn.addEventListener('click', function() {
+        clearPrompts();
+        b.action();
+      });
+      promptBox.appendChild(btn);
+    });
+    if (typeof promptBox.scrollIntoView === 'function') {
+      promptBox.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'nearest' });
+    }
+  }
+
+  /* ═══ PROLOGO: LLEGADA + INTERACCIÓN INICIAL ═══ */
+  function startPrologue() {
+    dobbyPage.classList.remove('liberated');
+    setEarState('ears-droop');
+    setMouthSmile(false);
+    luciusBox.classList.remove('on');
+    silencePause.classList.remove('on');
+    giftPhase.classList.remove('on');
+    shareCardContainer.classList.remove('on');
+    clearPrompts();
+    interactionCount = 0;
+
+    if (hasFreedBefore) {
+      actBadge.textContent = '❖ La Amistad que Perdura';
+      actSubtitle.textContent = 'Dobby todavía guarda aquel calcetín imperfecto. Las decisiones de libertad no se borran.';
+      setEarState('ears-dignity');
+      setMouthSmile(true);
+      typeText(
+        '«¡El señor ha vuelto! ¡Dobby sabía que el señor volvería! Dobby ha guardado el calcetín. Mire: todavía está descosido. Dobby no lo ha arreglado. Es perfecto así.»',
+        'Dobby',
+        'Con lágrimas de emoción serena',
+        22,
+        function() {
+          var availableChoices = [
+            { icon: '📜', tag: 'Vía I · La Astuta', title: 'Volver a burlar a Lucius Malfoy con el diario perforado.', action: function() { startChoiceA(); } },
+            { icon: '🤝', tag: 'Vía II · La Directa', title: 'Entregarle el calcetín mirándolo fijamente a los ojos.', action: function() { startChoiceB(); } },
+            { icon: '⚡', tag: 'Vía III · La Arriesgada', title: 'Desafiar abiertamente a Lucius y presenciar la magia de Dobby.', action: function() { startChoiceC(); } }
+          ].filter(function(c) {
+            var choiceKey = c.tag.includes('I ·') ? 'A' : (c.tag.includes('II ·') ? 'B' : 'C');
+            return choiceKey !== previousChoice;
+          });
+          renderButtons('¿Cómo deseas revivir este momento histórico?', availableChoices);
+        }
+      );
+      return;
+    }
+
+    actBadge.textContent = 'Prólogo · La Llegada';
+    actSubtitle.textContent = 'En la penumbra helada de la mansión Malfoy, algo pequeño te espera.';
+
+    typeText(
+      '«Dobby no debería estar aquí. Dobby ha venido a ver al señor antes de… antes de que sea demasiado tarde.»',
+      'Dobby',
+      'Encogido y tembloroso',
+      26,
+      function() {
+        interactionHint.classList.add('on');
+      }
+    );
+  }
+
+  /* ═══ INTERACCIÓN INICIAL: Clic en Dobby ═══ */
+  dobbyFig.addEventListener('click', function() {
+    if (interactionCount === 0 && !hasFreedBefore) {
+      interactionCount++;
+      interactionHint.classList.remove('on');
+      typeText(
+        '«El señor es amable al mirar a Dobby. Los amos nunca miran a Dobby, solo le gritan. Dobby… Dobby quería darle algo al señor antes de que los amos descubran que Dobby ha escapado. Pero primero… ¡THUMP! ¡Dobby debe castigarse por hablar!»',
+        'Dobby',
+        'Desesperado',
+        24,
+        function() {
+          setTimeout(startActI, 1200);
+        }
+      );
+    }
+  });
+
+  /* ═══ ACTO I: EL CASTIGO Y LA INTERVENCIÓN ═══ */
+  function startActI() {
+    actBadge.textContent = 'Acto I · El Castigo';
+    actSubtitle.textContent = 'Dobby se estrella la cabeza contra la piedra. Sientes la injusticia en cada golpe.';
+
+    triggerHeadBash();
+    typeText(
+      '¡THUMP! ¡THUMP! ¡THUMP! Dobby se estrella la frente contra las piedras de la chimenea. «¡Dobby malo! ¡Dobby no debió venir! ¡Dobby se castigará con la plancha caliente!»',
+      'Dobby',
+      'Desesperado y castigándose',
+      24,
+      function() {
+        renderButtons('Dobby está a punto de abrirse la frente contra la piedra. Debes intervenir:', [
+          {
+            icon: '✋',
+            tag: 'Intervención Física',
+            title: 'Sujetar a Dobby firmemente por los hombros para frenar sus golpes.',
+            action: function() { actI_Intervene('shoulders'); }
+          },
+          {
+            icon: '🛡️',
+            tag: 'Interponer tu Mano',
+            title: 'Colocar tu propia mano entre su cabeza y la piedra de la chimenea.',
+            action: function() { actI_Intervene('hand'); }
+          },
+          {
+            icon: '🗣️',
+            tag: 'Voz Serena',
+            title: '«¡Dobby, detente! No estás haciendo nada malo. Por favor, mírame.»',
+            action: function() { actI_Intervene('voice'); }
+          }
+        ]);
+      }
+    );
+  }
+
+  function actI_Intervene(type) {
+    if (window.SucursalSound && window.SucursalSound.page) window.SucursalSound.page();
+    var reactionText = '';
+    if (type === 'hand') {
+      reactionText = 'Dobby golpea la palma de tu mano en lugar de la piedra fría. Se detiene de golpe, respirando con estertores. Alza los ojos aterrado, esperando una bofetada.';
+    } else if (type === 'shoulders') {
+      reactionText = 'Tus manos sujetan con firmeza sus hombros flacos cubiertos por la tela áspera. Dobby se congela en seco, temblando como una hoja al viento.';
+    } else {
+      reactionText = 'Tu voz corta el silencio lúgubre de la chimenea. Dobby deja caer los brazos y se encoge hacia atrás, parpadeando con incredulidad dolorosa.';
+    }
+
+    typeText(reactionText, 'Narrador', 'Silencio tenso', 20, function() {
+      setTimeout(function() {
+        typeText(
+          '«El señor… ¿ha tocado a Dobby para protegerlo? Ningún amo hace eso… Los amos de Dobby le recuerdan cien veces al día que es una alimaña y le queman los dedos en el horno cuando Dobby habla de más…»',
+          'Dobby',
+          'Ojos húmedos y estupefactos',
+          22,
+          function() {
+            setTimeout(startActII, 1400);
+          }
+        );
+      }, 900);
+    });
+  }
+
+  /* ═══ ACTO II: LA CONFESIÓN Y LA RECIPROCIDAD ═══ */
+  function startActII() {
+    actBadge.textContent = 'Acto II · La Confesión';
+    actSubtitle.textContent = 'Dobby revela el precio que pagó por intentar protegerte. La amistad nace del riesgo compartido.';
+
+    typeText(
+      'Dobby introduce su mano huesuda en una costura deshilachada de su funda de almohada y extrae un fajo de pergaminos arrugados: las cartas de Ron y Hermione que nunca te llegaron en verano.',
+      'Narrador',
+      'Confesión dolorosa',
+      20,
+      function() {
+        setTimeout(function() {
+          typeText(
+            '«Dobby interceptó las cartas del señor… Dobby cerró la barrera del andén… Dobby creyó que si el señor pensaba que sus amigos lo habían olvidado, no querría volver a Hogwarts. ¡Dobby solo quería mantener al señor a salvo de lo que los amos tramaban con la Cámara!»',
+            'Dobby',
+            'Llorando con amargura',
+            22,
+            function() {
+              renderButtons('Dobby arriesgó el castigo y la tortura por ti. ¿Cómo le respondes?', [
+                {
+                  icon: '🤝',
+                  tag: 'Comprensión y Perdón',
+                  title: '«Casi me expulsan por tu culpa, Dobby… pero ahora comprendo cuánto te costó advertirme.»',
+                  action: function() { actII_Response('forgive'); }
+                },
+                {
+                  icon: '🕯️',
+                  tag: 'Gratitud Profunda',
+                  title: '«¿Por qué te arriesgaste tanto por alguien a quien apenas conocías?»',
+                  action: function() { actII_Response('why'); }
+                },
+                {
+                  icon: '⚡',
+                  tag: 'Lealtad Inquebrantable',
+                  title: '«Los amigos nunca se olvidan, Dobby. Y tú fuiste más valiente que nadie este curso.»',
+                  action: function() { actII_Response('brave'); }
+                }
+              ]);
+            }
+          );
+        }, 900);
+      }
+    );
+  }
+
+  function actII_Response(kind) {
+    if (window.SucursalSound && window.SucursalSound.bell) window.SucursalSound.bell();
+    var reply = '';
+    if (kind === 'why') {
+      reply = '«¡Porque Harry Potter venció a Quien-Usted-Sabe! ¡Porque cuando Harry Potter sobrevivió, la luz volvió a brillar para todos nosotros! ¡Dobby supo que mientras Harry Potter estuviera vivo, habría esperanza!»';
+    } else if (kind === 'forgive') {
+      reply = '«El señor perdona a Dobby… Dobby ha escuchado tantas cosas de la grandeza del señor, pero la bondad del señor es aún mayor…»';
+    } else {
+      reply = '«¿Amigos? ¿El señor llama a Dobby… amigo? Dobby… Dobby nunca soñó con escuchar esa palabra en toda su vida…»';
+    }
+
+    typeText(reply, 'Dobby', 'El alma al descubierto', 22, function() {
+      setTimeout(startActIII, 1600);
+    });
+  }
+
+  /* ═══ ACTO III: LA SOMBRA DE LUCIUS MALFOY ═══ */
+  function startActIII() {
+    actBadge.textContent = 'Acto III · La Sombra de la Tiranía';
+    actSubtitle.textContent = 'Pasos pesados resuenan por el corredor de piedra. La arrogancia de los Malfoy entra en la sala.';
+
+    if (window.SucursalSound && window.SucursalSound.thud) {
+      window.SucursalSound.thud();
+      setTimeout(function() { window.SucursalSound.thud(); }, 400);
+      setTimeout(function() { window.SucursalSound.thud(); }, 850);
+    }
+
+    setEarState('ears-droop');
+    luciusBox.textContent = '«¿Qué haces merodeando por aquí con esta inmundicia, muchacho? ¿Has venido a contemplar las ruinas de tu propia ingenuidad?»';
+    luciusBox.classList.add('on');
+
+    typeText(
+      'La sombra de Lucius Malfoy se proyecta gélida sobre las losas de piedra. Su bastón con cabeza de serpiente plateada marca cada paso. Dobby se encoge tras tus piernas, temblando con un terror animal.',
+      'Narrador',
+      'Tensión máxima',
+      20,
+      function() {
+        setTimeout(function() {
+          typeText(
+            'En tus manos sostienes el diario de Tom Riddle, perforado por el colmillo de basilisco y goteando tinta negra. Y en tu bolsillo notas el bulto de un calcetín de lana gris, sucio y desparejado.',
+            'Narrador',
+            'La oportunidad liminal',
+            20,
+            function() {
+              renderButtons('Lucius exige sus pertenencias. Es el momento decisivo. ¿Cómo actúas?', [
+                {
+                  icon: '📜',
+                  tag: 'Vía I · La Astuta (Harry-canónica)',
+                  title: 'Envolver el calcetín dentro del diario perforado y entregárselo a Lucius para que él mismo se lo arroje al elfo.',
+                  action: function() { startChoiceA(); }
+                },
+                {
+                  icon: '🤝',
+                  tag: 'Vía II · La Directa (Íntima y Valiente)',
+                  title: 'Interponerte entre Lucius y Dobby, extendiendo el calcetín cara a cara con el elfo.',
+                  action: function() { startChoiceB(); }
+                },
+                {
+                  icon: '⚡',
+                  tag: 'Vía III · La Arriesgada (Teatral y Rebelde)',
+                  title: 'Estampar el calcetín a los pies de Lucius y desafiarlo: «¡Es para tu elfo, Malfoy!»',
+                  action: function() { startChoiceC(); }
+                }
+              ]);
+            }
+          );
+        }, 1100);
+      }
+    );
+  }
+
+  /* ═══ ACTO IV: LAS 3 VÍAS DE LIBERACIÓN ═══ */
+  function startChoiceA() {
+    clearPrompts();
+    actBadge.textContent = 'Acto IV · La Trampa de la Astucia';
+    typeText(
+      'Con disimulo, deslizas el calcetín grasiento en el hueco dejado por el colmillo dentro del diario. Das un paso al frente y le extiendes el tomo a Lucius: «Creo que esto le pertenece, señor Malfoy.»',
+      'Narrador',
+      'Astucia fría',
+      20,
+      function() {
+        setTimeout(function() {
+          luciusBox.textContent = 'Lucius arruga la nariz con asco repugnante al tocar el diario pringoso. Arranca el calcetín sin mirarlo y se lo lanza violentamente a Dobby: «¡Toma esto, elfo! ¡Limpia esta porquería y lárgate!»';
+          if (window.SucursalSound && window.SucursalSound.thud) window.SucursalSound.thud();
+
+          silenceLabel.textContent = 'Dobby atrapa el envoltorio. El silencio congela la sala…';
+          silencePause.classList.add('on');
+          if (window.SucursalSound && window.SucursalSound.ember) window.SucursalSound.ember();
+
+          setTimeout(function() {
+            silencePause.classList.remove('on');
+            luciusBox.classList.remove('on');
+            executeCatharsis('A');
+          }, 2600);
+        }, 1000);
+      }
+    );
+  }
+
+  function startChoiceB() {
+    clearPrompts();
+    actBadge.textContent = 'Acto IV · El Coraje de la Mirada';
+    typeText(
+      'Ignoras la mirada altanera de Lucius. Das tres pasos firmes hacia la esquina oscura donde Dobby se encoge. Sacas el calcetín del bolsillo y se lo ofreces directamente a la altura de sus ojos.',
+      'Narrador',
+      'Firmeza moral',
+      20,
+      function() {
+        setTimeout(function() {
+          typeText(
+            '«¿Para… para Dobby? ¿El señor… el señor le da una prenda a Dobby?» Las manos de Dobby tiemblan tanto que apenas pueden sostenerse.',
+            'Dobby',
+            'Al borde del llanto',
+            22,
+            function() {
+              silenceLabel.textContent = 'Asientes en silencio. Nadie se atreve a respirar…';
+              silencePause.classList.add('on');
+              if (window.SucursalSound && window.SucursalSound.ember) window.SucursalSound.ember();
+
+              setTimeout(function() {
+                silencePause.classList.remove('on');
+                luciusBox.classList.remove('on');
+                executeCatharsis('B');
+              }, 3200);
+            }
+          );
+        }, 900);
+      }
+    );
+  }
+
+  function startChoiceC() {
+    clearPrompts();
+    actBadge.textContent = 'Acto IV · El Desafío de la Rebeldía';
+    typeText(
+      'Sacas el calcetín con fuerza y lo arrojas contra las botas de piel de dragón de Lucius Malfoy. Tu voz resuena en las bóvedas: «¡Es para tu elfo, Malfoy!»',
+      'Narrador',
+      'Desafío público',
+      20,
+      function() {
+        setTimeout(function() {
+          luciusBox.textContent = 'Lucius desenfunda la varita de su bastón con un siseo metálico de furia ciega: «¡Te arrepentirás de esto, Potter! ¡Avada—!»';
+          if (window.SucursalSound && window.SucursalSound.glass) window.SucursalSound.glass();
+
+          silenceLabel.textContent = '¡Un estallido mágico hace temblar las columnas!';
+          silencePause.classList.add('on');
+
+          setTimeout(function() {
+            silencePause.classList.remove('on');
+            luciusBox.classList.remove('on');
+            if (window.SucursalSound && window.SucursalSound.thud) window.SucursalSound.thud();
+            executeCatharsis('C');
+          }, 2400);
+        }, 1000);
+      }
+    );
+  }
+
+  /* ═══ ACTO V: CATARSIS ARISTOTÉLICA ═══ */
+  function executeCatharsis(choice) {
+    dobbyPage.classList.add('liberated');
+    setMouthSmile(true);
+    actBadge.textContent = 'Acto V · La Catarsis de la Libertad';
+    actSubtitle.textContent = 'La opresión se quiebra en un segundo. La luz dorada inunda el rincón más oscuro.';
+
+    if (window.fireGoldenSparks) window.fireGoldenSparks();
+    if (window.SucursalSound && window.SucursalSound.spark) window.SucursalSound.spark();
+
+    if (choice === 'A') {
+      setEarState('ears-wings');
+      typeText(
+        '«¡LIBRE! ¡Dobby es libre! ¡El señor… el señor lo ha hecho! ¡El amo ha tirado el calcetín y Dobby lo ha cogido! ¡Dobby no lo merece, pero Dobby es LIBRE!»',
+        'Dobby',
+        'Llorando y saltando de dicha pura',
+        20,
+        function() {
+          trophyQuote.textContent = '«¡LIBRE! ¡Dobby es libre! ¡El señor lo ha hecho! Dobby es LIBRE.»';
+          setTimeout(showGiftRelic, 2400);
+        }
+      );
+    } else if (choice === 'B') {
+      setEarState('ears-dignity');
+      if (window.SucursalSound && window.SucursalSound.bell) window.SucursalSound.bell();
+      typeText(
+        'Dobby coge el calcetín con manos temblorosas. Lentamente, desciende en una reverencia tan solemne y profunda que la punta de su nariz roza el suelo de piedra: «Dobby… Dobby nunca olvidará esto. Dobby es libre. Y Dobby tiene un amigo.»',
+        'Dobby',
+        'Gratitud sagrada y conmovedora',
+        20,
+        function() {
+          trophyQuote.textContent = '«Dobby nunca olvidará esto. Dobby es libre. Y Dobby tiene un amigo.»';
+          setTimeout(showGiftRelic, 2400);
+        }
+      );
+    } else {
+      setEarState('ears-flutter');
+      typeText(
+        '¡BANG! Dobby chasqueó los dedos y lanzó a Lucius Malfoy por los aires rodando por el pasillo. Dobby se tapa la boca, incrédulo, y estalla en una carcajada limpia y triunfal: «¡Dobby es libre! ¡Dobby es libre y los amos están ENFADADOS! ¡Es maravilloso!»',
+        'Dobby',
+        'Risa eufórica e incontenible',
+        20,
+        function() {
+          trophyQuote.textContent = '«¡Dobby es libre y los amos están enfadados! ¡Dobby es libre!»';
+          setTimeout(showGiftRelic, 2400);
+        }
+      );
+    }
+
+    try {
+      localStorage.setItem(DOBBY_STORAGE_KEY, 'true');
+      localStorage.setItem(DOBBY_CHOICE_KEY, choice);
+      hasFreedBefore = true;
+      previousChoice = choice;
+    } catch (e) {}
+  }
+
+  /* ═══ ACTO VI: EL OBJETO TRANSICIONAL ═══ */
+  function showGiftRelic() {
+    actBadge.textContent = 'Acto VI · El Regalo';
+    typeText(
+      'Dobby se seca las lágrimas con la manga sucia. Da un paso suave hacia ti y saca algo diminuto de su funda: un calcetín descosido de lana gris, con un agujero en el talón. «Dobby no tiene nada de valor. Pero Dobby quiere darle esto al señor. Para que el señor siempre recuerde.»',
+      'Dobby',
+      'Ofreciendo su tesoro humilde',
+      20,
+      function() {
+        giftPhase.classList.add('on');
+        if (window.SucursalSound && window.SucursalSound.wand) window.SucursalSound.wand();
+
+        var relic = document.getElementById('sockRelic');
+        if (relic) {
+          relic.addEventListener('click', function() {
+            if (window.SucursalSound && window.SucursalSound.wand) window.SucursalSound.wand();
+            if (window.toastMsg) window.toastMsg('✨ Lana humilde y talón descosido: la libertad no es lujosa, pero es sagrada.');
+          }, { once: false });
+        }
+
+        setTimeout(showFinalTrophyCard, 3400);
+      }
+    );
+  }
+
+  /* ═══ ACTO VII: TARJETA COMPARTIBLE ═══ */
+  function showFinalTrophyCard() {
+    actBadge.textContent = 'Acto VII · La Memoria';
+    shareCardContainer.classList.add('on');
+    if (typeof shareCardContainer.scrollIntoView === 'function') {
+      shareCardContainer.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'nearest' });
+    }
+  }
+
+  var copyBtn = document.getElementById('btnCopyCard');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', function() {
+      var quoteText = trophyQuote.textContent.trim();
+      var nameVal = (userNameInput && userNameInput.value ? userNameInput.value.trim() : 'Lector de Hogwarts') || 'Lector de Hogwarts';
+      var shareText = '🧦 ' + quoteText + ' — ' + nameVal + ', Olor a Libros';
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(shareText).then(function() {
+          if (window.toastMsg) window.toastMsg('✨ Tarjeta de Dobby copiada al portapapeles');
+          if (window.SucursalSound && window.SucursalSound.spark) window.SucursalSound.spark();
+        }).catch(function() {
+          fallbackCopy(shareText);
+        });
+      } else {
+        fallbackCopy(shareText);
+      }
+    });
+  }
+
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+      if (window.toastMsg) window.toastMsg('✨ Tarjeta de Dobby copiada');
+    } catch (e) {
+      if (window.toastMsg) window.toastMsg('Pulsa Ctrl+C para copiar');
+    }
+    document.body.removeChild(ta);
+  }
+
+  var replayBtn = document.getElementById('btnReplay');
+  if (replayBtn) {
+    replayBtn.addEventListener('click', function() {
+      if (window.SucursalSound && window.SucursalSound.page) window.SucursalSound.page();
+      startPrologue();
+    });
+  }
+
+  setTimeout(startPrologue, 400);
+
+})();
+</script>
+</body>
+</html>

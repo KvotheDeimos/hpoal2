@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invoca tu Patronus — Olor a Libros · Sucursal de Hogwarts</title>
+<meta name="description" content="Un Dementor no se vence con fuerza: se vence con un recuerdo sostenido de cerca. Escribe el tuyo y descubre qué forma toma tu luz.">
+<meta name="theme-color" content="#060a10">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Olor a Libros · Sucursal de Hogwarts">
+<meta property="og:title" content="Invoca tu Patronus · Libro III: El Prisionero de Azkaban">
+<meta property="og:description" content="«Los Dementores no se alimentan de tu miedo, se alimentan de lo borroso. Dale contorno a lo que amas.»">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@600;700;800&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="patronus.css">
+</head>
+<body class="patronus-body stage-hielo" id="pPage">
+
+<div class="toast" id="toast" role="status"></div>
+<div class="frost-overlay f-stage-6" id="frostOverlay" aria-hidden="true"></div>
+<div class="dementor-rift" id="dementorRift" aria-hidden="true"></div>
+<div class="hold-glow" id="holdGlow" aria-hidden="true"></div>
+<div class="waiting-patronus" id="waitingPatronus" aria-hidden="true"></div>
+
+<header class="pat-nav">
+  <a href="index.html" class="brand"><span>🦌</span><span>Olor a Libros · Sucursal</span></a>
+  <div class="nav-actions">
+    <button class="sound-btn" id="soundToggleBtn" title="Alternar audio procedural">
+      <span id="soundIcon">🔕</span>
+      <span id="soundLabel">Silencio</span>
+    </button>
+    <a href="index.html" class="back-link">Volver al Gran Comedor</a>
+  </div>
+</header>
+
+<main class="pat-container">
+
+  <!-- ═══ FASE 1 · LA ANTESALA ═══ -->
+  <section class="phase-pane active" id="panePhase1">
+    <div style="text-align:center;max-width:680px;margin:0 auto">
+      <span class="phase-kicker">Libro III · Cap. 20</span>
+      <h1 class="phase-title">Invoca tu Patronus</h1>
+      <p class="phase-lead">No es un test de personalidad para etiquetarte. Es un acto de memoria viva y precisión sensorial: la única fuerza capaz de repeler la desesperación del Dementor.</p>
+
+      <div id="returningBanner" class="returning-banner" style="display:none"></div>
+      <div id="burnedBanner" class="burned-banner" style="display:none">
+        <div class="ash-circle"></div>
+        <p>«Aquí hubo luz tuya. Nadie más lo sabe. Sigue siendo cierto.»</p>
+      </div>
+
+      <div class="lupin-margin" id="lupinIntro">
+        «No te pediré valentía. Te pediré algo más difícil: precisión. Los Dementores no se alimentan de tu miedo, se alimentan de lo borroso. Dale contorno a lo que amas y no tendrán dónde morder.»
+      </div>
+
+      <div id="gateNote" class="gate-note" style="display:none">
+        <b>Nota de Lupin, fechada antes del capítulo 20:</b>
+        Aún no. Cuando lo hayas leído sabrás por qué te lo pido ahora y no antes: hay cosas que solo se pueden sostener después de haberlas visto caer. Si aun así quieres entrar, el spoiler será tuyo y solo tuyo.
+      </div>
+
+      <div class="phase-actions">
+        <button class="pat-btn-primary" id="btnStart">
+          <span>Estoy listo para recordar</span>
+          <span>➔</span>
+        </button>
+        <button class="pat-btn-secondary" id="btnGateSkip" style="display:none">
+          <span>Entrar de todos modos</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FASE 2 · RESPIRACIÓN ═══ -->
+  <section class="phase-pane" id="panePhase2">
+    <div style="text-align:center;max-width:620px;margin:0 auto">
+      <span class="phase-kicker">Regulación Fisiológica</span>
+      <h2 class="phase-title-sm">Aquieta el Cuerpo</h2>
+      <p class="phase-lead">Bajar el pulso aclara la memoria episódica. Sigue el compás de la luz: cuatro tiempos al entrar, cuatro al sostener, seis al soltar.</p>
+      <div class="breath-box">
+        <div class="breath-circle-wrap"><div class="breath-circle" id="breathCircle"></div></div>
+        <div class="breath-instruction" id="breathText">Inhala con calma…</div>
+        <div class="breath-count" id="breathSeconds">4 s</div>
+      </div>
+      <div id="breathNote" class="lupin-margin" style="display:none"></div>
+      <div class="phase-actions">
+        <button class="pat-btn-primary" id="btnDoors" style="display:none">
+          <span>Abrir las puertas de la memoria</span>
+          <span>➔</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FASE 3 · PUERTAS ═══ -->
+  <section class="phase-pane" id="panePhase3">
+    <div style="max-width:760px;margin:0 auto">
+      <div style="text-align:center;margin-bottom:20px">
+        <span class="phase-kicker">Fase III · La Elección</span>
+        <h2 class="phase-title-sm">Las Catorce Puertas de la Memoria</h2>
+        <p class="phase-lead" id="doorsLead">Elige la puerta que más te llame hoy. Ninguna es incorrecta; todas guardan un calor que no se apaga.</p>
+      </div>
+      <div class="doors-grid" id="doorsGrid"></div>
+      <div class="phase-actions">
+        <button class="pat-btn-primary" id="btnAnchors" disabled style="opacity:0.5;cursor:not-allowed">
+          <span>Entrar a esta memoria</span>
+          <span>➔</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FASE 3b · MICRO-ESCENA DE LA PUERTA ═══ -->
+  <section class="phase-pane" id="panePhase3b">
+    <div style="max-width:640px;margin:0 auto;text-align:center">
+      <span class="phase-kicker" id="sceneKicker">Puerta — de 14</span>
+      <h2 class="phase-title-sm" id="sceneTitle">—</h2>
+      <div class="door-scene-big" id="sceneText">—</div>
+      <div class="phase-actions">
+        <button class="pat-btn-primary" id="btnSceneGo">
+          <span>Abrir del todo</span>
+          <span>➔</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FASE 4 · ANCLAJES ═══ -->
+  <section class="phase-pane" id="panePhase4">
+    <div style="max-width:740px;margin:0 auto">
+      <div style="text-align:center;margin-bottom:24px">
+        <span class="phase-kicker">Fase IV · Dale Contorno</span>
+        <h2 class="phase-title-sm">El Anclaje Sensorial</h2>
+        <p class="phase-lead" id="anchorsLead">Un recuerdo abstracto produce luz vaga. Los detalles condensan el cuerpo de tu Patronus.</p>
+      </div>
+
+      <div class="anchor-section">
+        <div class="anchor-q-title"><span>✦</span><span>¿Cómo te llaman en el club?</span></div>
+        <p class="anchor-hint">Opcional. Firmará tu ficha y permitirá que tu Patronus te reconozca en futuras visitas.</p>
+        <input type="text" id="inputUserName" class="free-input-field" style="min-height:auto;font-size:1.1rem" placeholder="Tu nombre" maxlength="40">
+      </div>
+
+      <div class="anchor-section">
+        <div class="anchor-q-title"><span>I.</span><span>¿Qué temperatura tenía ese momento?</span></div>
+        <div class="options-pill-grid" id="tempGrid"></div>
+      </div>
+
+      <div class="anchor-section">
+        <div class="anchor-q-title"><span>II.</span><span>¿Qué sonido había debajo del sonido?</span></div>
+        <div class="options-pill-grid" id="soundGrid"></div>
+      </div>
+
+      <div class="anchor-section">
+        <div class="anchor-q-title"><span>III.</span><span>Si cerrabas los ojos, ¿qué objeto seguía ahí?</span></div>
+        <div class="options-pill-grid" id="objectGrid"></div>
+      </div>
+
+      <div class="anchor-section">
+        <div class="anchor-q-title"><span>IV.</span><span>Y tú, dentro de ese recuerdo… ¿quién eras?</span></div>
+        <div class="options-pill-grid" id="whoGrid"></div>
+      </div>
+
+      <div class="anchor-section wonder-section" id="wonderSection" style="display:none">
+        <div class="anchor-q-title"><span style="color:#ffd1fc">V.</span><span>Toda memoria de asombro deja una pregunta sin contestar. ¿Cuál era la tuya?</span></div>
+        <div class="options-pill-grid" id="wonderGrid"></div>
+      </div>
+
+      <div class="anchor-section">
+        <div class="anchor-q-title"><span>VI.</span><span>Dilo con tus palabras, como se lo contarías a alguien que no puede saberlo:</span></div>
+        <p class="anchor-hint">Esta frase arderá como mecha durante toda la invocación. No te apresures.</p>
+        <textarea id="freeMemoryText" class="free-input-field" placeholder="Escribe aquí con calma…"></textarea>
+        <div id="lupinSlow" class="lupin-margin" style="display:none"></div>
+      </div>
+
+      <div class="phase-actions">
+        <button class="pat-btn-primary" id="btnSilence">
+          <span>Encender la vela y sostener</span>
+          <span>➔</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FASE 5 · EL SILENCIO VERDADERO ═══ -->
+  <section class="phase-pane" id="panePhase5">
+    <div class="silence-container">
+      <div class="pat-candle-wrap">
+        <div class="pat-candle-flame" id="silenceFlame"></div>
+        <div class="pat-candle-wick"></div>
+        <div class="pat-candle-body"></div>
+        <div class="pat-candle-phrase" id="silencePhrase">«...»</div>
+      </div>
+      <p class="silence-instruction" id="silenceInstruction">Sosténlo. No lo digas todavía. Solo sosténlo.</p>
+      <div class="silence-clock" id="silenceClock">10 s</div>
+    </div>
+  </section>
+
+  <!-- ═══ FASE 6 · EL DEMENTOR DISCUTE ═══ -->
+  <section class="phase-pane" id="panePhase6">
+    <div style="max-width:760px;margin:0 auto">
+      <div class="pat-candle-wrap" style="margin-bottom:12px">
+        <div class="pat-candle-flame" id="combatFlame"></div>
+        <div class="pat-candle-wick"></div>
+        <div class="pat-candle-body"></div>
+        <div class="pat-candle-phrase" id="combatPhrase">«...»</div>
+      </div>
+      <div class="combat-card">
+        <div class="combat-header">
+          <span class="combat-round" id="combatRoundLabel">Asalto 1 de 3</span>
+          <span class="combat-health" id="combatHealth">Vela: Viva y encendida</span>
+        </div>
+        <div class="dementor-whisper" id="dementorWhisper">«Fue pequeño. Nada de eso importó.»</div>
+        <div id="lupinCombatNote" class="lupin-margin" style="display:none"></div>
+        <div class="sustain-grid" id="sustainGrid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FASE 7 · LA INVOCACIÓN ═══ -->
+  <section class="phase-pane" id="panePhase7">
+    <div style="max-width:680px;margin:0 auto;text-align:center">
+      <div class="pat-candle-wrap">
+        <div class="pat-candle-flame glow" id="incantFlame"></div>
+        <div class="pat-candle-wick"></div>
+        <div class="pat-candle-body"></div>
+        <div class="pat-candle-phrase" id="incantPhrase">«...»</div>
+      </div>
+      <h2 class="phase-title-sm" style="color:#fcedba">La Invocación</h2>
+      <p class="phase-lead">Respira con calma. Escribe el conjuro sin correr, al compás sereno de tu pulso interior.</p>
+
+      <div class="incant-box" id="incantBox">
+        <div class="incant-target">EXPECTO PATRONUM</div>
+        <input type="text" class="incant-input" id="incantInput" placeholder="Escribe aquí…" autocomplete="off" spellcheck="false">
+        <div class="incant-note" id="incantNote">Pulso de calma: medido</div>
+      </div>
+
+      <div class="phase-actions">
+        <button class="pat-btn-primary" id="btnCast" disabled style="opacity:0.4;cursor:not-allowed">
+          <span>¡Lanzar la luz!</span>
+          <span>✨</span>
+        </button>
+      </div>
+
+      <div id="jokePanel" class="joke-panel" style="display:none">
+        <div class="joke-ico">🐉💀</div>
+        <span class="joke-title">Un Dragón Muerto</span>
+        <div class="lupin-margin" style="border-left-color:#ff6b6b;color:#fce4a6">
+          «¿Qué...? ¿Un dragón muerto? Pero... si los Patronus están hechos de luz pura, esperanza y vida incorruptible... Qué sumamente raro... jamás en todos mis años de docencia y en la Orden del Fénix había visto una aberración tan desconcertante.»
+        </div>
+        <button class="pat-btn-primary" id="btnRevealJoke">
+          <span>Miremos algo de nuevo… ¡Revelio Animae Mentis!</span>
+          <span>⚡</span>
+        </button>
+      </div>
+
+      <div id="rareFace" class="rare-face" style="display:none">
+        <div class="rare-face-circle"><span>👤</span></div>
+        <p>«Eso no lo había visto hacer a ningún Patronus. Creo que no era tu luz: era un recado.»</p>
+      </div>
+
+      <div id="seedNote" class="seed-note" style="display:none">
+        <b>Semilla de luz</b>
+        <p>No todos los Patronus nacen con cuerpo. El tuyo nació con intención. Queda sembrado en esta misma puerta: vuelve otro día y, si el recuerdo ha madurado, saldrá con forma.</p>
+      </div>
+
+      <div id="notReadyNote" class="seed-note" style="display:none">
+        <b>Lo que no estaba listo</b>
+        <p>La vela no se apaga: se guarda. Hay recuerdos que no se abren bajo presión. No es un fracaso: es pudor. Lupin dejó dicho que vuelvas cuando haga menos frío. El Dementor se retira igual: incluso un recuerdo guardado quema al tacto.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FASE 8 · LA TARJETA ═══ -->
+  <section class="phase-pane" id="panePhase8">
+    <div style="max-width:720px;margin:0 auto">
+      <div class="patronus-card-wrap">
+        <div class="patronus-card" id="shareCard">
+          <div class="patronus-badge-top">Lo que tu luz recuerda · Olor a Libros</div>
+          <h2 class="patronus-card-title" id="cardName">—</h2>
+          <span class="patronus-card-family" id="cardFamily">—</span>
+          <div class="patronus-svg-box" id="cardSvg"></div>
+          <p class="patronus-quote-line" id="cardQuote">«...»</p>
+          <div class="patronus-wick-phrase" id="cardWick">"..."</div>
+          <div class="patronus-anchors-row" id="cardAnchors"></div>
+          <div class="patronus-who-row" id="cardWho"></div>
+          <div class="patronus-combo-row" id="cardCombo" style="display:none"></div>
+          <div class="patronus-lupin-row" id="cardLupin" style="display:none"></div>
+          <div class="patronus-signature" id="cardSignature">—</div>
+        </div>
+      </div>
+      <div class="phase-actions">
+        <button class="pat-btn-primary" id="btnCopy"><span>Copiar Testimonio</span><span>📋</span></button>
+        <button class="pat-btn-burn" id="btnBurn"><span>Quemar el Recuerdo</span><span>🕯️</span></button>
+        <a href="index.html" class="pat-btn-secondary"><span>Volver al Portal</span><span>🏰</span></a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="magia.js" defer></script>
+<script src="patronus.js" defer></script>
+</body>
+</html>

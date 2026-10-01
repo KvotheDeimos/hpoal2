@@ -129,6 +129,31 @@
       playNote(329.63, 1.5, 'sine', 0.08, -3, 80);   // E4
       playNote(415.30, 1.6, 'sine', 0.06, 4, 120);   // G#4
     },
+    thud: function () {
+      // Golpe seco y pesado (libro o pasos de Lucius)
+      if (!soundEnabled) return;
+      var c = getAudioContext(); if (!c) return;
+      try {
+        var t = c.currentTime;
+        var osc = c.createOscillator();
+        var gain = c.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(125, t);
+        osc.frequency.exponentialRampToValueAtTime(34, t + 0.22);
+        gain.gain.setValueAtTime(0.24, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
+        osc.connect(gain);
+        gain.connect(c.destination);
+        osc.start(t);
+        osc.stop(t + 0.26);
+      } catch (e) {}
+    },
+    ember: function () {
+      // Chasquido tenue de brasas en chimenea
+      if (!soundEnabled) return;
+      playNote(480, 0.12, 'triangle', 0.03, 0, 0);
+      playNote(720, 0.08, 'sine', 0.02, 2, 35);
+    },
     page: function () {
       // Roce suave de pergamino antiguo
       if (!soundEnabled) return;
@@ -355,9 +380,14 @@
     targetX = x;
     targetY = y;
     if (!wandRaf) {
-      wandRaf = requestAnimationFrame(function () {
-        document.documentElement.style.setProperty('--lumos-x', targetX + 'px');
-        document.documentElement.style.setProperty('--lumos-y', targetY + 'px');
+      var rAF = (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function')
+        ? window.requestAnimationFrame
+        : function (cb) { return setTimeout(cb, 16); };
+      wandRaf = rAF(function () {
+        if (typeof document !== 'undefined' && document.documentElement) {
+          document.documentElement.style.setProperty('--lumos-x', targetX + 'px');
+          document.documentElement.style.setProperty('--lumos-y', targetY + 'px');
+        }
         wandRaf = null;
       });
     }

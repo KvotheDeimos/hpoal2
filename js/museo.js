@@ -92,14 +92,42 @@
   }
   function stopFly() { if (flyT) { clearInterval(flyT); flyT = null; } }
 
-  /* ── Las 4 vitrinas secundarias (con la varita doblada ya dibujada como SVG) ── */
+  /* ── SVG del Calcetín de Dobby ── */
+  var DOBBY_SOCK_ICON = '<svg viewBox="0 0 64 64" style="width:68%;height:68%;display:block;margin:auto;filter:drop-shadow(0 0 10px rgba(255,215,120,0.75))">'
+    + '<path d="M22 10 L44 12 L41 38 C41 44 47 50 56 52 C61 54 61 60 55 62 C45 64 32 62 25 53 C19 46 20 37 23 31 Z" fill="#756b5f" stroke="#ffd700" stroke-width="2"/>'
+    + '<circle cx="31" cy="51" r="3.8" fill="#241c14" stroke="#ffd700" stroke-width="1"/>'
+    + '<path d="M31 55 Q28 62 32 66" stroke="#ffd700" stroke-width="1.4" fill="none"/>'
+    + '</svg>';
+
+  /* ── Las vitrinas secundarias (con la varita doblada y el calcetín de Dobby si está liberado) ── */
   function renderGrid() {
     var g = document.getElementById('musGrid'); if (!g) return;
+    var dobbyFreed = false;
+    try { dobbyFreed = localStorage.getItem('hpoal_dobby_freed_v2') === 'true'; } catch(e){}
+
+    var dobbyCard = dobbyFreed
+      ? '<div class="mus-card" style="border-color:#ffd700;box-shadow:0 0 26px rgba(255,215,120,0.25)"><div><div class="mus-ico" style="background:#26180a;border:1.5px solid #ffd700">' + DOBBY_SOCK_ICON + '</div><h4>El Calcetín de Dobby</h4><p>Lana gris y talón descosido. La reliquia que liberó a un elfo.</p><div id="sockOut"></div></div><button class="mus-mini" id="sockBtn" style="background:#4a3212;border-color:#ffd700;color:#fcedba">Examinar la reliquia →</button></div>'
+      : '';
+
     g.innerHTML =
       '<div class="mus-card"><div><div class="mus-ico">🍬</div><h4>Grageas Bertie Bott</h4><p>Un riesgo en cada bocado. ¿Te atreves a sacar una?</p><div id="beanOut"></div></div><button class="mus-mini" id="beanBtn">Probar una gragea →</button></div>'
       + '<div class="mus-card"><div><div class="mus-ico" style="background:#3d3318">🍋</div><h4>Exhibición A: El Limón</h4><p>Del célebre incidente en la tienda de varitas. Prohibido exprimir.</p><div id="lemonOut"></div></div><button class="mus-mini" id="lemonBtn" style="background:#3a301c">Tocar con cuidado →</button></div>'
       + '<div class="mus-card"><div><div class="mus-ico" style="background:#2a1c38">' + WAND_BENT + '</div><h4>La Varita Doblada</h4><p>Agitada como sartén en el capítulo 5. Ollivander aún no lo supera.</p><div class="mus-out" style="animation:none;border-color:rgba(138,104,51,.4);color:#a79bb5">Madera de espino · núcleo de dragón chamuscado</div></div><span class="mus-mini" style="opacity:.5;cursor:default">No se toca · orden de Ollivander</span></div>'
-      + '<div class="mus-card"><div><div class="mus-ico" style="background:#1b2b38">📖</div><h4>El Ejemplar de 1999</h4><p>347 subrayados, lomo de celofán y 12 esquinas dobladas con orgullo.</p></div><button class="mus-mini" id="bookBtn" style="background:#1e2f3d">Abrir dedicatoria →</button></div>';
+      + '<div class="mus-card"><div><div class="mus-ico" style="background:#1b2b38">📖</div><h4>El Ejemplar de 1999</h4><p>347 subrayados, lomo de celofán y 12 esquinas dobladas con orgullo.</p></div><button class="mus-mini" id="bookBtn" style="background:#1e2f3d">Abrir dedicatoria →</button></div>'
+      + dobbyCard;
+
+    if (dobbyFreed) {
+      var sBtn = document.getElementById('sockBtn');
+      if (sBtn) {
+        sBtn.addEventListener('click', function () {
+          snd('wand');
+          var sOut = document.getElementById('sockOut');
+          if (sOut) {
+            sOut.innerHTML = '<div class="mus-out" style="border-color:#ffd700;color:#fcedba">✨ «Dobby nunca olvidará al señor. Dobby tiene un amigo.»</div>';
+          }
+        });
+      }
+    }
 
     document.getElementById('beanBtn').addEventListener('click', function () {
       snd('spark');
